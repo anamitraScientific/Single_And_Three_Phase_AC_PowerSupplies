@@ -1,0 +1,78 @@
+################################################################################
+# IGNORE THESE FILES & FOLDERS FOR CODE COMPOSER STUDIO (CCS) WORKSPACES
+################################################################################
+
+# CCS workspace metadata (not needed for Git)
+.metadata/
+.jxbrowser.userdata/
+RemoteSystemsTempFiles/
+dvt/
+
+# CCS project-specific metadata
+.settings/
+.launches/
+*.launch
+*.wks
+*.ccsproject_info.json
+
+# Local temp files
+*.tmp
+*.bak
+*.log
+*.xdcenv
+
+################################################################################
+# IGNORE BUILD OUTPUT DIRECTORIES (VERY IMPORTANT)
+################################################################################
+
+# CPU1 build output
+Inverter_Side_20KW_cpu1/Debug/
+Inverter_Side_20KW_cpu1/Release/
+
+# CPU2 build output
+Inverter_Side_20KW_cpu2/Debug/
+Inverter_Side_20KW_cpu2/Release/
+
+################################################################################
+# IGNORE COMPILER & LINKER GENERATED FILES
+################################################################################
+
+# Object files
+*.obj
+*.o
+
+# Dependency files
+*.d
+
+# Listing / map / cmd generated files
+*.map
+*.lst
+*.cmd.gen
+
+# ELF / COFF intermediate artifacts
+*.out
+*.hex
+*.bin
+
+# TI-specific generated temporary files
+*_tmp/
+*.paf
+*.sf
+*.svl
+*.xml
+
+################################################################################
+# IGNORE MISC FILES
+################################################################################
+
+# Eclipse local metadata
+*.project.local
+*.cproject.local
+
+# Backup files
+*~
+*.orig
+
+# Mac / Windows OS junk
+.DS_Store
+Thumbs.db
