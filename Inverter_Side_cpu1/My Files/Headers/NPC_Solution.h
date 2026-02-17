@@ -57,6 +57,10 @@ typedef union
 
 extern f32_to_u16 PLL_angle_DAC;
 
+extern float32_t Vpgm_sns;
+extern float32_t Vpgm_ref;
+extern uint16_t Vmon;
+
 //
 // Global Variables
 //
@@ -518,6 +522,12 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
     Va_sns = (float)((AdcaResultRegs.ADCRESULT0 + AdcaResultRegs.ADCRESULT1 + AdcaResultRegs.ADCRESULT2 + AdcaResultRegs.ADCRESULT3)*0.25f);
     Va_fb =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling;
 
+    Vpgm_sns = (float32_t)((AdcaResultRegs.ADCRESULT4 + AdcaResultRegs.ADCRESULT5 + AdcaResultRegs.ADCRESULT6 + AdcaResultRegs.ADCRESULT7)*0.25f);
+
+    Vpgm_ref = (Vpgm_sns - 2047.5f)/2047.5f;
+
+    Vmon = (uint16_t)Va_sns;
+    NPC_HAL_passDAC_AVals(Vmon);
 #if mode1 == EL_AC
       Va_fb_prev = Va_fb_pu;
       Va_fb_pu =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling_PU;
@@ -1100,8 +1110,8 @@ static inline void RUN_INV_ISR_ABC(void)
 {
 
     NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
-    NPC_run_internal_PLL();
-    Ref_Gen_function();  // REFERENCE SINE GENERATION FUNC.
+//    NPC_run_internal_PLL();
+//    Ref_Gen_function();  // REFERENCE SINE GENERATION FUNC.
     if (StartPowerStage != StartPowerStage_prev)
     {
         if(StartPowerStage == 1)
@@ -1151,7 +1161,8 @@ static inline void RUN_INV_ISR_ABC(void)
     REFslew_run(&VdcRefSlewRamp, V_DC, slope_VacRef);
     VA_RefSlewed = VA_RefSlewRamp.out_slew;
     Vdc_RefSlewed = VdcRefSlewRamp.out_slew;
-    Va_ref = VA_RefSlewed*Ref_A + Vdc_RefSlewed;  // three different amplitude of sine.
+//    Va_ref = VA_RefSlewed*Ref_A + Vdc_RefSlewed;  // three different amplitude of sine.
+    Va_ref = VA_RefSlewed*Vpgm_ref + Vdc_RefSlewed;
 
 //    Va_ref = (Vac_fundamental * Ref_A) + V_DC;
     if(Va_ref > 300.0f) Va_ref = 300.0f;

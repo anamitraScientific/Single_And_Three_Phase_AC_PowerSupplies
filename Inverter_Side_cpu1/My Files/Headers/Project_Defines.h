@@ -274,9 +274,14 @@
 #if CONVERTER_TYPE == SINGLE_PHASE
 #define ADCPrescaler 6
 #define Acqps        25
+
 #define VgridSense_channel  2
 #define IconvSense_channel  2
 #define Vdc_1Sense_channel  2
+
+#define Vpgm_channel        4
+#define Ipgm_channel        4
+
 #define ADCSOCTrigger1      5
 #define ADCSOCTrigger2      9
 #define ADCSOCTrigger3      10

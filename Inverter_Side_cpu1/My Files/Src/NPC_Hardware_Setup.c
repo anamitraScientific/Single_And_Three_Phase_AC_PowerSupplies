@@ -673,6 +673,24 @@ static inline void NPC_HAL_setupV_gridADC(void)
     AdcaRegs.ADCSOC3CTL.bit.ACQPS = Acqps;                                  //sample window is 15 SYSCLK cycles
     AdcaRegs.ADCSOC3CTL.bit.TRIGSEL = ADCSOCTrigger4;   //ADCSOCTrigger1;                       //trigger on ePWM3 SOCB @TBCTR_U_CMPB, CMPB = ACQPS/2
 
+
+    AdcaRegs.ADCSOC4CTL.bit.CHSEL = Vpgm_channel;                       //SOC0 of ADC_A2 will convert VAC connected to pin A2
+    AdcaRegs.ADCSOC4CTL.bit.ACQPS = Acqps;                                  //sample window is 15 SYSCLK cycles
+    AdcaRegs.ADCSOC4CTL.bit.TRIGSEL = ADCSOCTrigger1;                       //trigger on ePWM1 SOCA
+
+    AdcaRegs.ADCSOC5CTL.bit.CHSEL = Vpgm_channel;                       //SOC1 of ADC_A2 will convert VAC connected to pin A2
+    AdcaRegs.ADCSOC5CTL.bit.ACQPS = Acqps;                                  //sample window is 15 SYSCLK cycles
+    AdcaRegs.ADCSOC5CTL.bit.TRIGSEL = ADCSOCTrigger2;  //ADCSOCTrigger1;                       //trigger on ePWM1 SOCB @TBCTR = CTR_PRD
+
+    AdcaRegs.ADCSOC6CTL.bit.CHSEL = Vpgm_channel;                       //SOC2 of ADC_A2 will convert VAC connected to pin A2
+    AdcaRegs.ADCSOC6CTL.bit.ACQPS = Acqps;                                  //sample window is 15 SYSCLK cycles
+    AdcaRegs.ADCSOC6CTL.bit.TRIGSEL = ADCSOCTrigger3;   //ADCSOCTrigger1;                       //trigger on ePWM3 SOCA @TBCTR_U_CMPB, CMPB = TB/2
+
+    AdcaRegs.ADCSOC7CTL.bit.CHSEL = Vpgm_channel;                       //SOC3 of ADC_A2 will convert VAC connected to pin A2
+    AdcaRegs.ADCSOC7CTL.bit.ACQPS = Acqps;                                  //sample window is 15 SYSCLK cycles
+    AdcaRegs.ADCSOC7CTL.bit.TRIGSEL = ADCSOCTrigger4;   //ADCSOCTrigger1;                       //trigger on ePWM3 SOCB @TBCTR_U_CMPB, CMPB = ACQPS/2
+
+
     EDIS;
 
 #elif CONVERTER_TYPE == THREE_PHASE
