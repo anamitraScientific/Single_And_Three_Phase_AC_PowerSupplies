@@ -17,6 +17,9 @@ float32_t V_DC_slope;
 float32_t slope_FreqRef;
 volatile int32_t StartPowerStage;
 volatile int32_t StartPowerStage_prev;
+
+volatile int32_t StartVoltDipSeq;
+
 float32_t ON_degree;
 float32_t OFF_degree;
 volatile int32_t CouplingMode;

@@ -118,11 +118,11 @@ void main(void)
 
      //********For SCI B **********//
 
-     Interrupt_register(INT_SCIB_RX, scib_isr);
-     config_SCI_interrupt(SCIB_BASE);
-     Interrupt_enable(INT_SCIB_RX);
-
-     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
+//     Interrupt_register(INT_SCIB_RX, scib_isr);
+//     config_SCI_interrupt(SCIB_BASE);
+//     Interrupt_enable(INT_SCIB_RX);
+//
+//     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
 
 //    //********For SCI C **********//
 //
@@ -153,14 +153,6 @@ void main(void)
     Harmonic_Array_content();
     updateBaseLookUpTable();
 
-//    while(DSP_boot == 0)
-//    {
-//        DSP_ready();
-//        DEVICE_DELAY_US(500000);
-//    }
-
-//    ReadDatafromEEPROM();
-//    DEVICE_DELAY_US(1000000);
 
     while(1)
     {
@@ -270,83 +262,11 @@ __interrupt void scib_isr(void)
                 handle_Display_uart(Receive_Buf_Primary, index);
                 CRCvar = false;
                 CRCindex = 0;
-
-//                int w = 0;
-//                for(w = 0; w < index - 1; w++)
-//                {
-//                    SCI_writeCharBlockingFIFO(SCIB_BASE, Receive_Buf_Primary[w]);
-//                }
-//                send_Data_to_Display();
                 index = 0;
             }
         }
     }
-//    SCI_clearInterruptStatus(SCIB_BASE, SCI_INT_RXFF | SCI_INT_TXFF);
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
-
-//    uint32_t istat = SCI_getInterruptStatus(SCIB_BASE);
-//
-//    // Handle RX errors first (framing/parity/break). These suppress further RX interrupts until cleared.
-//    if (istat & SCI_INT_RXERR)
-//    {
-//        volatile uint16_t dump = HWREGH(SCIB_BASE + SCI_O_RXBUF); // read to pop error char
-//        (void)dump;
-//        SCI_clearInterruptStatus(SCIB_BASE, SCI_INT_RXERR);
-//        SCI_resetRxFIFO(SCIB_BASE);          // flush garbage
-//        SCI_clearOverflowStatus(SCIB_BASE);  // clear RXFFOVF if it happened
-//    }
-//
-//    while (SCI_getRxFIFOStatus(SCIB_BASE) != SCI_FIFO_RX0)
-//    {
-//        receivedChar = (uint16_t)(SCI_readCharNonBlocking(SCIB_BASE) & 0xFF);
-//        SCI_clearInterruptStatus(SCIB_BASE, SCI_INT_RXFF);
-//        SCI_clearOverflowStatus(SCIB_BASE);
-//
-//        if(!CRCvar)
-//        {
-//            Receive_Buf_Primary[index] = (uint8_t)receivedChar;
-//            index++;
-//            if (receivedChar == 0x00EF)
-//            {
-//                Receive_Buf_Primary[index] = 0x0000;
-//                CRCvar = true;
-//            }
-//        }
-//
-//        else
-//        {
-//            if(CRCindex < 2)
-//            {
-//                Receive_Buf_Primary[index] = (uint8_t)receivedChar;
-//                index++;
-//                Receive_Buf_Primary[index] = 0x0000;
-//                CRCindex++;
-//            }
-//            if(CRCindex == 2)
-//            {
-//                handle_Display_uart(Receive_Buf_Primary, index);
-//                CRCvar = false;
-//                CRCindex = 0;
-//
-////                int w = 0;
-////                for(w = 0; w < index - 1; w++)
-////                {
-////                    SCI_writeCharBlockingFIFO(SCIB_BASE, Receive_Buf_Primary[w]);
-////                }
-//                index = 0;
-//
-////                send_Data_to_Display();
-//
-//                SCI_clearInterruptStatus(SCIB_BASE, SCI_INT_RXERR);
-//                SCI_resetRxFIFO(SCIB_BASE);          // flush garbage
-//                SCI_clearOverflowStatus(SCIB_BASE);  // clear RXFFOVF if it happened
-//
-//            }
-//        }
-//
-//    }
-//
-//    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
 
 }
 

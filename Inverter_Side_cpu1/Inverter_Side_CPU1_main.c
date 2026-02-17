@@ -17,6 +17,7 @@
 #include "Control_Variables.h"
 #include "Common_Memmap.h"
 #include "Ref_Gen.h"
+#include "Volt_Dip_Int_Var.h"
 
 // Variable declarations for state machine
 void (*alpha_State_Ptr)(void);
@@ -227,7 +228,9 @@ interrupt void ISR(void)
 
 #if mode1 == GE_AC
     #if AC_submode == NormalOperation
-            RUN_INV_ISR_ABC();
+
+    if(StartVoltDipSeq == 0) RUN_INV_ISR_ABC();
+    else RUN_INV_ISR_DipsAndInterruptionSequence();
 
     #elif AC_submode == ACFaults
             RUN_INV_ISR_ABC();  // applicable in balanced and CV mode

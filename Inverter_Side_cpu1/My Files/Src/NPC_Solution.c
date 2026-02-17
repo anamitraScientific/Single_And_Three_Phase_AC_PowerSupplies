@@ -94,6 +94,12 @@ float32_t slope_AngleRef;
 float32_t cosine_A;
 float32_t cosine_B;
 float32_t cosine_C;
+
+
+volatile int32_t StartSeq;
+int32 cycleCount;
+
+
 float32_t pll_ang;
 float32_t pll_ang_A;
 float32_t pll_ang_B;
@@ -817,9 +823,11 @@ void NPC_globalVariablesInit(void)
             //
             //controller Initialization
             //
-//            StartPowerStage      = 0;
             StartPowerStage      = 0;
             StartPowerStage_prev = 0;
+
+            StartVoltDipSeq = 0;
+
             clearPWMTrips        = 0;
             close_CurrentLoop    = 0;
             close_VoltageLoop    = 0;
@@ -827,6 +835,9 @@ void NPC_globalVariablesInit(void)
             aux_isrTicker        = 0;
             PFC_RDY              = 0;
             test_variable        = 0;
+
+            StartSeq = 1;
+            cycleCount = 0;
 
 #if CONVERTER_TYPE == THREE_PHASE
 

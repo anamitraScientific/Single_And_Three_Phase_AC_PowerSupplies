@@ -10,7 +10,6 @@
 #define NPC_SOLUTION_H_
 
 
-
 //
 // Included Files
 //
@@ -120,6 +119,9 @@ extern float32_t Flicker_slope;
 extern float32_t slope_VdcRef;
 //extern float32_t slope_FreqRef;
 extern float32_t slope_AngleRef;
+
+extern volatile int32_t StartSeq;
+extern int32_t cycleCount;
 
 extern float32_t pll_ang;
 extern float32_t pll_ang_A;
@@ -1053,44 +1055,7 @@ static inline void NPC_Testing(void)
 
 ///////// ON OFF and modes are done needs to be tested at power and output off at 2
 
-//static inline void RUN_INV_ISR_ABC(void)
-//{
-//    NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
-//    NPC_run_internal_PLL();
-//    Ref_Gen_function();
-//    NPC_HAL_ClearALLPWMTripFlags();
-//
-//    Ref_A = Ref_A * Vac_fundamental/300.0f ;
-//
-//    Ref_A = Ref_A + (V_DC/300.0f);
-//
-//    if(Ref_A>1)
-//    {
-//        Ref_A = 1;
-//    }
-//    else if(Ref_A<-1)
-//    {
-//        Ref_A = -1;
-//    }
-//
-//    NPC_Calculate_duty(Ref_A);
-//
-//    if(StartPowerStage != 1)
-//    {
-//        DeadBand = 1000;
-//    }
-//
-//    NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
-//                                                dutyB_S1_Ref,
-//                                                DeadBand);
-//
-//    if(DeadBand >= DBTicks)
-//    {
-//        DeadBand = DeadBand - 1;
-//    }
-//
-//
-//}
+
 
 
 
@@ -1225,6 +1190,7 @@ static inline void RUN_INV_ISR_ABC(void)
             DeadBand = DeadBand - 1;
         }
    }
+
 
 #pragma FUNC_ALWAYS_INLINE(Run_aux_ISR)
 static inline void Run_aux_ISR(void)

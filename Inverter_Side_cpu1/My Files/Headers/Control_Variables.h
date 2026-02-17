@@ -35,6 +35,9 @@ extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
 extern volatile int32_t StartPowerStage;
 extern volatile int32_t StartPowerStage_prev;
+
+extern volatile int32_t StartVoltDipSeq;
+
 extern float32_t ON_degree;
 extern float32_t OFF_degree;
 extern volatile int32_t CouplingMode;
