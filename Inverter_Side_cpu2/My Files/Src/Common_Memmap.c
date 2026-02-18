@@ -20,7 +20,6 @@ const DataMapEntry Source_Limit_dataMap[] = {
 
 #if CONVERTER_TYPE == SINGLE_PHASE
                                                      //Source Subsystem
-                                                     {BUFF_DSP_BOOT, &DSP_boot, TYPE_INT32},
                                                      {BUFF_ADR_SET_VAC, &Vac_fundamental, TYPE_FLOAT32},
                                                      {BUFF_ADR_SET_VDC, &V_DC, TYPE_FLOAT32},
                                                      {BUFF_ADR_SET_FREQ, &AC_Freq_Ref, TYPE_FLOAT32},
