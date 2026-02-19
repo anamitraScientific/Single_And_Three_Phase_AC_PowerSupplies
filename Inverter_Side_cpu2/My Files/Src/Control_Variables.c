@@ -29,6 +29,208 @@ float32_t Limit_OPP             = 0.0f;
 float32_t Limit_OCP             = 0.0f;
 float32_t Limit_OCP_Delay       = 0.0f;
 
+int32_t harmonic_select         = 0;
+
+float32_t harm1_no              = 0.0f;
+float32_t harm1_amp             = 0.0f;
+float32_t harm1_pha             = 0.0f;
+
+float32_t harm2_no              = 0.0f;
+float32_t harm2_amp             = 0.0f;
+float32_t harm2_pha             = 0.0f;
+
+float32_t harm3_no              = 0.0f;
+float32_t harm3_amp             = 0.0f;
+float32_t harm3_pha             = 0.0f;
+
+float32_t harm4_no              = 0.0f;
+float32_t harm4_amp             = 0.0f;
+float32_t harm4_pha             = 0.0f;
+
+float32_t harm5_no              = 0.0f;
+float32_t harm5_amp             = 0.0f;
+float32_t harm5_pha             = 0.0f;
+
+float32_t harm6_no              = 0.0f;
+float32_t harm6_amp             = 0.0f;
+float32_t harm6_pha             = 0.0f;
+
+float32_t harm7_no              = 0.0f;
+float32_t harm7_amp             = 0.0f;
+float32_t harm7_pha             = 0.0f;
+
+float32_t harm8_no              = 0.0f;
+float32_t harm8_amp             = 0.0f;
+float32_t harm8_pha             = 0.0f;
+
+float32_t harm9_no              = 0.0f;
+float32_t harm9_amp             = 0.0f;
+float32_t harm9_pha             = 0.0f;
+
+float32_t harm10_no             = 0.0f;
+float32_t harm10_amp            = 0.0f;
+float32_t harm10_pha            = 0.0f;
+
+float32_t harm11_no             = 0.0f;
+float32_t harm11_amp            = 0.0f;
+float32_t harm11_pha            = 0.0f;
+
+float32_t harm12_no             = 0.0f;
+float32_t harm12_amp            = 0.0f;
+float32_t harm12_pha            = 0.0f;
+
+float32_t harm13_no             = 0.0f;
+float32_t harm13_amp            = 0.0f;
+float32_t harm13_pha            = 0.0f;
+
+float32_t harm14_no             = 0.0f;
+float32_t harm14_amp            = 0.0f;
+float32_t harm14_pha            = 0.0f;
+
+float32_t harm15_no             = 0.0f;
+float32_t harm15_amp            = 0.0f;
+float32_t harm15_pha            = 0.0f;
+
+float32_t harm16_no             = 0.0f;
+float32_t harm16_amp            = 0.0f;
+float32_t harm16_pha            = 0.0f;
+
+float32_t harm17_no             = 0.0f;
+float32_t harm17_amp            = 0.0f;
+float32_t harm17_pha            = 0.0f;
+
+float32_t harm18_no             = 0.0f;
+float32_t harm18_amp            = 0.0f;
+float32_t harm18_pha            = 0.0f;
+
+float32_t harm19_no             = 0.0f;
+float32_t harm19_amp            = 0.0f;
+float32_t harm19_pha            = 0.0f;
+
+float32_t harm20_no             = 0.0f;
+float32_t harm20_amp            = 0.0f;
+float32_t harm20_pha            = 0.0f;
+
+float32_t harm21_no             = 0.0f;
+float32_t harm21_amp            = 0.0f;
+float32_t harm21_pha            = 0.0f;
+
+float32_t harm22_no             = 0.0f;
+float32_t harm22_amp            = 0.0f;
+float32_t harm22_pha            = 0.0f;
+
+float32_t harm23_no             = 0.0f;
+float32_t harm23_amp            = 0.0f;
+float32_t harm23_pha            = 0.0f;
+
+float32_t harm24_no             = 0.0f;
+float32_t harm24_amp            = 0.0f;
+float32_t harm24_pha            = 0.0f;
+
+float32_t harm25_no             = 0.0f;
+float32_t harm25_amp            = 0.0f;
+float32_t harm25_pha            = 0.0f;
+
+float32_t harm26_no             = 0.0f;
+float32_t harm26_amp            = 0.0f;
+float32_t harm26_pha            = 0.0f;
+
+float32_t harm27_no             = 0.0f;
+float32_t harm27_amp            = 0.0f;
+float32_t harm27_pha            = 0.0f;
+
+float32_t harm28_no             = 0.0f;
+float32_t harm28_amp            = 0.0f;
+float32_t harm28_pha            = 0.0f;
+
+float32_t harm29_no             = 0.0f;
+float32_t harm29_amp            = 0.0f;
+float32_t harm29_pha            = 0.0f;
+
+float32_t harm30_no             = 0.0f;
+float32_t harm30_amp            = 0.0f;
+float32_t harm30_pha            = 0.0f;
+
+float32_t harm31_no             = 0.0f;
+float32_t harm31_amp            = 0.0f;
+float32_t harm31_pha            = 0.0f;
+
+float32_t harm32_no             = 0.0f;
+float32_t harm32_amp            = 0.0f;
+float32_t harm32_pha            = 0.0f;
+
+float32_t harm33_no             = 0.0f;
+float32_t harm33_amp            = 0.0f;
+float32_t harm33_pha            = 0.0f;
+
+float32_t harm34_no             = 0.0f;
+float32_t harm34_amp            = 0.0f;
+float32_t harm34_pha            = 0.0f;
+
+float32_t harm35_no             = 0.0f;
+float32_t harm35_amp            = 0.0f;
+float32_t harm35_pha            = 0.0f;
+
+float32_t harm36_no             = 0.0f;
+float32_t harm36_amp            = 0.0f;
+float32_t harm36_pha            = 0.0f;
+
+float32_t harm37_no             = 0.0f;
+float32_t harm37_amp            = 0.0f;
+float32_t harm37_pha            = 0.0f;
+
+float32_t harm38_no             = 0.0f;
+float32_t harm38_amp            = 0.0f;
+float32_t harm38_pha            = 0.0f;
+
+float32_t harm39_no             = 0.0f;
+float32_t harm39_amp            = 0.0f;
+float32_t harm39_pha            = 0.0f;
+
+float32_t harm40_no             = 0.0f;
+float32_t harm40_amp            = 0.0f;
+float32_t harm40_pha            = 0.0f;
+
+float32_t harm41_no             = 0.0f;
+float32_t harm41_amp            = 0.0f;
+float32_t harm41_pha            = 0.0f;
+
+float32_t harm42_no             = 0.0f;
+float32_t harm42_amp            = 0.0f;
+float32_t harm42_pha            = 0.0f;
+
+float32_t harm43_no             = 0.0f;
+float32_t harm43_amp            = 0.0f;
+float32_t harm43_pha            = 0.0f;
+
+float32_t harm44_no             = 0.0f;
+float32_t harm44_amp            = 0.0f;
+float32_t harm44_pha            = 0.0f;
+
+float32_t harm45_no             = 0.0f;
+float32_t harm45_amp            = 0.0f;
+float32_t harm45_pha            = 0.0f;
+
+float32_t harm46_no             = 0.0f;
+float32_t harm46_amp            = 0.0f;
+float32_t harm46_pha            = 0.0f;
+
+float32_t harm47_no             = 0.0f;
+float32_t harm47_amp            = 0.0f;
+float32_t harm47_pha            = 0.0f;
+
+float32_t harm48_no             = 0.0f;
+float32_t harm48_amp            = 0.0f;
+float32_t harm48_pha            = 0.0f;
+
+float32_t harm49_no             = 0.0f;
+float32_t harm49_amp            = 0.0f;
+float32_t harm49_pha            = 0.0f;
+
+float32_t harm50_no             = 0.0f;
+float32_t harm50_amp            = 0.0f;
+float32_t harm50_pha            = 0.0f;
+
 /* MEASUREMENT VARIABLES */
 float32_t Meas_Vrms             = 0.0f;         // RMS Voltage
 float32_t Meas_Vdc              = 0.0f;         // DC Voltage component

@@ -7,7 +7,7 @@
 
 #include "Ref_Gen.h"
 
-void Harmonic_Array_Init(void)
+void Harmonic_Array_clear(void)
 {
     uint16_t i;
     i = 0;
@@ -28,10 +28,10 @@ void Harmonic_Array_Init(void)
     }
 }
 
-void Harmonic_Array_content(void)
+void Harmonic_Array_Init(void)
 {
     /* Fundamental only */
-    HarmonicA[0][0] = 1.0f;     HarmonicA[0][1] = 1.0f;      HarmonicA[0][2] = 0.0f;
+    HarmonicA[0][0] = 1.0f;     HarmonicA[0][1] = 100.0f;      HarmonicA[0][2] = 0.0f;
 //    HarmonicB[0][0] = 1.0f;     HarmonicB[0][1] = 1.0f;      HarmonicB[0][2] = 0.0f;
 //    HarmonicC[0][0] = 1.0f;     HarmonicC[0][1] = 1.0f;      HarmonicC[0][2] = 0.0f;
 
@@ -68,36 +68,36 @@ void updateBaseLookUpTable(void)
         {
             /* Phase A */
             float TimeA = (HarmonicA[j][0] * theta_base) + HarmonicA[j][2];
-            ResultA += sinf(TimeA) * HarmonicA[j][1];
+            ResultA += sinf(TimeA) * HarmonicA[j][1] * 0.01f;
 
-            /* Phase B */
-            float TimeB = (HarmonicB[j][0] * theta_base) + HarmonicB[j][2];
-            ResultB += sinf(TimeB) * HarmonicB[j][1];
-
-            /* Phase C */
-            float TimeC = (HarmonicC[j][0] * theta_base) + HarmonicC[j][2];
-            ResultC += sinf(TimeC) * HarmonicC[j][1];
+//            /* Phase B */
+//            float TimeB = (HarmonicB[j][0] * theta_base) + HarmonicB[j][2];
+//            ResultB += sinf(TimeB) * HarmonicB[j][1];
+//
+//            /* Phase C */
+//            float TimeC = (HarmonicC[j][0] * theta_base) + HarmonicC[j][2];
+//            ResultC += sinf(TimeC) * HarmonicC[j][1];
         }
 
         /* Scale */
         float OutA = ResultA * 32767.0f;
-        float OutB = ResultB * 32767.0f;
-        float OutC = ResultC * 32767.0f;
+//        float OutB = ResultB * 32767.0f;
+//        float OutC = ResultC * 32767.0f;
 
         /* Saturate */
         if(OutA >  32767.0f) OutA =  32767.0f;
         if(OutA < -32768.0f) OutA = -32768.0f;
 
-        if(OutB >  32767.0f) OutB =  32767.0f;
-        if(OutB < -32768.0f) OutB = -32768.0f;
-
-        if(OutC >  32767.0f) OutC =  32767.0f;
-        if(OutC < -32768.0f) OutC = -32768.0f;
+//        if(OutB >  32767.0f) OutB =  32767.0f;
+//        if(OutB < -32768.0f) OutB = -32768.0f;
+//
+//        if(OutC >  32767.0f) OutC =  32767.0f;
+//        if(OutC < -32768.0f) OutC = -32768.0f;
 
         /* Store */
         BaseLUT_A[i] = (signed int)OutA;
-        BaseLUT_B[i] = (signed int)OutB;
-        BaseLUT_C[i] = (signed int)OutC;
+//        BaseLUT_B[i] = (signed int)OutB;
+//        BaseLUT_C[i] = (signed int)OutC;
     }
 }
 

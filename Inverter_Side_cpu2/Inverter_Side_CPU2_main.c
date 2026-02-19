@@ -149,8 +149,8 @@ void main(void)
 
     Angle_Step = TWO_PI / (float)LUT_SIZE;
 
+    Harmonic_Array_clear();
     Harmonic_Array_Init();
-    Harmonic_Array_content();
     updateBaseLookUpTable();
 
 //    while(DSP_boot == 0)

@@ -36,6 +36,208 @@ extern float32_t Limit_OPP;
 extern float32_t Limit_OCP;
 extern float32_t Limit_OCP_Delay;
 
+extern int32_t harmonic_select;
+
+extern float32_t harm1_no;
+extern float32_t harm1_amp;
+extern float32_t harm1_pha;
+
+extern float32_t harm2_no;
+extern float32_t harm2_amp;
+extern float32_t harm2_pha;
+
+extern float32_t harm3_no;
+extern float32_t harm3_amp;
+extern float32_t harm3_pha;
+
+extern float32_t harm4_no;
+extern float32_t harm4_amp;
+extern float32_t harm4_pha;
+
+extern float32_t harm5_no;
+extern float32_t harm5_amp;
+extern float32_t harm5_pha;
+
+extern float32_t harm6_no;
+extern float32_t harm6_amp;
+extern float32_t harm6_pha;
+
+extern float32_t harm7_no;
+extern float32_t harm7_amp;
+extern float32_t harm7_pha;
+
+extern float32_t harm8_no;
+extern float32_t harm8_amp;
+extern float32_t harm8_pha;
+
+extern float32_t harm9_no;
+extern float32_t harm9_amp;
+extern float32_t harm9_pha;
+
+extern float32_t harm10_no;
+extern float32_t harm10_amp;
+extern float32_t harm10_pha;
+
+extern float32_t harm11_no;
+extern float32_t harm11_amp;
+extern float32_t harm11_pha;
+
+extern float32_t harm12_no;
+extern float32_t harm12_amp;
+extern float32_t harm12_pha;
+
+extern float32_t harm13_no;
+extern float32_t harm13_amp;
+extern float32_t harm13_pha;
+
+extern float32_t harm14_no;
+extern float32_t harm14_amp;
+extern float32_t harm14_pha;
+
+extern float32_t harm15_no;
+extern float32_t harm15_amp;
+extern float32_t harm15_pha;
+
+extern float32_t harm16_no;
+extern float32_t harm16_amp;
+extern float32_t harm16_pha;
+
+extern float32_t harm17_no;
+extern float32_t harm17_amp;
+extern float32_t harm17_pha;
+
+extern float32_t harm18_no;
+extern float32_t harm18_amp;
+extern float32_t harm18_pha;
+
+extern float32_t harm19_no;
+extern float32_t harm19_amp;
+extern float32_t harm19_pha;
+
+extern float32_t harm20_no;
+extern float32_t harm20_amp;
+extern float32_t harm20_pha;
+
+extern float32_t harm21_no;
+extern float32_t harm21_amp;
+extern float32_t harm21_pha;
+
+extern float32_t harm22_no;
+extern float32_t harm22_amp;
+extern float32_t harm22_pha;
+
+extern float32_t harm23_no;
+extern float32_t harm23_amp;
+extern float32_t harm23_pha;
+
+extern float32_t harm24_no;
+extern float32_t harm24_amp;
+extern float32_t harm24_pha;
+
+extern float32_t harm25_no;
+extern float32_t harm25_amp;
+extern float32_t harm25_pha;
+
+extern float32_t harm26_no;
+extern float32_t harm26_amp;
+extern float32_t harm26_pha;
+
+extern float32_t harm27_no;
+extern float32_t harm27_amp;
+extern float32_t harm27_pha;
+
+extern float32_t harm28_no;
+extern float32_t harm28_amp;
+extern float32_t harm28_pha;
+
+extern float32_t harm29_no;
+extern float32_t harm29_amp;
+extern float32_t harm29_pha;
+
+extern float32_t harm30_no;
+extern float32_t harm30_amp;
+extern float32_t harm30_pha;
+
+extern float32_t harm31_no;
+extern float32_t harm31_amp;
+extern float32_t harm31_pha;
+
+extern float32_t harm32_no;
+extern float32_t harm32_amp;
+extern float32_t harm32_pha;
+
+extern float32_t harm33_no;
+extern float32_t harm33_amp;
+extern float32_t harm33_pha;
+
+extern float32_t harm34_no;
+extern float32_t harm34_amp;
+extern float32_t harm34_pha;
+
+extern float32_t harm35_no;
+extern float32_t harm35_amp;
+extern float32_t harm35_pha;
+
+extern float32_t harm36_no;
+extern float32_t harm36_amp;
+extern float32_t harm36_pha;
+
+extern float32_t harm37_no;
+extern float32_t harm37_amp;
+extern float32_t harm37_pha;
+
+extern float32_t harm38_no;
+extern float32_t harm38_amp;
+extern float32_t harm38_pha;
+
+extern float32_t harm39_no;
+extern float32_t harm39_amp;
+extern float32_t harm39_pha;
+
+extern float32_t harm40_no;
+extern float32_t harm40_amp;
+extern float32_t harm40_pha;
+
+extern float32_t harm41_no;
+extern float32_t harm41_amp;
+extern float32_t harm41_pha;
+
+extern float32_t harm42_no;
+extern float32_t harm42_amp;
+extern float32_t harm42_pha;
+
+extern float32_t harm43_no;
+extern float32_t harm43_amp;
+extern float32_t harm43_pha;
+
+extern float32_t harm44_no;
+extern float32_t harm44_amp;
+extern float32_t harm44_pha;
+
+extern float32_t harm45_no;
+extern float32_t harm45_amp;
+extern float32_t harm45_pha;
+
+extern float32_t harm46_no;
+extern float32_t harm46_amp;
+extern float32_t harm46_pha;
+
+extern float32_t harm47_no;
+extern float32_t harm47_amp;
+extern float32_t harm47_pha;
+
+extern float32_t harm48_no;
+extern float32_t harm48_amp;
+extern float32_t harm48_pha;
+
+extern float32_t harm49_no;
+extern float32_t harm49_amp;
+extern float32_t harm49_pha;
+
+extern float32_t harm50_no;
+extern float32_t harm50_amp;
+extern float32_t harm50_pha;
+
 /* MEASUREMENT VARIABLES */
 extern float32_t Meas_Vrms;            // RMS Voltage
 extern float32_t Meas_Vdc;             // DC Voltage component
