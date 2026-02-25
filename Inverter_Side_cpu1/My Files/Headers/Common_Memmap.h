@@ -261,8 +261,9 @@ extern int32_t val_prev_int;
 #define    BUFF_SET_HARMNO                          (BUFF_ADR_HARM50_PHASE + 4)
 #define    BUFF_SET_HARMAMP                         (BUFF_SET_HARMNO + 4)
 #define    BUFF_SET_HARMPHASE                       (BUFF_SET_HARMAMP + 4)
+#define    BUFF_SET_HARMSRNUM                       (BUFF_SET_HARMPHASE + 4)
 
-#define    BUFF_ADR_MEAS_VOLT                       (BUFF_SET_HARMPHASE + 4)
+#define    BUFF_ADR_MEAS_VOLT                       (BUFF_SET_HARMSRNUM + 4)
 #define    BUFF_ADR_MEAS_VDC                        (BUFF_ADR_MEAS_VOLT + 4)
 #define    BUFF_ADR_MEAS_VAC                        (BUFF_ADR_MEAS_VDC + 4)
 #define    BUFF_ADR_MEAS_IDC                        (BUFF_ADR_MEAS_VAC + 4)

@@ -15,6 +15,7 @@
 
 #define MAX_LENGTH      1024
 extern uint16_t Receive_Buf_Secondary[MAX_LENGTH];
+extern uint16_t Receive_Buf_Primary[MAX_LENGTH];
 
 #define MAX_HARMONIC_NO     50
 #define LUT_SIZE            720
@@ -37,9 +38,8 @@ typedef union
 extern IntToUint16 intConv;
 
 typedef struct {
-    int cpu2Write_Flag;
     uint16_t VarAddr[2];
-    bool EEPROM_STM_cpu2Write;
+    uint16_t dataLength[2];
 }SharedFlags;
 
 extern volatile SharedFlags cpu2Write_Flags;

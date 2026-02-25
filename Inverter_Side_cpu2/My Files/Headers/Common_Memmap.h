@@ -48,19 +48,19 @@ typedef struct{
 #define    BUFF_ADR_LIM_OCP                         (BUFF_ADR_LIM_OPP + 4)
 #define    BUFF_ADR_LIM_OCP_DLY                     (BUFF_ADR_LIM_OCP + 4)
 
-#define    BUFF_ADR_HARM_WAVEFORM_NUM               (BUFF_ADR_LIM_OCP_DLY + 4)
+#define    BUFF_ADR_HARM_WAVEFORM_NUM               (BUFF_ADR_LIM_OCP_DLY + 4)              //63
 
-#define    BUFF_ADR_HARM1_NO                        (BUFF_ADR_HARM_WAVEFORM_NUM + 1)
-#define    BUFF_ADR_HARM1_AMP                       (BUFF_ADR_HARM1_NO + 4)
-#define    BUFF_ADR_HARM1_PHASE                     (BUFF_ADR_HARM1_AMP + 4)
+#define    BUFF_ADR_HARM1_NO                        (BUFF_ADR_HARM_WAVEFORM_NUM + 1)        //64
+#define    BUFF_ADR_HARM1_AMP                       (BUFF_ADR_HARM1_NO + 4)                 //68
+#define    BUFF_ADR_HARM1_PHASE                     (BUFF_ADR_HARM1_AMP + 4)                //72
 
 #define    BUFF_ADR_HARM_BASE                       (BUFF_ADR_HARM1_NO)
 #define    BUFF_ADR_HARM_NUM(n)                     (BUFF_ADR_HARM_BASE + ((n-1) * 12))
 #define    BUFF_ADR_HARM_AMP(n)                     (BUFF_ADR_HARM_BASE + ((n-1) * 12) + 4)
 #define    BUFF_ADR_HARM_PHASE(n)                   (BUFF_ADR_HARM_BASE + ((n-1) * 12) + 8)
 
-#define    BUFF_ADR_HARM2_NO                        (BUFF_ADR_HARM1_PHASE + 4)
-#define    BUFF_ADR_HARM2_AMP                       (BUFF_ADR_HARM2_NO + 4)
+#define    BUFF_ADR_HARM2_NO                        (BUFF_ADR_HARM1_PHASE + 4)              //76
+#define    BUFF_ADR_HARM2_AMP                       (BUFF_ADR_HARM2_NO + 4)                 //80
 #define    BUFF_ADR_HARM2_PHASE                     (BUFF_ADR_HARM2_AMP + 4)
 
 #define    BUFF_ADR_HARM3_NO                        (BUFF_ADR_HARM2_PHASE + 4)
@@ -258,8 +258,9 @@ typedef struct{
 #define    BUFF_SET_HARMNO                          (BUFF_ADR_HARM50_PHASE + 4)
 #define    BUFF_SET_HARMAMP                         (BUFF_SET_HARMNO + 4)
 #define    BUFF_SET_HARMPHASE                       (BUFF_SET_HARMAMP + 4)
+#define    BUFF_SET_HARMSRNUM                       (BUFF_SET_HARMPHASE + 4)
 
-#define    BUFF_ADR_MEAS_VOLT                       (BUFF_SET_HARMPHASE + 4)
+#define    BUFF_ADR_MEAS_VOLT                       (BUFF_SET_HARMSRNUM + 4)
 #define    BUFF_ADR_MEAS_VDC                        (BUFF_ADR_MEAS_VOLT + 4)
 #define    BUFF_ADR_MEAS_VAC                        (BUFF_ADR_MEAS_VDC + 4)
 #define    BUFF_ADR_MEAS_IDC                        (BUFF_ADR_MEAS_VAC + 4)
@@ -530,6 +531,7 @@ float32_t hex2float(void);
 int32_t hex2int(void);
 extern void ReadMeasureDataFromSharedMemory(void);
 extern void MemDataUpdate(void);
+extern void HarmonicTableUpdate(uint16_t startIdx, uint16_t length);
 
 extern const DataMapEntry Measure_Input_dataMap[];
 extern const size_t NUM_ENTRIES_MEAS_IN;
