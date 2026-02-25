@@ -11,10 +11,13 @@ MEMORY
    RAMD1            : origin = 0x00C800, length = 0x000800
    RAMLS0           : origin = 0x008000, length = 0x000800
    RAMLS1           : origin = 0x008800, length = 0x000800
-   RAMLS2           : origin = 0x009000, length = 0x000800
-   RAMLS3           : origin = 0x009800, length = 0x000800
-   RAMLS4           : origin = 0x00A000, length = 0x000800
-   RAMLS5           : origin = 0x00A800, length = 0x000800
+//   RAMLS2           : origin = 0x009000, length = 0x000800
+//   RAMLS3           : origin = 0x009800, length = 0x000800
+//   RAMLS4           : origin = 0x00A000, length = 0x000800
+//   RAMLS5           : origin = 0x00A800, length = 0x000800
+   RAMLS2_5 		: origin = 0x009000, length = 0x002000
+
+
    RAMLS6           : origin = 0x00B000, length = 0x000800
    RAMLS7           : origin = 0x00B800, length = 0x000800
    RAMGS0           : origin = 0x00D000, length = 0x001000
@@ -71,19 +74,28 @@ SECTIONS
    .stack              : > RAMM1
 
 #if defined(__TI_EABI__)
-   .init_array      : > FLASH4, ALIGN(8)
-   .bss             : > RAMLS3
-   .bss:output      : > RAMLS3
-   .bss:cio         : > RAMLS3
-   .data            : > RAMLS2
+//   .init_array      : > FLASH4, ALIGN(8)
+//   .bss             : > RAMLS3
+//   .bss:output      : > RAMLS3
+//   .bss:cio         : > RAMLS3
+//   .data            : > RAMLS2
+//   .sysmem          : > RAMM1
+
+   .bss             : > RAMLS2_5
+   .bss:output      : > RAMLS2_5
+   .bss:cio         : > RAMLS2_5
+   .data            : > RAMLS2_5
    .sysmem          : > RAMM1
+
    /* Initalized sections go in Flash */
    .const           : > FLASH5, ALIGN(8)
 #else
    .pinit           : > FLASH4, ALIGN(8)
-   .ebss            : > RAMLS3
+//   .ebss            : > RAMLS3
+	.ebss            : > RAMLS2_5
    .esysmem         : > RAMM1
-   .cio             : > RAMLS3
+//   .cio             : > RAMLS3
+	.cio             : > RAMLS2_5
    /* Initalized sections go in Flash */
    .econst          : >> FLASH4 | FLASH5, ALIGN(8)
 #endif
@@ -112,7 +124,8 @@ SECTIONS
 
    #if defined(__TI_EABI__)
        .TI.ramfunc : {} LOAD = FLASH3,
-                        RUN = RAMLS0 | RAMLS1 | RAMLS2 |RAMLS3,
+//                        RUN = RAMLS0 | RAMLS1 | RAMLS2 |RAMLS3,
+                        RUN = RAMLS0 | RAMLS1 | RAMLS2_5,
                         LOAD_START(RamfuncsLoadStart),
                         LOAD_SIZE(RamfuncsLoadSize),
                         LOAD_END(RamfuncsLoadEnd),
@@ -122,7 +135,8 @@ SECTIONS
                         ALIGN(8)
    #else
        .TI.ramfunc : {} LOAD = FLASH3,
-                        RUN = RAMLS0 | RAMLS1 | RAMLS2 |RAMLS3,
+//                        RUN = RAMLS0 | RAMLS1 | RAMLS2 |RAMLS3,
+                        RUN = RAMLS0 | RAMLS1 | RAMLS2_5,
                         LOAD_START(_RamfuncsLoadStart),
                         LOAD_SIZE(_RamfuncsLoadSize),
                         LOAD_END(_RamfuncsLoadEnd),
@@ -133,8 +147,10 @@ SECTIONS
    #endif
    
     /* The following section definition are for DCSM dual core examples */
-    ZONE1_RAM       : > RAMLS4
-    UNSECURE_RAM    : > RAMLS6
+//    ZONE1_RAM       : > RAMLS4
+    ZONE1_RAM       : > RAMLS6
+//    UNSECURE_RAM    : > RAMLS6
+	UNSECURE_RAM    : > RAMLS7
     CSMKEY_RAM      : > RAMD0
 }
 

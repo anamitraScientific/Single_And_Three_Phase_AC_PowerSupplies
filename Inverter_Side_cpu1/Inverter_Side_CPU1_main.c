@@ -108,10 +108,10 @@ void main(void)
 
 
     memset((void*)cpu1Read, 0, sizeof(cpu1Read));
-    cpu1Read_Flags.EEPROM_STM_cpu1Read = FALSE;
-    cpu1Read_Flags.cpu1Read_Flag = 0;
-    cpu1Read_Flags.readVarAddr[0] = 0;
-    cpu1Read_Flags.readVarAddr[1] = 0;
+    cpu1Read_Flags.VarAddr[0] = 0;
+    cpu1Read_Flags.VarAddr[1] = 0;
+    cpu1Read_Flags.dataLength[0] = 0;
+    cpu1Read_Flags.dataLength[1] = 0;
     memset((void*)cpu1Write, 0, sizeof(cpu1Write));
     cpu1Write_Flag = 0;
 
@@ -389,14 +389,14 @@ interrupt void ISR(void)
 
 static inline void CheckSharedMemory(void)
 {
-    if(cpu1Read_Flags.EEPROM_STM_cpu1Read == TRUE){
-        MemDataUpdate();
-    }
-    else{}
-
-    uint16_t Start_Address;
-    Start_Address = cpu1Read_Flags.readVarAddr[0]*256 + cpu1Read_Flags.readVarAddr[1];
-    MarkDirty(Start_Address);
+//    if(cpu1Read_Flags.EEPROM_STM_cpu1Read == TRUE){
+//        MemDataUpdate();
+//    }
+//    else{}
+//
+//    uint16_t Start_Address;
+//    Start_Address = cpu1Read_Flags.readVarAddr[0]*256 + cpu1Read_Flags.readVarAddr[1];
+//    MarkDirty(Start_Address);
     ReadingDataFromSharedMemory();
 }
 

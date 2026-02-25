@@ -28,7 +28,7 @@ extern void handle_Display_uart(uint16_t r_Buff[], uint16_t size);
 extern void send_Data_to_STM(void);
 extern void DSP_ready(void);
 extern void ReadDatafromEEPROM(void);
-//static inline void ackDataReceive(void);
+static inline void ackDataReceive(void);
 
 
 extern uint16_t DataSize;
@@ -38,6 +38,6 @@ extern bool TransmitData;
 
 extern uint16_t crcACKglobal[4];
 
-
+extern int harmonicChunk;
 
 #endif /* UART_H_ */

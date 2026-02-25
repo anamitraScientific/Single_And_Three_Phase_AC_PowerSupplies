@@ -30,9 +30,8 @@ typedef union
 extern IntToUint16 intConv;
 
 typedef struct{
-    uint16_t cpu1Read_Flag;
-    uint16_t readVarAddr[2];
-    bool EEPROM_STM_cpu1Read;
+    uint16_t VarAddr[2];
+    uint16_t dataLength[2];
 }SharedFlags;
 
 extern volatile SharedFlags cpu1Read_Flags;

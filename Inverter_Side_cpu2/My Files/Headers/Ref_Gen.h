@@ -16,8 +16,8 @@
 #include "Config.h"
 
 
+extern void Harmonic_Array_clear(void);
 extern void Harmonic_Array_Init(void);
-extern void Harmonic_Array_content(void);
 extern void updateBaseLookUpTable(void);
 
 
