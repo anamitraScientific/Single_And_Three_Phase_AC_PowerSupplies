@@ -78,6 +78,7 @@ extern void NPC_HAL_TurnOFF_LED2(void);
 
 
 extern void NPC_HAL_SCI_B_GPIO_18_19_Init(void);
+extern void NPC_HAL_SCI_C_GPIO_56_139_Init(void);
 extern void NPC_HAL_config_SCI_polling(uint32_t base);
 extern void NPC_HAL_config_SCI_interrupt(uint32_t base);
 

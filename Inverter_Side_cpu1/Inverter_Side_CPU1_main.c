@@ -50,7 +50,6 @@ volatile float32_t HarmonicC[MAX_HARMONIC_NO][3];
 #pragma DATA_SECTION(HarmonicC, "SHARERAMGS10");
 
 
-uint16_t ipcFlag17 = 17U;
 volatile uint16_t handshake;
 volatile bool handshake_flag;
 
@@ -86,6 +85,7 @@ void main(void)
     NPC_HAL_setupDevice();
 
     SysCtl_selectCPUForPeripheral(SYSCTL_CPUSEL5_SCI, 2, SYSCTL_CPUSEL_CPU2); // Hand-over the SCI B module access to CPU2
+    SysCtl_selectCPUForPeripheral(SYSCTL_CPUSEL5_SCI, 3, SYSCTL_CPUSEL_CPU2); // Hand-over the SCI C module access to CPU2
     MemCfg_setGSRAMControllerSel(MEMCFG_SECT_GS6 | MEMCFG_SECT_GS8 | MEMCFG_SECT_GS10, MEMCFG_GSRAMCONTROLLER_CPU2); //Hand-over the control of GS6 & GS8 shared memory section to CPU2
 
 
@@ -95,10 +95,7 @@ void main(void)
     NPC_HAL_disablePWMCLKCounting(); // Stop all PWM mode clock
 
     NPC_HAL_SCI_B_GPIO_18_19_Init();
-//    NPC_HAL_SCI_C_GPIO_56_139_Init();
-
-//    Device_bootCPU2(BOOTMODE_BOOT_TO_FLASH_SECTOR0);//Send boot command to allow the CPU2 application to begin execution
-//    IPC_sync(IPC_CPU1_L_CPU2_R, IPC_FLAG31);
+    NPC_HAL_SCI_C_GPIO_56_139_Init();
 
 
     NPC_HAL_configureDAC();
@@ -136,7 +133,6 @@ void main(void)
 
     NPC_HAL_setupBoardProtection();
     NPC_HAL_setupInterrupt();
-//    MemCfg_setGSRAMControllerSel(MEMCFG_SECT_GS6 | MEMCFG_SECT_GS8, MEMCFG_GSRAMCONTROLLER_CPU2); //Hand-over the control of GS6 & GS8 shared memory section to CPU2
     Device_bootCPU2(BOOTMODE_BOOT_TO_FLASH_SECTOR0);//Send boot command to allow the CPU2 application to begin execution
     IPC_sync(IPC_CPU1_L_CPU2_R, IPC_FLAG31);
 

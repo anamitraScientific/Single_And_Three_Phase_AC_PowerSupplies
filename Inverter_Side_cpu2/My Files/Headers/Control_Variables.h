@@ -263,6 +263,17 @@ extern float32_t Meas_Preactive;       // Reactive Power (VAR)
 extern float32_t Meas_Papparent;       // Apparent Power (VA)
 extern float32_t Meas_PF;              // Power Factor
 
+/*Input Side Measurement Variables*/
+extern float32_t Meas_Vin_rms;                // Input RMS Voltage
+extern float32_t Meas_Iin_rms;                // Input RMS Current
+extern float32_t Meas_Vdc_bus;                // PFC DC bus voltage
+extern float32_t Meas_Freq_in;                // Input Measured Frequency
+extern float32_t Meas_Preal_in;               // Input Real Power (Watts)
+extern float32_t Meas_Preactive_in;           // Input Reactive Power (VAR)
+extern float32_t Meas_Papparent_in;           // Input Apparent Power (VA)
+extern float32_t Meas_PF_in;                  // Input Power Factor
+extern volatile int32_t PFC_state;            // PFC operating state
+
 #elif CONVERTER_TYPE == THREE_PHASE
 
 //***********Source Subsystem***********//

@@ -1531,13 +1531,14 @@ void NPC_HAL_TurnONRelay(void)
 
 void NPC_HAL_SCI_B_GPIO_18_19_Init(void)
 {
-#ifdef _LAUNCHXL_F28379D
-    GPIO_setPinConfig(GPIO_19_SCIRXDB);
-    GPIO_setPinConfig(GPIO_18_SCITXDB);
-#elif defined(_LAUNCHXL_F28388D)
     GPIO_setPinConfig(GPIO_19_SCIB_RX);
     GPIO_setPinConfig(GPIO_18_SCIB_TX);
-#endif
+}
+
+void NPC_HAL_SCI_C_GPIO_56_139_Init(void)
+{
+    GPIO_setPinConfig(GPIO_56_SCIC_TX);
+    GPIO_setPinConfig(GPIO_139_SCIC_RX);
 }
 
 void NPC_HAL_config_SCI_polling(uint32_t base)

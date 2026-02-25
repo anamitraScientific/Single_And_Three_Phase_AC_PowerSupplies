@@ -50,15 +50,17 @@ volatile float32_t HarmonicC[MAX_HARMONIC_NO][3];
 
 volatile float32_t Angle_Step;
 
-uint16_t ipcFlag17 = 17U;
 
-uint16_t Receive_Buf_Primary[MAX_LENGTH];
+uint16_t Receive_Buf_Primary[MAX_LENGTH];  // to handle incoming data from IOD, connected to SCIB
+uint16_t Receive_Buf_Primary1[MAX_LENGTH];  // to handle incoming data from PFC, connected to SCIC
 uint16_t Receive_Buf_Secondary[MAX_LENGTH];
 uint16_t tempArr[MAX_LENGTH] = {0x0000};
 
 
-uint16_t  receivedChar;
-uint16_t index = 0;
+uint16_t  receivedChar; // to handle incoming data from IOD, connected to SCIB
+uint16_t  receivedChar1; // to handle incoming data from PFC, connected to SCIC
+uint16_t index = 0; // to handle incoming data from IOD, connected to SCIB
+uint16_t index1 = 0; // to handle incoming data from PFC, connected to SCIC
 int check = 0;
 int check1 = 0;
 int check1_prev = 0;
@@ -77,7 +79,7 @@ uint16_t CRCbuff[2] = {0x0000};
 //*******Function Prototypes**********//
 void config_SCI_interrupt(uint32_t base);
 __interrupt void scib_isr(void);  // for SCI B
-//__interrupt void scic_isr(void);  // for SCI C
+__interrupt void scic_isr(void);  // for SCI C
 void Read_Data_from_Shared_Memory(void);
 
 
@@ -114,11 +116,11 @@ void main(void)
      Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
 
 //    //********For SCI C **********//
-//
-//    Interrupt_register(INT_SCIC_RX, scic_isr);
-//    config_SCI_interrupt(SCIC_BASE);
-//    Interrupt_enable(INT_SCIC_RX);
-//
+
+    Interrupt_register(INT_SCIC_RX, scic_isr);
+    config_SCI_interrupt(SCIC_BASE);
+    Interrupt_enable(INT_SCIC_RX);
+
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP8);
 
 
@@ -150,7 +152,7 @@ void main(void)
 
         if(Delay_counter==5)
         {
-            send_Data_to_STM();
+//            send_Data_to_STM();
             Delay_counter = 0;
         }
         Delay_counter++;
@@ -254,12 +256,48 @@ __interrupt void scib_isr(void)
             }
         }
     }
-//    SCI_clearInterruptStatus(SCIB_BASE, SCI_INT_RXFF | SCI_INT_TXFF);
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
-
 }
 
+__interrupt void scic_isr(void)
+{
+    uint32_t istat = SCI_getInterruptStatus(SCIC_BASE);
 
+    // Handle RX errors first (framing/parity/break). These suppress further RX interrupts until cleared.
+    if (istat & SCI_INT_RXERR)
+    {
+        volatile uint16_t dump = HWREGH(SCIC_BASE + SCI_O_RXBUF); // read to pop error char
+        (void)dump;
+        SCI_clearInterruptStatus(SCIC_BASE, SCI_INT_RXERR);
+        SCI_resetRxFIFO(SCIC_BASE);          // flush garbage
+        SCI_clearOverflowStatus(SCIC_BASE);  // clear RXFFOVF if it happened
+    }
+
+    // Drain the FIFO completely so the next interrupt can re-arm
+    while (SCI_getRxFIFOStatus(SCIC_BASE) != SCI_FIFO_RX0)
+    {
+        receivedChar1 = (uint16_t)(SCI_readCharNonBlocking(SCIC_BASE) & 0xFF);
+        SCI_clearInterruptStatus(SCIC_BASE, SCI_INT_RXFF);
+        SCI_clearOverflowStatus(SCIC_BASE);
+        Receive_Buf_Primary1[index1] = (uint8_t)receivedChar1;
+        index1++;
+
+        if (receivedChar1 == 0x000A)
+        {
+            Receive_Buf_Primary1[index1] = 0x0000;
+
+            int w = 0;
+            for(w = 0; w < index1 - 1; w++)
+            {
+                SCI_writeCharBlockingFIFO(SCIC_BASE, Receive_Buf_Primary1[w]);
+            }
+
+            index1 = 0;
+        }
+    }
+
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP8);
+}
 
 
 
