@@ -66,7 +66,7 @@ void handle_Display_uart(uint16_t r_Buff[], uint16_t size)
                     Receive_Buf_Secondary[Start_Address + p] = r_Buff2[5 + p];
                     cpu2Write[Start_Address + p] = r_Buff2[5 + p];
                 }
-                MemDataUpdate();
+                SetDataUpdate();
             }
             else
             {
@@ -261,7 +261,25 @@ void ReadDatafromEEPROM(void)
     }
 }
 
+void handle_PFC_uart(uint16_t Pfc_buff[], uint16_t Pfc_datasize)
+{
+    if(Pfc_buff[0] == 0x004A && Pfc_buff[Pfc_datasize - 1] == 0x00EF)
+    {
+        uint16_t crcCheck = crc16(Pfc_buff, (Pfc_datasize - 1));
 
+        if(crcCheck == 0x0000)
+        {
+            uint16_t pfcStartAddr = Pfc_buff[1]*256 + Pfc_buff[2];
+            uint16_t pfcDataLen = Pfc_buff[3]*256 + Pfc_buff[4];
+            uint16_t p = 0;
+            for(p = 0; p < pfcDataLen; p++)
+            {
+                Receive_Buf_Secondary[pfcStartAddr + p] = Pfc_buff[5 + p];
+            }
+            ReadMeasureDataFromPFC();
+        }
+    }
+}
 
 
 

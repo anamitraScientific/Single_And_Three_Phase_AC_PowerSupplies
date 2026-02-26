@@ -29,6 +29,7 @@ extern void send_Data_to_STM(void);
 extern void DSP_ready(void);
 extern void ReadDatafromEEPROM(void);
 static inline void ackDataReceive(void);
+extern void handle_PFC_uart(uint16_t Pfc_buff[], uint16_t size);
 
 
 extern uint16_t DataSize;

@@ -202,7 +202,7 @@ void config_SCI_interrupt(uint32_t base)
 }
 
 
-//********For SCI B **********//
+//********For SCI B  connected to IOD**********//
 
 __interrupt void scib_isr(void)
 {
@@ -259,6 +259,8 @@ __interrupt void scib_isr(void)
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP9);
 }
 
+
+//********For SCI C  connected to PFC**********//
 __interrupt void scic_isr(void)
 {
     uint32_t istat = SCI_getInterruptStatus(SCIC_BASE);
@@ -282,16 +284,10 @@ __interrupt void scic_isr(void)
         Receive_Buf_Primary1[index1] = (uint8_t)receivedChar1;
         index1++;
 
-        if (receivedChar1 == 0x000A)
+        if (receivedChar1 == 0x00EF)
         {
             Receive_Buf_Primary1[index1] = 0x0000;
-
-            int w = 0;
-            for(w = 0; w < index1 - 1; w++)
-            {
-                SCI_writeCharBlockingFIFO(SCIC_BASE, Receive_Buf_Primary1[w]);
-            }
-
+            handle_PFC_uart(Receive_Buf_Primary1, index1);
             index1 = 0;
         }
     }

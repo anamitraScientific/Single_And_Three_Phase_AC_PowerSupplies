@@ -284,7 +284,17 @@ typedef struct{
 #define    BUFF_ADR_MEAS_VA                         (BUFF_ADR_MEAS_VAR + 4)
 #define    BUFF_ADR_MEAS_PF                         (BUFF_ADR_MEAS_VA + 4)
 
-#define    BUFF_END_ADDR                            (BUFF_ADR_MEAS_PF + 4)
+#define    BUFF_ADR_MEAS_V_IN                       (BUFF_ADR_MEAS_PF + 4)
+#define    BUFF_ADR_MEAS_I_IN                       (BUFF_ADR_MEAS_V_IN + 4)
+#define    BUFF_ADR_MEAS_VDC_IN                     (BUFF_ADR_MEAS_I_IN + 4)
+#define    BUFF_ADR_MEAS_FREQ_IN                    (BUFF_ADR_MEAS_VDC_IN + 4)
+#define    BUFF_ADR_MEAS_POWER_IN                   (BUFF_ADR_MEAS_FREQ_IN + 4)
+#define    BUFF_ADR_MEAS_VAR_IN                     (BUFF_ADR_MEAS_POWER_IN + 4)
+#define    BUFF_ADR_MEAS_VA_IN                      (BUFF_ADR_MEAS_VAR_IN + 4)
+#define    BUFF_ADR_MEAS_PF_IN                      (BUFF_ADR_MEAS_VA_IN + 4)
+#define    BUFF_ADR_PFC_STATE                       (BUFF_ADR_MEAS_PF_IN + 4)
+
+#define    BUFF_END_ADDR                            (BUFF_ADR_PFC_STATE + 4)
 
 #elif CONVERTER_TYPE == THREE_PHASE
 //***************************Source Subsystem************************************//
@@ -524,14 +534,15 @@ typedef struct{
 #endif
 
 
-extern void InitDataMappping(void);
-extern void MarkDirty(uint16_t address);
-extern void ProcessData(void);
+//extern void InitDataMappping(void);
+//extern void MarkDirty(uint16_t address);
+//extern void ProcessData(void);
 float32_t hex2float(void);
 int32_t hex2int(void);
 extern void ReadMeasureDataFromSharedMemory(void);
-extern void MemDataUpdate(void);
+extern void SetDataUpdate(void);
 extern void HarmonicTableUpdate(uint16_t startIdx, uint16_t length);
+extern void ReadMeasureDataFromPFC(void);
 
 extern const DataMapEntry Measure_Input_dataMap[];
 extern const size_t NUM_ENTRIES_MEAS_IN;

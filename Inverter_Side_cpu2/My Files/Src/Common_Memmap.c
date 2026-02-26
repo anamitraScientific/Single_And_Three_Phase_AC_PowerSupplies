@@ -398,7 +398,7 @@ const DataMapEntry Harmonic_dataMap[] = {
 
 };
 
-const DataMapEntry Measure_Input_dataMap[] = {
+const DataMapEntry Measure_dataMap[] = {
 
 #if CONVERTER_TYPE == SINGLE_PHASE
 
@@ -527,64 +527,80 @@ const DataMapEntry Measure_Input_dataMap[] = {
 #endif
 };
 
-#define NUM_ENTRIES_SRC_LIM (sizeof(Source_Limit_dataMap)/sizeof(DataMapEntry))
+const DataMapEntry Measure_PFC_dataMap[] = {
 
-const size_t NUM_ENTRIES_MEAS_IN = (sizeof(Measure_Input_dataMap)/sizeof(DataMapEntry));
+                                                     //Input Measure Subsystem - PFC Side
+                                                     {BUFF_ADR_MEAS_V_IN, &Meas_Vin_rms, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_I_IN, &Meas_Iin_rms, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_VDC_IN, &Meas_Vdc_bus, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_FREQ_IN, &Meas_Freq_in, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_POWER_IN, &Meas_Preal_in, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_VAR_IN, &Meas_Preactive_in, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_VA_IN, &Meas_Papparent_in, TYPE_FLOAT32},
+                                                     {BUFF_ADR_MEAS_PF_IN, &Meas_PF_in, TYPE_FLOAT32},
+                                                     {BUFF_ADR_PFC_STATE, &PFC_state, TYPE_INT32},
+};
 
-static uint8_t dirtyFlags[NUM_ENTRIES_SRC_LIM];
 
-void InitDataMappping(void)
-{
-    int i = 0;
-    for(i = 0; i < NUM_ENTRIES_SRC_LIM; i++)
-    {
-        dirtyFlags[i] = 0;
-    }
-}
+//#define NUM_ENTRIES_SRC_LIM (sizeof(Source_Limit_dataMap)/sizeof(DataMapEntry))
 
-void MarkDirty(uint16_t address)
-{
-    int i = 0;
-    for(i = 0; i < NUM_ENTRIES_SRC_LIM; i++)
-    {
-        if(Source_Limit_dataMap[i].BUF_ADR == address)
-        {
-            dirtyFlags[i] = 1;
-            break;
-        }
-    }
-}
+const size_t NUM_ENTRIES_MEAS_IN = (sizeof(Measure_dataMap)/sizeof(DataMapEntry));
+const size_t NUM_ENTRIES_MEAS_IN_PFC = (sizeof(Measure_PFC_dataMap)/sizeof(DataMapEntry));
 
-void ProcessData(void)
-{
-    uint16_t addr;
-    int i = 0;
-    for(i = 0; i < NUM_ENTRIES_SRC_LIM; i++)
-    {
-        if(dirtyFlags[i])
-        {
-            addr = Source_Limit_dataMap[i].BUF_ADR;
+//static uint8_t dirtyFlags[NUM_ENTRIES_SRC_LIM];
 
-            data[0] = Receive_Buf_Secondary[addr];
-            data[1] = Receive_Buf_Secondary[addr + 1];
-            data[2] = Receive_Buf_Secondary[addr + 2];
-            data[3] = Receive_Buf_Secondary[addr + 3];
+//void InitDataMappping(void)
+//{
+//    int i = 0;
+//    for(i = 0; i < NUM_ENTRIES_SRC_LIM; i++)
+//    {
+//        dirtyFlags[i] = 0;
+//    }
+//}
 
-            switch(Source_Limit_dataMap[i].type)
-            {
-            case TYPE_FLOAT32:
-                *(volatile float32_t *)(Source_Limit_dataMap[i].variable_ptr) = hex2float();
-                break;
-            case TYPE_INT32:
-                *(volatile int32_t *)(Source_Limit_dataMap[i].variable_ptr) = hex2int();
-            }
-            dirtyFlags[i] = 0;
-            break;
-        }
-    }
-}
+//void MarkDirty(uint16_t address)
+//{
+//    int i = 0;
+//    for(i = 0; i < NUM_ENTRIES_SRC_LIM; i++)
+//    {
+//        if(Source_Limit_dataMap[i].BUF_ADR == address)
+//        {
+//            dirtyFlags[i] = 1;
+//            break;
+//        }
+//    }
+//}
 
-void MemDataUpdate(void)
+//void ProcessData(void)
+//{
+//    uint16_t addr;
+//    int i = 0;
+//    for(i = 0; i < NUM_ENTRIES_SRC_LIM; i++)
+//    {
+//        if(dirtyFlags[i])
+//        {
+//            addr = Source_Limit_dataMap[i].BUF_ADR;
+//
+//            data[0] = Receive_Buf_Secondary[addr];
+//            data[1] = Receive_Buf_Secondary[addr + 1];
+//            data[2] = Receive_Buf_Secondary[addr + 2];
+//            data[3] = Receive_Buf_Secondary[addr + 3];
+//
+//            switch(Source_Limit_dataMap[i].type)
+//            {
+//            case TYPE_FLOAT32:
+//                *(volatile float32_t *)(Source_Limit_dataMap[i].variable_ptr) = hex2float();
+//                break;
+//            case TYPE_INT32:
+//                *(volatile int32_t *)(Source_Limit_dataMap[i].variable_ptr) = hex2int();
+//            }
+//            dirtyFlags[i] = 0;
+//            break;
+//        }
+//    }
+//}
+
+void SetDataUpdate(void)
 {
     uint16_t addr;
 
@@ -615,6 +631,42 @@ void MemDataUpdate(void)
     }
 
 }
+
+
+void ReadMeasureDataFromPFC(void)
+{
+    union{
+        float32_t f;
+        int32_t i;
+        uint8_t u[4];
+    }DataConv;
+
+    uint16_t i = 0;
+
+    for(i = 0; i < NUM_ENTRIES_MEAS_IN_PFC; i++)
+    {
+        const DataMapEntry *entry = &Measure_PFC_dataMap[i];
+
+//        DataConv.u[0] = cpu2Read[entry->BUF_ADR];
+//        DataConv.u[1] = cpu2Read[entry->BUF_ADR + 1];
+//        DataConv.u[2] = cpu2Read[entry->BUF_ADR + 2];
+//        DataConv.u[3] = cpu2Read[entry->BUF_ADR + 3];
+
+        DataConv.u[0] = (cpu2Read[entry->BUF_ADR + 1] << 8) + cpu2Read[entry->BUF_ADR];
+        DataConv.u[1] = (cpu2Read[entry->BUF_ADR + 3] << 8) + cpu2Read[entry->BUF_ADR + 2];
+
+        switch(entry->type)
+        {
+        case TYPE_FLOAT32:
+            *(volatile float32_t *)(entry->variable_ptr) = DataConv.f;
+            break;
+        case TYPE_INT32:
+            *(volatile int32_t *)(entry->variable_ptr) = DataConv.i;
+            break;
+        }
+    }
+}
+
 
 void HarmonicTableUpdate(uint16_t startIdx, uint16_t length)
 {
@@ -724,7 +776,7 @@ void ReadMeasureDataFromSharedMemory(void)
 
     for(i = 0; i < NUM_ENTRIES_MEAS_IN; i++)
     {
-        const DataMapEntry *entry = &Measure_Input_dataMap[i];
+        const DataMapEntry *entry = &Measure_dataMap[i];
 
 //        DataConv.u[0] = cpu2Read[entry->BUF_ADR];
 //        DataConv.u[1] = cpu2Read[entry->BUF_ADR + 1];
