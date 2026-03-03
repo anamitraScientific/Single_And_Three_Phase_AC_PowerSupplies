@@ -36,14 +36,41 @@ extern int32_t val_prev_int;
 #define    BUFF_ADR_SET_VDC                          BUFF_ADR_SET_VAC + 4
 #define    BUFF_ADR_SET_FREQ                         BUFF_ADR_SET_VDC + 4
 #define    BUFF_ADR_VAC_SLEW                         BUFF_ADR_SET_FREQ + 4
-#define    BUFF_ADR_VDC_SLEW                         BUFF_ADR_VAC_SLEW + 4
+
+#define    BUFF_ADR_SET_I                            BUFF_ADR_VAC_SLEW + 4
+#define    BUFF_ADR_SET_RES                          BUFF_ADR_SET_I + 4
+#define    BUFF_ADR_SET_PKVA                         BUFF_ADR_SET_RES + 4
+#define    BUFF_ADR_SET_PF                           BUFF_ADR_SET_PKVA + 4
+#define    BUFF_ADR_SET_I_PF                         BUFF_ADR_SET_PF + 4
+
+
+#define    BUFF_ADR_SET_R_TOP                           BUFF_ADR_SET_I_PF + 4
+#define    BUFF_ADR_SET_L_TOP                           BUFF_ADR_SET_R_TOP + 4
+#define    BUFF_ADR_SET_C_TOP                           BUFF_ADR_SET_L_TOP + 4
+#define    BUFF_ADR_SET_RL_TOP                          BUFF_ADR_SET_C_TOP + 4
+#define    BUFF_ADR_SET_RC_TOP                          BUFF_ADR_SET_RL_TOP + 4
+#define    BUFF_ADR_SET_RS_TOP                          BUFF_ADR_SET_RC_TOP + 4
+#define    BUFF_ADR_SET_P_TOP                           BUFF_ADR_SET_RS_TOP + 4
+#define    BUFF_ADR_SET_QL_TOP                          BUFF_ADR_SET_P_TOP + 4
+#define    BUFF_ADR_SET_QC_TOP                          BUFF_ADR_SET_QL_TOP + 4
+#define    BUFF_ADR_SET_IL_TOP                          BUFF_ADR_SET_QC_TOP + 4
+#define    BUFF_ADR_SET_VC_TOP                          BUFF_ADR_SET_IL_TOP + 4
+
+
+#define    BUFF_ADR_VDC_SLEW                         BUFF_ADR_SET_VC_TOP + 4
 #define    BUFF_ADR_FREQ_SLEW                        BUFF_ADR_VDC_SLEW + 4
-#define    BUFF_ADR_OUT_STATE                        BUFF_ADR_FREQ_SLEW + 4
-#define    BUFF_ADR_ON_DEGREE                        BUFF_ADR_OUT_STATE + 1
+
+#define    BUFF_ADR_ON_DEGREE                        BUFF_ADR_FREQ_SLEW + 4
 #define    BUFF_ADR_OFF_DEGREE                       BUFF_ADR_ON_DEGREE + 4
 #define    BUFF_ADR_COUPLE                           BUFF_ADR_OFF_DEGREE + 4
 
-#define    BUFF_ADR_LIM_VAC                         (BUFF_ADR_COUPLE + 1)
+
+#define    BUFF_ADR_OUT_STATE                        BUFF_ADR_COUPLE + 1
+#define    BUFF_ADR_LOAD_SOURCE_MODE                 BUFF_ADR_OUT_STATE + 1
+#define    BUFF_ADR_LOAD__MODE                       BUFF_ADR_LOAD_SOURCE_MODE + 1
+#define    BUFF_ADR_SELECTED_TOPOLOGY                BUFF_ADR_LOAD__MODE + 1
+
+#define    BUFF_ADR_LIM_VAC                         (BUFF_ADR_SELECTED_TOPOLOGY + 1)
 #define    BUFF_ADR_LIM_VDC_P                       (BUFF_ADR_LIM_VAC + 4)
 #define    BUFF_ADR_LIM_VDC_M                       (BUFF_ADR_LIM_VDC_P + 4)
 #define    BUFF_ADR_LIM_FREQ                        (BUFF_ADR_LIM_VDC_M + 4)
@@ -51,19 +78,19 @@ extern int32_t val_prev_int;
 #define    BUFF_ADR_LIM_OCP                         (BUFF_ADR_LIM_OPP + 4)
 #define    BUFF_ADR_LIM_OCP_DLY                     (BUFF_ADR_LIM_OCP + 4)
 
-#define    BUFF_ADR_HARM_WAVEFORM_NUM               (BUFF_ADR_LIM_OCP_DLY + 4)
+#define    BUFF_ADR_HARM_WAVEFORM_NUM               (BUFF_ADR_LIM_OCP_DLY + 4)              //63
 
-#define    BUFF_ADR_HARM1_NO                        (BUFF_ADR_HARM_WAVEFORM_NUM + 1)
-#define    BUFF_ADR_HARM1_AMP                       (BUFF_ADR_HARM1_NO + 4)
-#define    BUFF_ADR_HARM1_PHASE                     (BUFF_ADR_HARM1_AMP + 4)
+#define    BUFF_ADR_HARM1_NO                        (BUFF_ADR_HARM_WAVEFORM_NUM + 1)        //64
+#define    BUFF_ADR_HARM1_AMP                       (BUFF_ADR_HARM1_NO + 4)                 //68
+#define    BUFF_ADR_HARM1_PHASE                     (BUFF_ADR_HARM1_AMP + 4)                //72
 
 #define    BUFF_ADR_HARM_BASE                       (BUFF_ADR_HARM1_NO)
 #define    BUFF_ADR_HARM_NUM(n)                     (BUFF_ADR_HARM_BASE + ((n-1) * 12))
 #define    BUFF_ADR_HARM_AMP(n)                     (BUFF_ADR_HARM_BASE + ((n-1) * 12) + 4)
 #define    BUFF_ADR_HARM_PHASE(n)                   (BUFF_ADR_HARM_BASE + ((n-1) * 12) + 8)
 
-#define    BUFF_ADR_HARM2_NO                        (BUFF_ADR_HARM1_PHASE + 4)
-#define    BUFF_ADR_HARM2_AMP                       (BUFF_ADR_HARM2_NO + 4)
+#define    BUFF_ADR_HARM2_NO                        (BUFF_ADR_HARM1_PHASE + 4)              //76
+#define    BUFF_ADR_HARM2_AMP                       (BUFF_ADR_HARM2_NO + 4)                 //80
 #define    BUFF_ADR_HARM2_PHASE                     (BUFF_ADR_HARM2_AMP + 4)
 
 #define    BUFF_ADR_HARM3_NO                        (BUFF_ADR_HARM2_PHASE + 4)
@@ -287,7 +314,17 @@ extern int32_t val_prev_int;
 #define    BUFF_ADR_MEAS_VA                         (BUFF_ADR_MEAS_VAR + 4)
 #define    BUFF_ADR_MEAS_PF                         (BUFF_ADR_MEAS_VA + 4)
 
-#define    BUFF_END_ADDR                            (BUFF_ADR_MEAS_PF + 4)
+#define    BUFF_ADR_MEAS_V_IN                       (BUFF_ADR_MEAS_PF + 4)
+#define    BUFF_ADR_MEAS_I_IN                       (BUFF_ADR_MEAS_V_IN + 4)
+#define    BUFF_ADR_MEAS_VDC_IN                     (BUFF_ADR_MEAS_I_IN + 4)
+#define    BUFF_ADR_MEAS_FREQ_IN                    (BUFF_ADR_MEAS_VDC_IN + 4)
+#define    BUFF_ADR_MEAS_POWER_IN                   (BUFF_ADR_MEAS_FREQ_IN + 4)
+#define    BUFF_ADR_MEAS_VAR_IN                     (BUFF_ADR_MEAS_POWER_IN + 4)
+#define    BUFF_ADR_MEAS_VA_IN                      (BUFF_ADR_MEAS_VAR_IN + 4)
+#define    BUFF_ADR_MEAS_PF_IN                      (BUFF_ADR_MEAS_VA_IN + 4)
+#define    BUFF_ADR_PFC_STATE                       (BUFF_ADR_MEAS_PF_IN + 4)
+
+#define    BUFF_END_ADDR                            (BUFF_ADR_PFC_STATE + 4)
 
 
 #elif CONVERTER_TYPE == THREE_PHASE

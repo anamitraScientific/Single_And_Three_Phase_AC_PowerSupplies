@@ -26,6 +26,15 @@ const DataMapEntry Source_Limit_dataMap[] = {
                                                      {BUFF_ADR_SET_VDC, &V_DC, TYPE_FLOAT32},
                                                      {BUFF_ADR_SET_FREQ, &AC_Freq_Ref, TYPE_FLOAT32},
                                                      {BUFF_ADR_VAC_SLEW, &slope_VacRef, TYPE_FLOAT32},
+
+
+                                                     {BUFF_ADR_SET_I, &Iset, TYPE_FLOAT32},
+                                                     {BUFF_ADR_SET_RES, &Rset, TYPE_FLOAT32},
+                                                     {BUFF_ADR_SET_PKVA, &Pkva_set, TYPE_FLOAT32},
+                                                     {BUFF_ADR_SET_PF, &PFset, TYPE_FLOAT32},
+                                                     {BUFF_ADR_SET_I_PF, &I_PFset, TYPE_FLOAT32},
+
+
                                                      {BUFF_ADR_VDC_SLEW, &V_DC_slope, TYPE_FLOAT32},
                                                      {BUFF_ADR_FREQ_SLEW, &slope_FreqRef, TYPE_FLOAT32},
 
@@ -35,6 +44,10 @@ const DataMapEntry Source_Limit_dataMap[] = {
                                                      {BUFF_ADR_OFF_DEGREE, &OFF_degree, TYPE_FLOAT32},
 
                                                      {BUFF_ADR_COUPLE, &CouplingMode, TYPE_INT32},
+
+
+                                                     {BUFF_ADR_LOAD_SOURCE_MODE, &LoadSource_mode, TYPE_INT32},
+                                                     {BUFF_ADR_LOAD__MODE, &Load_mode, TYPE_INT32},
 
 
                                                      //Limit SubSystem
@@ -652,8 +665,8 @@ void ReadMeasureDataFromPFC(void)
 //        DataConv.u[2] = cpu2Read[entry->BUF_ADR + 2];
 //        DataConv.u[3] = cpu2Read[entry->BUF_ADR + 3];
 
-        DataConv.u[0] = (cpu2Read[entry->BUF_ADR + 1] << 8) + cpu2Read[entry->BUF_ADR];
-        DataConv.u[1] = (cpu2Read[entry->BUF_ADR + 3] << 8) + cpu2Read[entry->BUF_ADR + 2];
+        DataConv.u[0] = (Receive_Buf_Secondary[entry->BUF_ADR + 1] << 8) + Receive_Buf_Secondary[entry->BUF_ADR];
+        DataConv.u[1] = (Receive_Buf_Secondary[entry->BUF_ADR + 3] << 8) + Receive_Buf_Secondary[entry->BUF_ADR + 2];
 
         switch(entry->type)
         {
@@ -782,6 +795,11 @@ void ReadMeasureDataFromSharedMemory(void)
 //        DataConv.u[1] = cpu2Read[entry->BUF_ADR + 1];
 //        DataConv.u[2] = cpu2Read[entry->BUF_ADR + 2];
 //        DataConv.u[3] = cpu2Read[entry->BUF_ADR + 3];
+
+        Receive_Buf_Secondary[entry->BUF_ADR] = cpu2Read[entry->BUF_ADR];
+        Receive_Buf_Secondary[entry->BUF_ADR + 1] = cpu2Read[entry->BUF_ADR + 1];
+        Receive_Buf_Secondary[entry->BUF_ADR + 2] = cpu2Read[entry->BUF_ADR + 2];
+        Receive_Buf_Secondary[entry->BUF_ADR + 3] = cpu2Read[entry->BUF_ADR + 3];
 
         DataConv.u[0] = (cpu2Read[entry->BUF_ADR + 1] << 8) + cpu2Read[entry->BUF_ADR];
         DataConv.u[1] = (cpu2Read[entry->BUF_ADR + 3] << 8) + cpu2Read[entry->BUF_ADR + 2];

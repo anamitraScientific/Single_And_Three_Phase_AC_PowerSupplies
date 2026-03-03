@@ -9,17 +9,33 @@
 
 #if CONVERTER_TYPE == SINGLE_PHASE
 
-float32_t Vac_fundamental;
-float32_t V_DC;
-float32_t AC_Freq_Ref;
-float32_t slope_VacRef;
-float32_t V_DC_slope;
-float32_t slope_FreqRef;
-volatile int32_t StartPowerStage;
-volatile int32_t StartPowerStage_prev;
-float32_t ON_degree;
-float32_t OFF_degree;
-volatile int32_t CouplingMode;
+volatile int32_t DSP_boot       = 0;
+float32_t Vac_fundamental       = 0.0f;
+float32_t V_DC                  = 0.0f;
+float32_t AC_Freq_Ref           = 0.0f;
+float32_t slope_VacRef          = 0.0f;
+
+
+float32_t Iset                  = 0.0f;
+float32_t Rset                  = 0.0f;
+float32_t Pkva_set              = 0.0f;
+float32_t PFset                 = 0.0f;
+float32_t I_PFset               = 0.0f;
+
+
+float32_t V_DC_slope            = 0.0f;
+float32_t slope_FreqRef         = 0.0f;
+volatile int32_t StartPowerStage = 0;
+
+volatile int32_t StartPowerStage_prev = 0;
+
+
+float32_t ON_degree             = 0.0f;
+float32_t OFF_degree            = 0.0f;
+volatile int32_t CouplingMode   = 0;
+
+volatile int32_t LoadSource_mode = 0;
+volatile int32_t Load_mode      = 0;
 
 float32_t Limit_VAC             = 0.0f;
 float32_t Limit_VDC_max         = 0.0f;
@@ -256,8 +272,17 @@ float32_t Meas_Preactive        = 0.0f;         // Reactive Power (VAR)
 float32_t Meas_Papparent        = 0.0f;         // Apparent Power (VA)
 float32_t Meas_PF               = 0.0f;         // Power Factor
 
+/*Input Side Measurement Variables*/
+float32_t Meas_Vin_rms          = 0.0f;         // Input RMS Voltage
+float32_t Meas_Iin_rms          = 0.0f;         // Input RMS Current
+float32_t Meas_Vdc_bus          = 0.0f;         // PFC DC bus voltage
+float32_t Meas_Freq_in          = 0.0f;         // Input Measured Frequency
+float32_t Meas_Preal_in         = 0.0f;         // Input Real Power (Watts)
+float32_t Meas_Preactive_in     = 0.0f;         // Input Reactive Power (VAR)
+float32_t Meas_Papparent_in     = 0.0f;         // Input Apparent Power (VA)
+float32_t Meas_PF_in            = 0.0f;         // Input Power Factor
+volatile int32_t PFC_state      = 0;            // PFC operating state
 
-//float32_t Vdc_fb                = 0.0f;
 
 #elif CONVERTER_TYPE == THREE_PHASE
 

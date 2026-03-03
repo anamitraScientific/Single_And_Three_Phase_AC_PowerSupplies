@@ -148,11 +148,11 @@ void main(void)
     while(1)
     {
         ReadMeasureDataFromSharedMemory();
-        updateBaseLookUpTable();
+//        updateBaseLookUpTable();
 
         if(Delay_counter==5)
         {
-//            send_Data_to_STM();
+            send_Data_to_STM();
             Delay_counter = 0;
         }
         Delay_counter++;

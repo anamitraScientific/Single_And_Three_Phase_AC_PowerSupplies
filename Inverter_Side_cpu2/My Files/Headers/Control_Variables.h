@@ -21,12 +21,24 @@ extern float32_t Vac_fundamental;
 extern float32_t V_DC;
 extern float32_t AC_Freq_Ref;
 extern float32_t slope_VacRef;
+
+
+extern float32_t Iset;
+extern float32_t Rset;
+extern float32_t Pkva_set;
+extern float32_t PFset;
+extern float32_t I_PFset;
+
+
 extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
 extern volatile int32_t StartPowerStage;
 extern float32_t ON_degree;
 extern float32_t OFF_degree;
 extern volatile int32_t CouplingMode;
+
+extern volatile int32_t LoadSource_mode;
+extern volatile int32_t Load_mode;
 
 extern float32_t Limit_VAC;
 extern float32_t Limit_VDC_max;

@@ -22,235 +22,44 @@ IntToUint16 intConv;
 static const DataMapEntry Source_Limit_dataMap[] = {
 
 #if CONVERTER_TYPE == SINGLE_PHASE
-                                                     //Source Subsystem
-                                                     {BUFF_ADR_SET_VAC, &Vac_fundamental, TYPE_FLOAT32},
-                                                     {BUFF_ADR_SET_VDC, &V_DC, TYPE_FLOAT32},
-                                                     {BUFF_ADR_SET_FREQ, &AC_Freq_Ref, TYPE_FLOAT32},
-                                                     {BUFF_ADR_VAC_SLEW, &slope_VacRef, TYPE_FLOAT32},
-                                                     {BUFF_ADR_VDC_SLEW, &V_DC_slope, TYPE_FLOAT32},
-                                                     {BUFF_ADR_FREQ_SLEW, &slope_FreqRef, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_INT32},
-
-                                                     {BUFF_ADR_ON_DEGREE, &ON_degree, TYPE_FLOAT32},
-                                                     {BUFF_ADR_OFF_DEGREE, &OFF_degree, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_COUPLE, &CouplingMode, TYPE_INT32},
+                                                    //Source Subsystem
+                                                    {BUFF_ADR_SET_VAC, &Vac_fundamental, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_VDC, &V_DC, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_FREQ, &AC_Freq_Ref, TYPE_FLOAT32},
+                                                    {BUFF_ADR_VAC_SLEW, &slope_VacRef, TYPE_FLOAT32},
 
 
-                                                     //Limit SubSystem
+                                                    {BUFF_ADR_SET_I, &Iset, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_RES, &Rset, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_PKVA, &Pkva_set, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_PF, &PFset, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_I_PF, &I_PFset, TYPE_FLOAT32},
 
-                                                     {BUFF_ADR_LIM_VAC, &Limit_VAC, TYPE_FLOAT32},
-                                                     {BUFF_ADR_LIM_VDC_P, &Limit_VDC_max, TYPE_FLOAT32},
-                                                     {BUFF_ADR_LIM_VDC_M, &Limit_VDC_min, TYPE_FLOAT32},
-                                                     {BUFF_ADR_LIM_FREQ, &Limit_AC_Freq_Ref, TYPE_FLOAT32},
-                                                     {BUFF_ADR_LIM_OPP, &Limit_OPP, TYPE_FLOAT32},
-                                                     {BUFF_ADR_LIM_OCP, &Limit_OCP, TYPE_FLOAT32},
-                                                     {BUFF_ADR_LIM_OCP_DLY, &Limit_OCP_Delay, TYPE_FLOAT32},
 
-                                                     //Harmonics
+                                                    {BUFF_ADR_VDC_SLEW, &V_DC_slope, TYPE_FLOAT32},
+                                                    {BUFF_ADR_FREQ_SLEW, &slope_FreqRef, TYPE_FLOAT32},
 
-                                                     {BUFF_ADR_HARM_WAVEFORM_NUM, &harmonic_select, TYPE_INT32},
+                                                    {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_INT32},
 
-                                                     {BUFF_ADR_HARM1_NO, &harm1_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM1_AMP, &harm1_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM1_PHASE, &harm1_pha, TYPE_FLOAT32},
+                                                    {BUFF_ADR_ON_DEGREE, &ON_degree, TYPE_FLOAT32},
+                                                    {BUFF_ADR_OFF_DEGREE, &OFF_degree, TYPE_FLOAT32},
 
-                                                     {BUFF_ADR_HARM2_NO, &harm2_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM2_AMP, &harm2_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM2_PHASE, &harm2_pha, TYPE_FLOAT32},
+                                                    {BUFF_ADR_COUPLE, &CouplingMode, TYPE_INT32},
 
-                                                     {BUFF_ADR_HARM3_NO, &harm3_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM3_AMP, &harm3_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM3_PHASE, &harm3_pha, TYPE_FLOAT32},
 
-                                                     {BUFF_ADR_HARM4_NO, &harm4_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM4_AMP, &harm4_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM4_PHASE, &harm4_pha, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LOAD_SOURCE_MODE, &LoadSource_mode, TYPE_INT32},
+                                                    {BUFF_ADR_LOAD__MODE, &Load_mode, TYPE_INT32},
 
-                                                     {BUFF_ADR_HARM5_NO, &harm5_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM5_AMP, &harm5_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM5_PHASE, &harm5_pha, TYPE_FLOAT32},
 
-                                                     {BUFF_ADR_HARM6_NO, &harm6_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM6_AMP, &harm6_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM6_PHASE, &harm6_pha, TYPE_FLOAT32},
+                                                    //Limit SubSystem
 
-                                                     {BUFF_ADR_HARM7_NO, &harm7_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM7_AMP, &harm7_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM7_PHASE, &harm7_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM8_NO, &harm8_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM8_AMP, &harm8_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM8_PHASE, &harm8_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM9_NO, &harm9_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM9_AMP, &harm9_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM9_PHASE, &harm9_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM10_NO, &harm10_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM10_AMP, &harm10_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM10_PHASE, &harm10_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM11_NO, &harm11_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM11_AMP, &harm11_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM11_PHASE, &harm11_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM12_NO, &harm12_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM12_AMP, &harm12_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM12_PHASE, &harm12_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM13_NO, &harm13_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM13_AMP, &harm13_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM13_PHASE, &harm13_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM14_NO, &harm14_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM14_AMP, &harm14_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM14_PHASE, &harm14_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM15_NO, &harm15_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM15_AMP, &harm15_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM15_PHASE, &harm15_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM16_NO, &harm16_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM16_AMP, &harm16_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM16_PHASE, &harm16_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM17_NO, &harm17_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM17_AMP, &harm17_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM17_PHASE, &harm17_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM18_NO, &harm18_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM18_AMP, &harm18_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM18_PHASE, &harm18_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM19_NO, &harm19_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM19_AMP, &harm19_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM19_PHASE, &harm19_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM20_NO, &harm20_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM20_AMP, &harm20_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM20_PHASE, &harm20_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM21_NO, &harm21_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM21_AMP, &harm21_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM21_PHASE, &harm21_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM22_NO, &harm22_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM22_AMP, &harm22_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM22_PHASE, &harm22_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM23_NO, &harm23_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM23_AMP, &harm23_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM23_PHASE, &harm23_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM24_NO, &harm24_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM24_AMP, &harm24_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM24_PHASE, &harm24_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM25_NO, &harm25_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM25_AMP, &harm25_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM25_PHASE, &harm25_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM26_NO, &harm26_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM26_AMP, &harm26_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM26_PHASE, &harm26_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM27_NO, &harm27_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM27_AMP, &harm27_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM27_PHASE, &harm27_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM28_NO, &harm28_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM28_AMP, &harm28_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM28_PHASE, &harm28_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM29_NO, &harm29_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM29_AMP, &harm29_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM29_PHASE, &harm29_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM30_NO, &harm30_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM30_AMP, &harm30_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM30_PHASE, &harm30_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM31_NO, &harm31_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM31_AMP, &harm31_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM31_PHASE, &harm31_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM32_NO, &harm32_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM32_AMP, &harm32_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM32_PHASE, &harm32_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM33_NO, &harm33_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM33_AMP, &harm33_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM33_PHASE, &harm33_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM34_NO, &harm34_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM34_AMP, &harm34_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM34_PHASE, &harm34_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM35_NO, &harm35_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM35_AMP, &harm35_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM35_PHASE, &harm35_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM36_NO, &harm36_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM36_AMP, &harm36_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM36_PHASE, &harm36_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM37_NO, &harm37_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM37_AMP, &harm37_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM37_PHASE, &harm37_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM38_NO, &harm38_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM38_AMP, &harm38_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM38_PHASE, &harm38_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM39_NO, &harm39_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM39_AMP, &harm39_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM39_PHASE, &harm39_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM40_NO, &harm40_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM40_AMP, &harm40_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM40_PHASE, &harm40_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM41_NO, &harm41_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM41_AMP, &harm41_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM41_PHASE, &harm41_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM42_NO, &harm42_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM42_AMP, &harm42_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM42_PHASE, &harm42_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM43_NO, &harm43_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM43_AMP, &harm43_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM43_PHASE, &harm43_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM44_NO, &harm44_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM44_AMP, &harm44_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM44_PHASE, &harm44_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM45_NO, &harm45_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM45_AMP, &harm45_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM45_PHASE, &harm45_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM46_NO, &harm46_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM46_AMP, &harm46_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM46_PHASE, &harm46_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM47_NO, &harm47_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM47_AMP, &harm47_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM47_PHASE, &harm47_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM48_NO, &harm48_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM48_AMP, &harm48_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM48_PHASE, &harm48_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM49_NO, &harm49_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM49_AMP, &harm49_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM49_PHASE, &harm49_pha, TYPE_FLOAT32},
-
-                                                     {BUFF_ADR_HARM50_NO, &harm50_no, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM50_AMP, &harm50_amp, TYPE_FLOAT32},
-                                                     {BUFF_ADR_HARM50_PHASE, &harm50_pha, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_VAC, &Limit_VAC, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_VDC_P, &Limit_VDC_max, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_VDC_M, &Limit_VDC_min, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_FREQ, &Limit_AC_Freq_Ref, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_OPP, &Limit_OPP, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_OCP, &Limit_OCP, TYPE_FLOAT32},
+                                                    {BUFF_ADR_LIM_OCP_DLY, &Limit_OCP_Delay, TYPE_FLOAT32},
 
 #elif CONVERTER_TYPE == THREE_PHASE
                                                      //Source Subsystem
@@ -391,6 +200,216 @@ static const DataMapEntry Source_Limit_dataMap[] = {
                                                      {BUFF_ADR_LIM_PWR_TOT_MIN, &powerRmsTotal_Watts_min, TYPE_FLOAT32},
 #endif
 };
+
+
+const DataMapEntry Harmonic_dataMap[] = {
+
+                                         //Harmonics
+
+                                         {BUFF_ADR_HARM_WAVEFORM_NUM, &harmonic_select, TYPE_INT32},
+
+                                         {BUFF_ADR_HARM1_NO, &harm1_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM1_AMP, &harm1_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM1_PHASE, &harm1_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM2_NO, &harm2_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM2_AMP, &harm2_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM2_PHASE, &harm2_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM3_NO, &harm3_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM3_AMP, &harm3_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM3_PHASE, &harm3_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM4_NO, &harm4_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM4_AMP, &harm4_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM4_PHASE, &harm4_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM5_NO, &harm5_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM5_AMP, &harm5_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM5_PHASE, &harm5_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM6_NO, &harm6_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM6_AMP, &harm6_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM6_PHASE, &harm6_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM7_NO, &harm7_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM7_AMP, &harm7_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM7_PHASE, &harm7_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM8_NO, &harm8_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM8_AMP, &harm8_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM8_PHASE, &harm8_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM9_NO, &harm9_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM9_AMP, &harm9_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM9_PHASE, &harm9_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM10_NO, &harm10_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM10_AMP, &harm10_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM10_PHASE, &harm10_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM11_NO, &harm11_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM11_AMP, &harm11_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM11_PHASE, &harm11_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM12_NO, &harm12_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM12_AMP, &harm12_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM12_PHASE, &harm12_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM13_NO, &harm13_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM13_AMP, &harm13_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM13_PHASE, &harm13_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM14_NO, &harm14_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM14_AMP, &harm14_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM14_PHASE, &harm14_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM15_NO, &harm15_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM15_AMP, &harm15_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM15_PHASE, &harm15_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM16_NO, &harm16_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM16_AMP, &harm16_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM16_PHASE, &harm16_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM17_NO, &harm17_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM17_AMP, &harm17_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM17_PHASE, &harm17_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM18_NO, &harm18_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM18_AMP, &harm18_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM18_PHASE, &harm18_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM19_NO, &harm19_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM19_AMP, &harm19_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM19_PHASE, &harm19_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM20_NO, &harm20_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM20_AMP, &harm20_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM20_PHASE, &harm20_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM21_NO, &harm21_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM21_AMP, &harm21_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM21_PHASE, &harm21_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM22_NO, &harm22_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM22_AMP, &harm22_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM22_PHASE, &harm22_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM23_NO, &harm23_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM23_AMP, &harm23_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM23_PHASE, &harm23_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM24_NO, &harm24_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM24_AMP, &harm24_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM24_PHASE, &harm24_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM25_NO, &harm25_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM25_AMP, &harm25_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM25_PHASE, &harm25_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM26_NO, &harm26_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM26_AMP, &harm26_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM26_PHASE, &harm26_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM27_NO, &harm27_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM27_AMP, &harm27_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM27_PHASE, &harm27_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM28_NO, &harm28_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM28_AMP, &harm28_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM28_PHASE, &harm28_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM29_NO, &harm29_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM29_AMP, &harm29_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM29_PHASE, &harm29_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM30_NO, &harm30_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM30_AMP, &harm30_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM30_PHASE, &harm30_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM31_NO, &harm31_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM31_AMP, &harm31_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM31_PHASE, &harm31_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM32_NO, &harm32_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM32_AMP, &harm32_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM32_PHASE, &harm32_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM33_NO, &harm33_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM33_AMP, &harm33_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM33_PHASE, &harm33_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM34_NO, &harm34_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM34_AMP, &harm34_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM34_PHASE, &harm34_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM35_NO, &harm35_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM35_AMP, &harm35_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM35_PHASE, &harm35_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM36_NO, &harm36_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM36_AMP, &harm36_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM36_PHASE, &harm36_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM37_NO, &harm37_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM37_AMP, &harm37_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM37_PHASE, &harm37_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM38_NO, &harm38_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM38_AMP, &harm38_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM38_PHASE, &harm38_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM39_NO, &harm39_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM39_AMP, &harm39_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM39_PHASE, &harm39_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM40_NO, &harm40_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM40_AMP, &harm40_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM40_PHASE, &harm40_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM41_NO, &harm41_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM41_AMP, &harm41_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM41_PHASE, &harm41_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM42_NO, &harm42_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM42_AMP, &harm42_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM42_PHASE, &harm42_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM43_NO, &harm43_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM43_AMP, &harm43_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM43_PHASE, &harm43_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM44_NO, &harm44_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM44_AMP, &harm44_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM44_PHASE, &harm44_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM45_NO, &harm45_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM45_AMP, &harm45_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM45_PHASE, &harm45_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM46_NO, &harm46_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM46_AMP, &harm46_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM46_PHASE, &harm46_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM47_NO, &harm47_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM47_AMP, &harm47_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM47_PHASE, &harm47_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM48_NO, &harm48_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM48_AMP, &harm48_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM48_PHASE, &harm48_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM49_NO, &harm49_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM49_AMP, &harm49_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM49_PHASE, &harm49_pha, TYPE_FLOAT32},
+
+                                         {BUFF_ADR_HARM50_NO, &harm50_no, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM50_AMP, &harm50_amp, TYPE_FLOAT32},
+                                         {BUFF_ADR_HARM50_PHASE, &harm50_pha, TYPE_FLOAT32},
+
+};
+
 
 static const DataMapEntry Measure_Input_dataMap[] = {
 

@@ -14,12 +14,24 @@ float32_t Vac_fundamental       = 0.0f;
 float32_t V_DC                  = 0.0f;
 float32_t AC_Freq_Ref           = 0.0f;
 float32_t slope_VacRef          = 0.0f;
+
+
+float32_t Iset                  = 0.0f;
+float32_t Rset                  = 0.0f;
+float32_t Pkva_set              = 0.0f;
+float32_t PFset                 = 0.0f;
+float32_t I_PFset               = 0.0f;
+
+
 float32_t V_DC_slope            = 0.0f;
 float32_t slope_FreqRef         = 0.0f;
 volatile int32_t StartPowerStage = 0;
 float32_t ON_degree             = 0.0f;
 float32_t OFF_degree            = 0.0f;
 volatile int32_t CouplingMode   = 0;
+
+volatile int32_t LoadSource_mode = 0;
+volatile int32_t Load_mode      = 0;
 
 float32_t Limit_VAC             = 0.0f;
 float32_t Limit_VDC_max         = 0.0f;

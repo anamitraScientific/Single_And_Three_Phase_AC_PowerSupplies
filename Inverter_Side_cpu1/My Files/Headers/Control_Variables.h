@@ -27,17 +27,32 @@ typedef union
 
 #if CONVERTER_TYPE == SINGLE_PHASE
 
+extern volatile int32_t DSP_boot;
 extern float32_t Vac_fundamental;
 extern float32_t V_DC;
 extern float32_t AC_Freq_Ref;
 extern float32_t slope_VacRef;
+
+
+extern float32_t Iset;
+extern float32_t Rset;
+extern float32_t Pkva_set;
+extern float32_t PFset;
+extern float32_t I_PFset;
+
+
 extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
 extern volatile int32_t StartPowerStage;
+
 extern volatile int32_t StartPowerStage_prev;
+
 extern float32_t ON_degree;
 extern float32_t OFF_degree;
 extern volatile int32_t CouplingMode;
+
+extern volatile int32_t LoadSource_mode;
+extern volatile int32_t Load_mode;
 
 extern float32_t Limit_VAC;
 extern float32_t Limit_VDC_max;
@@ -274,7 +289,17 @@ extern float32_t Meas_Preactive;       // Reactive Power (VAR)
 extern float32_t Meas_Papparent;       // Apparent Power (VA)
 extern float32_t Meas_PF;              // Power Factor
 
-//extern float32_t Vdc_fb;
+/*Input Side Measurement Variables*/
+extern float32_t Meas_Vin_rms;                // Input RMS Voltage
+extern float32_t Meas_Iin_rms;                // Input RMS Current
+extern float32_t Meas_Vdc_bus;                // PFC DC bus voltage
+extern float32_t Meas_Freq_in;                // Input Measured Frequency
+extern float32_t Meas_Preal_in;               // Input Real Power (Watts)
+extern float32_t Meas_Preactive_in;           // Input Reactive Power (VAR)
+extern float32_t Meas_Papparent_in;           // Input Apparent Power (VA)
+extern float32_t Meas_PF_in;                  // Input Power Factor
+extern volatile int32_t PFC_state;            // PFC operating state
+
 
 #elif CONVERTER_TYPE == THREE_PHASE
 

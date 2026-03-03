@@ -177,7 +177,7 @@ void send_Data_to_STM(void)
     int i;
     for(i = 0; i < Length; i++)
     {
-        transmitBuff[5 + i] = cpu2Read[StartIdx + i];
+        transmitBuff[5 + i] = Receive_Buf_Secondary[StartIdx + i];
     }
 
     transmitBuff[5 + Length] = 0x00EF;

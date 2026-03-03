@@ -33,14 +33,41 @@ typedef struct{
 #define    BUFF_ADR_SET_VDC                          BUFF_ADR_SET_VAC + 4
 #define    BUFF_ADR_SET_FREQ                         BUFF_ADR_SET_VDC + 4
 #define    BUFF_ADR_VAC_SLEW                         BUFF_ADR_SET_FREQ + 4
-#define    BUFF_ADR_VDC_SLEW                         BUFF_ADR_VAC_SLEW + 4
+
+#define    BUFF_ADR_SET_I                            BUFF_ADR_VAC_SLEW + 4
+#define    BUFF_ADR_SET_RES                          BUFF_ADR_SET_I + 4
+#define    BUFF_ADR_SET_PKVA                         BUFF_ADR_SET_RES + 4
+#define    BUFF_ADR_SET_PF                           BUFF_ADR_SET_PKVA + 4
+#define    BUFF_ADR_SET_I_PF                         BUFF_ADR_SET_PF + 4
+
+
+#define    BUFF_ADR_SET_R_TOP                           BUFF_ADR_SET_I_PF + 4
+#define    BUFF_ADR_SET_L_TOP                           BUFF_ADR_SET_R_TOP + 4
+#define    BUFF_ADR_SET_C_TOP                           BUFF_ADR_SET_L_TOP + 4
+#define    BUFF_ADR_SET_RL_TOP                          BUFF_ADR_SET_C_TOP + 4
+#define    BUFF_ADR_SET_RC_TOP                          BUFF_ADR_SET_RL_TOP + 4
+#define    BUFF_ADR_SET_RS_TOP                          BUFF_ADR_SET_RC_TOP + 4
+#define    BUFF_ADR_SET_P_TOP                           BUFF_ADR_SET_RS_TOP + 4
+#define    BUFF_ADR_SET_QL_TOP                          BUFF_ADR_SET_P_TOP + 4
+#define    BUFF_ADR_SET_QC_TOP                          BUFF_ADR_SET_QL_TOP + 4
+#define    BUFF_ADR_SET_IL_TOP                          BUFF_ADR_SET_QC_TOP + 4
+#define    BUFF_ADR_SET_VC_TOP                          BUFF_ADR_SET_IL_TOP + 4
+
+
+#define    BUFF_ADR_VDC_SLEW                         BUFF_ADR_SET_VC_TOP + 4
 #define    BUFF_ADR_FREQ_SLEW                        BUFF_ADR_VDC_SLEW + 4
-#define    BUFF_ADR_OUT_STATE                        BUFF_ADR_FREQ_SLEW + 4
-#define    BUFF_ADR_ON_DEGREE                        BUFF_ADR_OUT_STATE + 1
+
+#define    BUFF_ADR_ON_DEGREE                        BUFF_ADR_FREQ_SLEW + 4
 #define    BUFF_ADR_OFF_DEGREE                       BUFF_ADR_ON_DEGREE + 4
 #define    BUFF_ADR_COUPLE                           BUFF_ADR_OFF_DEGREE + 4
 
-#define    BUFF_ADR_LIM_VAC                         (BUFF_ADR_COUPLE + 1)
+
+#define    BUFF_ADR_OUT_STATE                        BUFF_ADR_COUPLE + 1
+#define    BUFF_ADR_LOAD_SOURCE_MODE                 BUFF_ADR_OUT_STATE + 1
+#define    BUFF_ADR_LOAD__MODE                       BUFF_ADR_LOAD_SOURCE_MODE + 1
+#define    BUFF_ADR_SELECTED_TOPOLOGY                BUFF_ADR_LOAD__MODE + 1
+
+#define    BUFF_ADR_LIM_VAC                         (BUFF_ADR_SELECTED_TOPOLOGY + 1)
 #define    BUFF_ADR_LIM_VDC_P                       (BUFF_ADR_LIM_VAC + 4)
 #define    BUFF_ADR_LIM_VDC_M                       (BUFF_ADR_LIM_VDC_P + 4)
 #define    BUFF_ADR_LIM_FREQ                        (BUFF_ADR_LIM_VDC_M + 4)
