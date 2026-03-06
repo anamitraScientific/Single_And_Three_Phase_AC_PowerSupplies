@@ -67,6 +67,9 @@ int check1_prev = 0;
 uint16_t count = 0;
 int Delay_counter;
 
+
+uint16_t cpuTimer0IntCount;
+
 //uint16_t SendBuffer[256] = {0x0000};
 uint16_t transmitBuff[MAX_LENGTH] = {0x0000};
 
@@ -81,6 +84,8 @@ void config_SCI_interrupt(uint32_t base);
 __interrupt void scib_isr(void);  // for SCI B
 __interrupt void scic_isr(void);  // for SCI C
 void Read_Data_from_Shared_Memory(void);
+__interrupt void cpuTimer0ISR(void);
+void configCPUTimer(uint32_t cpuTimer, float freq, float period);
 
 
 void main(void)
@@ -124,6 +129,20 @@ void main(void)
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP8);
 
 
+    //*******************************//
+    Interrupt_register(INT_TIMER0, &cpuTimer0ISR);
+
+    CPUTimer_setPeriod(CPUTIMER0_BASE, 0xFFFFFFFF);
+    CPUTimer_setPreScaler(CPUTIMER0_BASE, 0);
+    CPUTimer_stopTimer(CPUTIMER0_BASE);
+    CPUTimer_reloadTimerCounter(CPUTIMER0_BASE);
+    cpuTimer0IntCount = 0;
+
+    configCPUTimer(CPUTIMER0_BASE, 200000000, 2000000);
+    CPUTimer_enableInterrupt(CPUTIMER0_BASE);
+    Interrupt_enable(INT_TIMER0);
+    CPUTimer_startTimer(CPUTIMER0_BASE);
+
     EINT;
     ERTM;
 
@@ -148,14 +167,19 @@ void main(void)
     while(1)
     {
         ReadMeasureDataFromSharedMemory();
-//        updateBaseLookUpTable();
+////        updateBaseLookUpTable();
+//
+//        if(Delay_counter==5)
+//        {
+////            send_Data_to_STM();
+//            Delay_counter = 0;
+//        }
+//        Delay_counter++;
 
-        if(Delay_counter==5)
-        {
-            send_Data_to_STM();
-            Delay_counter = 0;
-        }
-        Delay_counter++;
+
+
+
+
 //        if(ProcessDataFlag == 1)
 //        {
 //            send_Data_to_Display();
@@ -296,6 +320,12 @@ __interrupt void scic_isr(void)
 }
 
 
+__interrupt void cpuTimer0ISR(void)
+{
+    send_Data_to_STM();
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP1);
+}
+
 
 void Read_Data_from_Shared_Memory(void)
 {
@@ -308,7 +338,40 @@ void Read_Data_from_Shared_Memory(void)
 }
 
 
+void configCPUTimer(uint32_t cpuTimer, float freq, float period)
+{
+    uint32_t temp;
 
+    //
+    // Initialize timer period:
+    //
+    temp = (uint32_t)((freq / 1000000) * period);
+    CPUTimer_setPeriod(cpuTimer, temp - 1);
+
+    //
+    // Set pre-scale counter to divide by 1 (SYSCLKOUT):
+    //
+    CPUTimer_setPreScaler(cpuTimer, 0);
+
+    //
+    // Initializes timer control register. The timer is stopped, reloaded,
+    // free run disabled, and interrupt enabled.
+    // Additionally, the free and soft bits are set
+    //
+    CPUTimer_stopTimer(cpuTimer);
+    CPUTimer_reloadTimerCounter(cpuTimer);
+    CPUTimer_setEmulationMode(cpuTimer,
+                              CPUTIMER_EMULATIONMODE_STOPAFTERNEXTDECREMENT);
+    CPUTimer_enableInterrupt(cpuTimer);
+
+    //
+    // Resets interrupt counters for the three cpuTimers
+    //
+    if (cpuTimer == CPUTIMER0_BASE)
+    {
+        cpuTimer0IntCount = 0;
+    }
+}
 
 
 

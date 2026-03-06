@@ -32,13 +32,13 @@ extern float32_t I_PFset;
 
 extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
-extern volatile int32_t StartPowerStage;
+extern volatile uint32_t StartPowerStage;
 extern float32_t ON_degree;
 extern float32_t OFF_degree;
-extern volatile int32_t CouplingMode;
+extern volatile uint32_t CouplingMode;
 
-extern volatile int32_t LoadSource_mode;
-extern volatile int32_t Load_mode;
+extern volatile uint32_t LoadSource_mode;
+extern volatile uint32_t Load_mode;
 
 extern float32_t Limit_VAC;
 extern float32_t Limit_VDC_max;
@@ -48,7 +48,7 @@ extern float32_t Limit_OPP;
 extern float32_t Limit_OCP;
 extern float32_t Limit_OCP_Delay;
 
-extern int32_t harmonic_select;
+extern uint32_t harmonic_select;
 
 extern float32_t harm1_no;
 extern float32_t harm1_amp;
@@ -284,7 +284,7 @@ extern float32_t Meas_Preal_in;               // Input Real Power (Watts)
 extern float32_t Meas_Preactive_in;           // Input Reactive Power (VAR)
 extern float32_t Meas_Papparent_in;           // Input Apparent Power (VA)
 extern float32_t Meas_PF_in;                  // Input Power Factor
-extern volatile int32_t PFC_state;            // PFC operating state
+extern volatile uint32_t PFC_state;            // PFC operating state
 
 #elif CONVERTER_TYPE == THREE_PHASE
 

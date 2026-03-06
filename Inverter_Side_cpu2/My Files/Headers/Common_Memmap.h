@@ -18,7 +18,7 @@
 
 typedef enum{
     TYPE_FLOAT32,
-    TYPE_INT32
+    TYPE_UINT32
 } DataType;
 
 typedef struct{

@@ -39,16 +39,16 @@ static const DataMapEntry Source_Limit_dataMap[] = {
                                                     {BUFF_ADR_VDC_SLEW, &V_DC_slope, TYPE_FLOAT32},
                                                     {BUFF_ADR_FREQ_SLEW, &slope_FreqRef, TYPE_FLOAT32},
 
-                                                    {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_INT32},
+                                                    {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_UINT32},
 
                                                     {BUFF_ADR_ON_DEGREE, &ON_degree, TYPE_FLOAT32},
                                                     {BUFF_ADR_OFF_DEGREE, &OFF_degree, TYPE_FLOAT32},
 
-                                                    {BUFF_ADR_COUPLE, &CouplingMode, TYPE_INT32},
+                                                    {BUFF_ADR_COUPLE, &CouplingMode, TYPE_UINT32},
 
 
-                                                    {BUFF_ADR_LOAD_SOURCE_MODE, &LoadSource_mode, TYPE_INT32},
-                                                    {BUFF_ADR_LOAD__MODE, &Load_mode, TYPE_INT32},
+                                                    {BUFF_ADR_LOAD_SOURCE_MODE, &LoadSource_mode, TYPE_UINT32},
+                                                    {BUFF_ADR_LOAD__MODE, &Load_mode, TYPE_UINT32},
 
 
                                                     //Limit SubSystem
@@ -130,9 +130,9 @@ static const DataMapEntry Source_Limit_dataMap[] = {
                                                      {BUFF_ADR_SRC_OFF_DEG_C, &OFF_degree_C, TYPE_FLOAT32},
                                                      {BUFF_ADR_SRC_OFF_DEG_ABC, &OFF_degree_ABC, TYPE_FLOAT32},
 
-                                                     {BUFF_ADR_START_PWR_STAGE, &StartPowerStage, TYPE_INT32},
-                                                     {BUFF_ADR_RLY_CTRL, &Relay_Ctrl, TYPE_INT32},
-                                                     {BUFF_OUTPUT_MODE, &OutputMode, TYPE_INT32},
+                                                     {BUFF_ADR_START_PWR_STAGE, &StartPowerStage, TYPE_UINT32},
+                                                     {BUFF_ADR_RLY_CTRL, &Relay_Ctrl, TYPE_UINT32},
+                                                     {BUFF_OUTPUT_MODE, &OutputMode, TYPE_UINT32},
 
                                                      //Limit SubSystem
 
@@ -206,7 +206,7 @@ const DataMapEntry Harmonic_dataMap[] = {
 
                                          //Harmonics
 
-                                         {BUFF_ADR_HARM_WAVEFORM_NUM, &harmonic_select, TYPE_INT32},
+                                         {BUFF_ADR_HARM_WAVEFORM_NUM, &harmonic_select, TYPE_UINT32},
 
                                          {BUFF_ADR_HARM1_NO, &harm1_no, TYPE_FLOAT32},
                                          {BUFF_ADR_HARM1_AMP, &harm1_amp, TYPE_FLOAT32},
@@ -593,7 +593,7 @@ void ReadingDataFromSharedMemory(void)
             val_float = hex2float();
             *(volatile float32_t *)(Source_Limit_dataMap[i].variable_ptr) = val_float;
             break;
-        case TYPE_INT32:
+        case TYPE_UINT32:
             val_int = hex2int();
             *(volatile int32_t *)(Source_Limit_dataMap[i].variable_ptr) = val_int;
             break;
@@ -619,7 +619,7 @@ void MemDataUpdate()
         case TYPE_FLOAT32:
             *(volatile float32_t *)(Source_Limit_dataMap[i].variable_ptr) = hex2float();
             break;
-        case TYPE_INT32:
+        case TYPE_UINT32:
             *(volatile int32_t *)(Source_Limit_dataMap[i].variable_ptr) = hex2int();
         }
     }
@@ -669,7 +669,7 @@ void WriteMeasureDataToSharedMemory(void)
         case TYPE_FLOAT32:
             DataConv.f = *(volatile float32_t *)(entry->variable_ptr);
             break;
-        case TYPE_INT32:
+        case TYPE_UINT32:
             DataConv.i = *(volatile int32_t *)(entry->variable_ptr);
             break;
         }

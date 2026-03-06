@@ -25,17 +25,17 @@ float32_t I_PFset               = 0.0f;
 
 float32_t V_DC_slope            = 0.0f;
 float32_t slope_FreqRef         = 0.0f;
-volatile int32_t StartPowerStage = 0;
+volatile uint32_t StartPowerStage = 0;
 
-volatile int32_t StartPowerStage_prev = 0;
+volatile uint32_t StartPowerStage_prev = 0;
 
 
 float32_t ON_degree             = 0.0f;
 float32_t OFF_degree            = 0.0f;
-volatile int32_t CouplingMode   = 0;
+volatile uint32_t CouplingMode   = 0;
 
-volatile int32_t LoadSource_mode = 0;
-volatile int32_t Load_mode      = 0;
+volatile uint32_t LoadSource_mode = 0;
+volatile uint32_t Load_mode      = 0;
 
 float32_t Limit_VAC             = 0.0f;
 float32_t Limit_VDC_max         = 0.0f;
@@ -45,7 +45,7 @@ float32_t Limit_OPP             = 0.0f;
 float32_t Limit_OCP             = 0.0f;
 float32_t Limit_OCP_Delay       = 0.0f;
 
-int32_t harmonic_select         = 0;
+uint32_t harmonic_select         = 0;
 
 float32_t harm1_no              = 0.0f;
 float32_t harm1_amp             = 0.0f;
@@ -281,7 +281,7 @@ float32_t Meas_Preal_in         = 0.0f;         // Input Real Power (Watts)
 float32_t Meas_Preactive_in     = 0.0f;         // Input Reactive Power (VAR)
 float32_t Meas_Papparent_in     = 0.0f;         // Input Apparent Power (VA)
 float32_t Meas_PF_in            = 0.0f;         // Input Power Factor
-volatile int32_t PFC_state      = 0;            // PFC operating state
+volatile uint32_t PFC_state      = 0;            // PFC operating state
 
 
 #elif CONVERTER_TYPE == THREE_PHASE
