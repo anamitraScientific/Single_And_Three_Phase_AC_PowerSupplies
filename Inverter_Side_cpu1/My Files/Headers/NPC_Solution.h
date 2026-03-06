@@ -28,7 +28,6 @@
 #include "rampgen.h"
 #include "Ref_slew.h"
 #include "Control_Variables.h"
-#include "PowerAnalyzer.h"
 
 //#include "REF_GEN_FUNC.h"
 
@@ -55,6 +54,8 @@ typedef union
     uint16_t u16;
 }f32_to_u16;
 
+
+extern volatile POWER_MEAS_SINE_ANALYZER PPA_phaseA;
 extern f32_to_u16 PLL_angle_DAC;
 
 //
@@ -123,6 +124,8 @@ extern float32_t slope_AngleRef;
 
 extern float32_t pll_ang;
 extern float32_t pll_ang_A;
+extern float32_t pll_ang_A_prev;
+
 extern float32_t pll_ang_B;
 extern float32_t pll_ang_C;
 extern float32_t pll_ang_AB;
@@ -296,16 +299,6 @@ extern volatile float32_t Grid_min_freq;
 //extern POWER_MEAS_SINE_ANALYZER Phase_C;
 //extern POWER_MEAS_SINE_ANALYZER DC_OutPut;
 
-extern RMS_Cycle VArms;
-extern RMS_Cycle VBrms;
-extern RMS_Cycle VCrms;
-extern RMS_Cycle IArms;
-extern RMS_Cycle IBrms;
-extern RMS_Cycle ICrms;
-
-extern FREQ_ZC freqA;
-extern FREQ_ZC freqB;
-extern FREQ_ZC freqC;
 
 extern float32_t VGridRms_A;
 extern float32_t VGridRms_B;
@@ -515,8 +508,41 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
 
     Ia_sns = (float)((AdcbResultRegs.ADCRESULT0 + AdcbResultRegs.ADCRESULT1 + AdcbResultRegs.ADCRESULT2 + AdcbResultRegs.ADCRESULT3)*0.25f);
     Ia_fb =((float)Ia_sns - Iconv_sense_offset)*Iconv_Sense_scaling;
+//    PPA_phaseA.Ia = Ia_fb;
+    PPA_phaseA.i = Ia_fb;
+
+
     Va_sns = (float)((AdcaResultRegs.ADCRESULT0 + AdcaResultRegs.ADCRESULT1 + AdcaResultRegs.ADCRESULT2 + AdcaResultRegs.ADCRESULT3)*0.25f);
     Va_fb =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling;
+//    PPA_phaseA.Va = Va_fb;
+    PPA_phaseA.v = Va_fb;
+
+
+//    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
+//    Meas_Vrms = PPA_phaseA.Va_rms;
+//    Meas_Irms = PPA_phaseA.Ia_rms;
+//    Meas_Freq = PPA_phaseA.Frequency_A;
+//    Meas_Papparent = PPA_phaseA.Sa_apparent;
+//    Meas_Vpk_P = PPA_phaseA.POS_PK;
+//    Meas_Vpk_N = PPA_phaseA.NEG_PK;
+//    Meas_PF = PPA_phaseA.PF_A;
+
+    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
+    Meas_Vrms = PPA_phaseA.vRms;
+    Meas_Irms = PPA_phaseA.iRms;
+    Meas_PF = PPA_phaseA.powerFactor;
+    Meas_Papparent = Meas_Vrms * Meas_Irms;
+    Meas_Preal = Meas_Papparent * Meas_PF;
+    Meas_Preactive = Meas_Papparent * (sqrtf(1.0f - (Meas_PF * Meas_PF)));
+
+    Meas_Vpk_P = PPA_phaseA.Vpeak_Pos;
+    Meas_Vpk_N = PPA_phaseA.Vpeak_Neg;
+    Meas_Ipk_P = PPA_phaseA.Ipeak_Pos;
+    Meas_Ipk_N = PPA_phaseA.Ipeak_Neg;
+
+    Meas_V_CF = Meas_Vpk_P / Meas_Vrms;
+    Meas_I_CF = Meas_Ipk_P / Meas_Irms;
+
 
 #if mode1 == EL_AC
       Va_fb_prev = Va_fb_pu;
@@ -638,6 +664,8 @@ static inline void NPC_run_internal_PLL1(void)
 
 static inline void NPC_run_internal_PLL(void)
 {
+    float32_t ang_diff;
+
 #if mode2 == balanced
 
 #if CONVERTER_TYPE == SINGLE_PHASE
@@ -645,6 +673,27 @@ static inline void NPC_run_internal_PLL(void)
     REFslew_run(&FreqRefSlewRamp_A,(AC_Freq_Ref),slope_FreqRef);
     RAMP_run(&theta_A,FreqRefSlewRamp_A.out_slew,ISR_FREQUENCY);
     pll_ang_A = (float32_t)(theta_A.out*2*PI);
+
+    if(pll_ang_A > pll_ang_A_prev)
+    {
+        ang_diff = pll_ang_A - pll_ang_A_prev;
+    }
+    else
+    {
+        ang_diff = ((float32_t)2*PI - pll_ang_A_prev) + pll_ang_A;
+    }
+    float32_t Meas_Freq_radSec = (ang_diff / (float32_t)T_switching);
+
+    if(StartPowerStage == 1)
+    {
+        Meas_Freq = Meas_Freq_radSec / ((float32_t)2*PI);
+    }
+    else
+    {
+        Meas_Freq = 0.0f;
+    }
+
+    pll_ang_A_prev = pll_ang_A;
 
     // angle ramp
     REFslew_run(&AngleRefSlewRamp_A,Angle_Ref_A*(PI/180),AngleRefSlope);
@@ -959,6 +1008,8 @@ static inline void Ref_Gen_function(void)
     angle_cal = pll_ang_A;
     Ref_A = GetInterpolatedSinFromLUT(angle_cal,0);
 
+//   Ref_A = (float)(sinf(pll_ang_A));
+
 #if CONVERTER_TYPE == THREE_PHASE
 
     angle_cal = pll_ang_A + 2.094f;
@@ -1229,55 +1280,7 @@ static inline void RUN_INV_ISR_ABC(void)
 #pragma FUNC_ALWAYS_INLINE(Run_aux_ISR)
 static inline void Run_aux_ISR(void)
 {
-#if CONVERTER_TYPE == SINGLE_PHASE
 
-    Meas_Vrms = (RMS_Cycle_Update(&VArms, Va_fb, AC_Freq_Ref)*1.02f)-0.29f;
-    Meas_Irms = (2.05f *(RMS_Cycle_Update(&IArms, Ia_fb, AC_Freq_Ref))) - 4.175f;
-    if(Meas_Irms < 0) Meas_Irms = 0;
-    Meas_Papparent = Meas_Vrms * Meas_Irms;
-
-    if(StartPowerStage == 1 || StartPowerStage == 0)
-    {
-        Meas_Freq = AC_Freq_Ref * 0.9995f;
-    }
-    else
-    {
-        Meas_Freq = 0;
-    }
-
-#elif CONVERTER_TYPE == THREE_PHASE
-
-    VA_RMS_meas = (RMS_Cycle_Update(&VArms, Va_fb, AC_Freq_Ref_A)*1.02f)-0.29f;
-    IA_RMS_meas = (2.05f *(RMS_Cycle_Update(&IArms, Ia_fb, AC_Freq_Ref_A))) - 4.175f;
-    if(IA_RMS_meas < 0) IA_RMS_meas = 0;
-    powerRms_A_VA = VA_RMS_meas * IA_RMS_meas;
-
-    VB_RMS_meas = (RMS_Cycle_Update(&VBrms, Vb_fb, AC_Freq_Ref_A)*1.02f)-0.29f;
-    IB_RMS_meas = (2.05f *(RMS_Cycle_Update(&IBrms, Ib_fb, AC_Freq_Ref_A))) - 4.175f;
-    if(IB_RMS_meas < 0) IB_RMS_meas = 0;
-    powerRms_B_VA = VB_RMS_meas * IB_RMS_meas;
-
-    VC_RMS_meas = (RMS_Cycle_Update(&VCrms, Vc_fb, AC_Freq_Ref_A)*1.02f)-0.29f;
-    IC_RMS_meas = (2.05f *(RMS_Cycle_Update(&ICrms, Ic_fb, AC_Freq_Ref_A))) - 4.175f;
-    if(IC_RMS_meas < 0) IC_RMS_meas = 0;
-    powerRms_C_VA = VC_RMS_meas * IC_RMS_meas;
-
-
-
-    if(StartPowerStage == 1 || StartPowerStage == 0)
-    {
-
-        Freq_Meas_A = AC_Freq_Ref_A * 0.9995f;
-        Freq_Meas_B = AC_Freq_Ref_A * 1.0005f;
-        Freq_Meas_C = AC_Freq_Ref_A * 1.0002f;
-    }
-    else
-    {
-        Freq_Meas_A = 0;
-        Freq_Meas_B = 0;
-        Freq_Meas_C = 0;
-    }
-#endif
 }
 
 

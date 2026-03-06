@@ -248,6 +248,7 @@
 #if CONVERTER_TYPE == SINGLE_PHASE
 //#define Fswitching      100000.0f       // select switching frequency
 #define Fswitching      50000.0f
+#define T_switching     (1 / Fswitching)
 #define Faux            (Fswitching/10)        // select auxilary ISR frequency
 #define Fsw_FAN         20000       // select fan switching frequency
 #define TimeBase        (Uint16)(Fsysclock*0.5/Fswitching)

@@ -22,6 +22,8 @@ volatile float calculated_sin_value;
 volatile float32_t Angle_Step;
 
 
+volatile POWER_MEAS_SINE_ANALYZER PPA_phaseA;
+
 f32_to_u16 PLL_angle_DAC;
 
 //****************************************************************************************************************************\\
@@ -96,6 +98,8 @@ float32_t cosine_B;
 float32_t cosine_C;
 float32_t pll_ang;
 float32_t pll_ang_A;
+float32_t pll_ang_A_prev;
+
 float32_t pll_ang_B;
 float32_t pll_ang_C;
 float32_t pll_ang_AB;
@@ -232,17 +236,6 @@ volatile float32_t Grid_min_freq;
 //POWER_MEAS_SINE_ANALYZER DC_OutPut;
 
 
-//RMS_PerCycle VArms;
-RMS_Cycle VArms;
-RMS_Cycle VBrms;
-RMS_Cycle VCrms;
-RMS_Cycle IArms;
-RMS_Cycle IBrms;
-RMS_Cycle ICrms;
-
-FREQ_ZC freqA;
-FREQ_ZC freqB;
-FREQ_ZC freqC;
 
 
 float32_t VGridRms_A;                                          //********************
@@ -731,19 +724,6 @@ void NPC_globalVariablesInit(void)
 //#else
 //#endif
 
-
-           RMS_Cycle_init(&VArms);
-           RMS_Cycle_init(&IArms);
-           FREQ_ZC_init(&freqA, 50000, 0.0f, 0.02f, 0.2f);
-#if CONVERTER_TYPE == THREE_PHASE
-           RMS_Cycle_init(&VBrms);
-           RMS_Cycle_init(&IBrms);
-           FREQ_ZC_init(&freqB, 50000, 0.0f, 0.02f, 0.2f);
-           RMS_Cycle_init(&VCrms);
-           RMS_Cycle_init(&ICrms);
-           FREQ_ZC_init(&freqC, 50000, 0.0f, 0.02f, 0.2f);
-#else
-#endif
 
 
 

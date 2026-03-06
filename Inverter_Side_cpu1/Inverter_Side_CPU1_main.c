@@ -78,8 +78,16 @@ void main(void)
 
     /* Electrical angle step */
     Angle_Step = TWO_PI / (float)LUT_SIZE;
-//    Harmonic_Array_content();
-//    updateBaseLookUpTable();
+
+//    float32_t Tswitching;
+//    Tswitching = 1.0f/(float)Fswitching;
+//
+//    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
+////    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching, 0.5f, 600U);
+//    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching);
+
+    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
+    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Fswitching, 0.05f, 1000.0f, 25.0f);
 
 
     NPC_HAL_setupDevice();
@@ -144,8 +152,6 @@ void main(void)
 //        (*alpha_State_Ptr)();    // AUTO-START
 
 
-
-        Run_aux_ISR();
         WriteMeasureDataToSharedMemory();
         CheckSharedMemory();
  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

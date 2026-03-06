@@ -19,7 +19,7 @@
 
 #ifdef __cplusplus
 
-extern "C" 
+extern "C"
 {
 #endif
 
@@ -77,7 +77,7 @@ typedef volatile struct {
     float32_t vaRms;       //!< Output: RMS VA
     float32_t powerFactor; //!< Output: powerFactor
     int16_t  zcd;          //!< Output: Zero Cross detected
-    
+
     float32_t vSum;        //!< Internal : running sum for vac calculation over one sine cycles
     float32_t vSqrSum;     //!< Internal : running sum for vacc square calculation over one sine cycle
     float32_t iSqrSum;     //!< Internal : running sum for Iacc_rms calculation over one sine cycle
@@ -97,6 +97,12 @@ typedef volatile struct {
     float32_t pRmsSumMul; //!< Internal: used to sum Pac value over multiple sine cycles (100)
     int16_t jitterCount; //!< Internal: used to store jitter information due to noise on input
     float32_t emaFilterMultiplier;  //!< Internal: multiplier value used for the exponential moving average filter
+
+    float32_t Vpeak_Pos;
+    float32_t Vpeak_Neg;
+    float32_t Ipeak_Pos;
+    float32_t Ipeak_Neg;
+
 } POWER_MEAS_SINE_ANALYZER;
 
 //! \brief Resets internal data to zero
@@ -159,6 +165,12 @@ static inline void POWER_MEAS_SINE_ANALYZER_config(POWER_MEAS_SINE_ANALYZER *v,
 //!
 static inline void POWER_MEAS_SINE_ANALYZER_run(POWER_MEAS_SINE_ANALYZER *v)
 {
+    if(v->v > v->Vpeak_Pos) v->Vpeak_Pos = v->v;
+    if(v->v < v->Vpeak_Neg) v->Vpeak_Neg = v->v;
+
+    if(v->i > v->Ipeak_Pos) v->Ipeak_Pos = v->i;
+    if(v->i < v->Ipeak_Neg) v->Ipeak_Neg = v->i;
+
     v->vNorm = fabsf(v->v);
     v->iNorm = fabsf(v->i);
     v->currSign = ( v->v > v->threshold) ? 1 : 0;
@@ -175,8 +187,8 @@ static inline void POWER_MEAS_SINE_ANALYZER_run(POWER_MEAS_SINE_ANALYZER *v)
         //
         // check if the nSamples are in the ball park of a real frequency
         // that can be on the grid, this is done by comparing the nSamples
-        // with the max value and min value it can be for the 
-        // AC Grid Connection these Max and Min are initialized by the 
+        // with the max value and min value it can be for the
+        // AC Grid Connection these Max and Min are initialized by the
         // user in the code
         //
         if(v->nSamplesMin < v->nSamples )
@@ -204,6 +216,12 @@ static inline void POWER_MEAS_SINE_ANALYZER_run(POWER_MEAS_SINE_ANALYZER *v)
                 v->powerFactor=v->pRms/v->vaRms;
                 v->acFreqAvg=v->acFreqSum*0.01f;
                 v->acFreqSum=0;
+
+                v->Vpeak_Pos = -6000.0f;
+                v->Vpeak_Neg = 6000.0f;
+                v->Ipeak_Pos = -6000.0f;
+                v->Ipeak_Neg = 6000.0f;
+
             }
 
             v->jitterCount=0;

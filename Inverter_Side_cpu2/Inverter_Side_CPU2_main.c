@@ -138,7 +138,7 @@ void main(void)
     CPUTimer_reloadTimerCounter(CPUTIMER0_BASE);
     cpuTimer0IntCount = 0;
 
-    configCPUTimer(CPUTIMER0_BASE, 200000000, 2000000);
+    configCPUTimer(CPUTIMER0_BASE, 200000000, 1000000);
     CPUTimer_enableInterrupt(CPUTIMER0_BASE);
     Interrupt_enable(INT_TIMER0);
     CPUTimer_startTimer(CPUTIMER0_BASE);

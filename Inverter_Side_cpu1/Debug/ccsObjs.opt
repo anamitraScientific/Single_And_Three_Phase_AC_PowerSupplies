@@ -56,7 +56,6 @@
 "./My Files/Src/Control_Variables.obj"
 "./My Files/Src/NPC_Hardware_Setup.obj"
 "./My Files/Src/NPC_Solution.obj"
-"./My Files/Src/PowerAnalyzer.obj"
 "../2838x_FLASH_lnk_cpu1.cmd"
 "../f2838x_headers_nonBIOS_cpu1.cmd"
 "../Device/Compiler/c28x_fpu_dsp_library.lib"
