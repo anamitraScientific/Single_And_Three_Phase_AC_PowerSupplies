@@ -130,6 +130,7 @@ void main(void)
   //  NPC_HAL_setupGateDriverEnableGPIO();
     NPC_HAL_setupLEDGPIO();
     NPC_HAL_setupRelayGPIO();
+    GPIO_writePin(67, 1);
 #if CONVERTER_TYPE == THREE_PHASE
 
     NPC_HAL_TurnON_LED2();

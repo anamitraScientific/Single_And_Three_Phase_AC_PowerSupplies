@@ -26,6 +26,10 @@ float32_t I_PFset               = 0.0f;
 float32_t V_DC_slope            = 0.0f;
 float32_t slope_FreqRef         = 0.0f;
 volatile uint32_t StartPowerStage = 0;
+volatile uint32_t StartPowerStage_prev = 0;
+volatile uint32_t StartPowerStage_Harm = 0;
+volatile uint32_t StartPowerStage_Harm_prev = 0;
+
 float32_t ON_degree             = 0.0f;
 float32_t OFF_degree            = 0.0f;
 volatile uint32_t CouplingMode   = 0;
@@ -42,6 +46,7 @@ float32_t Limit_OCP             = 0.0f;
 float32_t Limit_OCP_Delay       = 0.0f;
 
 uint32_t harmonic_select         = 0;
+uint32_t tableUpdateVariable     = 0;
 
 float32_t harm1_no              = 0.0f;
 float32_t harm1_amp             = 0.0f;

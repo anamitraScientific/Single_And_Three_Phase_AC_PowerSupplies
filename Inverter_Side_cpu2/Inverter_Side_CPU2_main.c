@@ -162,39 +162,64 @@ void main(void)
     Harmonic_Array_clear();
     Harmonic_Array_Init();
     updateBaseLookUpTable();
-
+    harmonic_select = 0;
+    tableUpdateVariable = 0;
 
     while(1)
     {
         ReadMeasureDataFromSharedMemory();
-////        updateBaseLookUpTable();
+
+//**********************************************************************//
+
+//        if((harmonic_select =! 0) & (harmonic_select_prev == 0))
+//        {
+//            updateBaseLookUpTable();
+//        }
 //
-//        if(Delay_counter==5)
+//        else if((harmonic_select == 0) & (harmonic_select_prev =! 0))
 //        {
-////            send_Data_to_STM();
-//            Delay_counter = 0;
+//            Harmonic_Array_clear();
+//            Harmonic_Array_Init();
+//            updateBaseLookUpTable();
 //        }
-//        Delay_counter++;
+//
+//        harmonic_select_prev = harmonic_select;
 
-
-
-
-
-//        if(ProcessDataFlag == 1)
+//**********************************************************************//
+//        if(harmonic_select == 0)
 //        {
-//            send_Data_to_Display();
-//            ProcessDataFlag = 0;
+//
 //        }
-
-
-
-//        if(TransmitData)
+//        else
 //        {
-
-//            DEVICE_DELAY_US(500000);
-
+//            updateBaseLookUpTable();
+//            harmonic_select = 0;
+//        }
+//        if((StartPowerStage == 1) && (StartPowerStage_prev == 2) ||
+//                (StartPowerStage == 1) && (StartPowerStage_prev == 0))
+//        {
+//            Harmonic_Array_clear();
+//            Harmonic_Array_Init();
+//            updateBaseLookUpTable();
 //        }
 //        else{}
+//        StartPowerStage_prev = StartPowerStage;
+//**********************************************************************//
+        if((StartPowerStage == 1) && (StartPowerStage_prev == 0))
+        {
+            Harmonic_Array_clear();
+            Harmonic_Array_Init();
+            updateBaseLookUpTable();
+        }
+        else{}
+        StartPowerStage_prev = StartPowerStage;
+
+        if((StartPowerStage_Harm == 1) && (StartPowerStage_Harm_prev == 0))
+        {
+            updateBaseLookUpTable();
+        }
+        else{}
+        StartPowerStage_Harm_prev = StartPowerStage_Harm;
     }
 }
 

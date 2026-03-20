@@ -43,9 +43,11 @@ extern float32_t I_PFset;
 
 extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
-extern volatile uint32_t StartPowerStage;
 
+extern volatile uint32_t StartPowerStage;
 extern volatile uint32_t StartPowerStage_prev;
+extern volatile uint32_t StartPowerStage_Harm;
+extern volatile uint32_t StartPowerStage_Harm_prev;
 
 extern float32_t ON_degree;
 extern float32_t OFF_degree;

@@ -800,6 +800,9 @@ void NPC_globalVariablesInit(void)
 //            StartPowerStage      = 0;
             StartPowerStage      = 0;
             StartPowerStage_prev = 0;
+            StartPowerStage_Harm = 0;
+            StartPowerStage_Harm_prev = 0;
+
             clearPWMTrips        = 0;
             close_CurrentLoop    = 0;
             close_VoltageLoop    = 0;

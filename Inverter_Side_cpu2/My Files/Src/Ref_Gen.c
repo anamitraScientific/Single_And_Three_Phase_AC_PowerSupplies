@@ -67,8 +67,19 @@ void updateBaseLookUpTable(void)
         for(j = 0; j < MAX_HARMONIC_NO; j++)
         {
             /* Phase A */
-            float TimeA = (HarmonicA[j][0] * theta_base) + HarmonicA[j][2];
-            ResultA += sinf(TimeA) * HarmonicA[j][1] * 0.01f;
+//            float TimeA = (HarmonicA[j][0] * theta_base) + HarmonicA[j][2];
+//            ResultA += sinf(TimeA) * HarmonicA[j][1] * 0.01f;
+
+            if(j == 0)
+            {
+                float TimeA = (1.0f * theta_base) + HarmonicA[j][2];
+                ResultA += sinf(TimeA) * HarmonicA[j][1] * 0.01f;
+            }
+            else
+            {
+                float TimeA = (HarmonicA[j][0] * theta_base) + HarmonicA[j][2];
+                ResultA += sinf(TimeA) * HarmonicA[j][1] * 0.01f;
+            }
 
 //            /* Phase B */
 //            float TimeB = (HarmonicB[j][0] * theta_base) + HarmonicB[j][2];

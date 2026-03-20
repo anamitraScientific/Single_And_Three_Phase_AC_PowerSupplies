@@ -1191,6 +1191,46 @@ static inline void RUN_INV_ISR_ABC(void)
                 err_VA = 0;
             }
         }
+//        else if(StartPowerStage == 2)
+//        {
+//            REFslew_set(&VA_RefSlewRamp,0.0f);
+//            REFslew_set(&VdcRefSlewRamp,0.0f);
+////                close_VoltageLoop = 1;
+//            NPC_HAL_ClearALLPWMTripFlags();
+//            StartPowerStage_prev = StartPowerStage;
+//        }
+    }
+
+    if (StartPowerStage_Harm != StartPowerStage_Harm_prev)
+    {
+        if(StartPowerStage_Harm == 1)
+        {
+            float32_t target_on_angle = (float32_t)((ON_degree * PI) / 180.0f);
+            float32_t angle_diff = fabsf(pll_ang_A - target_on_angle);
+
+            if(angle_diff > PI) angle_diff = (float32_t)((2 * PI) - angle_diff);
+            if(angle_diff <= ON_ANG_TOL)
+            {
+                REFslew_set(&VA_RefSlewRamp,0.0f);
+                REFslew_set(&VdcRefSlewRamp,0.0f);
+//                close_VoltageLoop = 1;
+                NPC_HAL_ClearALLPWMTripFlags();
+                StartPowerStage_Harm_prev = StartPowerStage_Harm;
+            }
+        }
+        else if (StartPowerStage_Harm == 0)
+        {
+            float32_t target_off_angle = (float32_t)((OFF_degree * PI) / 180.0f);
+            float32_t angle_diff = fabsf(pll_ang_A - target_off_angle);
+
+            if(angle_diff > PI) angle_diff = (float32_t)((2 * PI) - angle_diff);
+            if(angle_diff <= OFF_ANG_TOL)
+            {
+                NPC_HAL_ForceOSTEVENTtoALLEPWM();
+                StartPowerStage_Harm_prev = StartPowerStage_Harm;
+                err_VA = 0;
+            }
+        }
     }
 
 
@@ -1202,11 +1242,11 @@ static inline void RUN_INV_ISR_ABC(void)
     REFslew_run(&VdcRefSlewRamp, V_DC, slope_VacRef);
     VA_RefSlewed = VA_RefSlewRamp.out_slew;
     Vdc_RefSlewed = VdcRefSlewRamp.out_slew;
-    Va_ref = VA_RefSlewed*Ref_A + Vdc_RefSlewed;  // three different amplitude of sine.
+    Va_ref = (1.4142f * VA_RefSlewed*Ref_A) + Vdc_RefSlewed;  // three different amplitude of sine.
 
 //    Va_ref = (Vac_fundamental * Ref_A) + V_DC;
-    if(Va_ref > 300.0f) Va_ref = 300.0f;
-    else if(Va_ref < -300.0f) Va_ref = -300.0f;
+//    if(Va_ref > 300.0f) Va_ref = 300.0f;
+//    else if(Va_ref < -300.0f) Va_ref = -300.0f;
 
 #elif CONVERTER_TYPE == THREE_PHASE
 

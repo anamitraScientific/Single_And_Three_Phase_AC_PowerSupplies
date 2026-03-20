@@ -40,6 +40,7 @@ static const DataMapEntry Source_Limit_dataMap[] = {
                                                     {BUFF_ADR_FREQ_SLEW, &slope_FreqRef, TYPE_FLOAT32},
 
                                                     {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_UINT32},
+                                                    {BUFF_ADR_HARM_TAB_OUT_STATE, &StartPowerStage_Harm, TYPE_UINT32},
 
                                                     {BUFF_ADR_ON_DEGREE, &ON_degree, TYPE_FLOAT32},
                                                     {BUFF_ADR_OFF_DEGREE, &OFF_degree, TYPE_FLOAT32},

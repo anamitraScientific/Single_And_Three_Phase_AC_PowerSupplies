@@ -205,9 +205,9 @@
 #if mode1 == GE_AC// testing //
     #if AC_submode == NormalOperation // ACFaults //
             //voltage loop
-            #define KPV_1H            0.5f //0.97f////0.045f //10//1.4567875851731f
-            #define KIV_1H            0.05f////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
-            #define WRCV_1H           62.8f//628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
+            #define KPV_1H            1.0f //0.5f //0.97f////0.045f //10//1.4567875851731f
+            #define KIV_1H            1000.0f //0.05f ////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
+            #define WRCV_1H           0.00628f //62.8f //628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
 
 #else
 #endif
@@ -246,8 +246,8 @@
 #define Fsysclock       100000000
 
 #if CONVERTER_TYPE == SINGLE_PHASE
-//#define Fswitching      100000.0f       // select switching frequency
-#define Fswitching      50000.0f
+#define Fswitching      50000.0f       // select switching frequency
+//#define Fswitching      50000.0f
 #define T_switching     (1 / Fswitching)
 #define Faux            (Fswitching/10)        // select auxilary ISR frequency
 #define Fsw_FAN         20000       // select fan switching frequency
@@ -378,7 +378,7 @@
 #if CONVERTER_TYPE == SINGLE_PHASE
 
 #define Iconv_MAX_SENSE_AMPS  ((float32_t)62.5)
-#define Iconv_TRIP_LIMIT_AMPS ((float32_t)62.5)
+#define Iconv_TRIP_LIMIT_AMPS ((float32_t)62)
 
 #elif CONVERTER_TYPE == THREE_PHASE
 
@@ -417,8 +417,8 @@
 //
 //Average current OFF set used in CMPSS
 //
-#define Vgrid_sense_offset    2265 //2332
-#define Iconv_sense_offset    2251 // 1885
+#define Vgrid_sense_offset    2332 //2265 //2332
+#define Iconv_sense_offset    1885 //2251 //1885
 
 #elif CONVERTER_TYPE == THREE_PHASE
 

@@ -66,7 +66,8 @@ extern int32_t val_prev_int;
 
 
 #define    BUFF_ADR_OUT_STATE                        BUFF_ADR_COUPLE + 1
-#define    BUFF_ADR_LOAD_SOURCE_MODE                 BUFF_ADR_OUT_STATE + 1
+#define    BUFF_ADR_HARM_TAB_OUT_STATE               BUFF_ADR_OUT_STATE + 1
+#define    BUFF_ADR_LOAD_SOURCE_MODE                 BUFF_ADR_HARM_TAB_OUT_STATE + 1
 #define    BUFF_ADR_LOAD__MODE                       BUFF_ADR_LOAD_SOURCE_MODE + 1
 #define    BUFF_ADR_SELECTED_TOPOLOGY                BUFF_ADR_LOAD__MODE + 1
 

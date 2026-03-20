@@ -1021,10 +1021,15 @@ static inline void NPC_HAL_setupCMPSS(uint32_t base1,
     //Voffset = 1.65v --> 2048counts & currentmax_sense(A) = Voffset/gain
     //
 
+//    CMPSS_setDACValueHigh(base1, Iconv_sense_offset + (int16_t)((float32_t)current_limit *
+//                          (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
+//    CMPSS_setDACValueLow(base1, Iconv_sense_offset - (int16_t)((float32_t)current_limit *
+//                         (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
+
     CMPSS_setDACValueHigh(base1, Iconv_sense_offset + (int16_t)((float32_t)current_limit *
-                          (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
+                          (float32_t)Iconv_sense_offset / (float32_t)current_max_sense));
     CMPSS_setDACValueLow(base1, Iconv_sense_offset - (int16_t)((float32_t)current_limit *
-                         (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
+                         (float32_t)Iconv_sense_offset / (float32_t)current_max_sense));
 
     //
     // Make sure the asynchronous path compare high and low event

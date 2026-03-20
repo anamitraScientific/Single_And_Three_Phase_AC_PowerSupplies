@@ -33,6 +33,9 @@ extern float32_t I_PFset;
 extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
 extern volatile uint32_t StartPowerStage;
+extern volatile uint32_t StartPowerStage_prev;
+extern volatile uint32_t StartPowerStage_Harm;
+extern volatile uint32_t StartPowerStage_Harm_prev;
 extern float32_t ON_degree;
 extern float32_t OFF_degree;
 extern volatile uint32_t CouplingMode;
@@ -49,6 +52,7 @@ extern float32_t Limit_OCP;
 extern float32_t Limit_OCP_Delay;
 
 extern uint32_t harmonic_select;
+extern uint32_t tableUpdateVariable;
 
 extern float32_t harm1_no;
 extern float32_t harm1_amp;
