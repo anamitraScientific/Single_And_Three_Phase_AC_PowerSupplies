@@ -22,20 +22,35 @@ float32_t Pkva_set              = 0.0f;
 float32_t PFset                 = 0.0f;
 float32_t I_PFset               = 0.0f;
 
+float32_t R_top                 = 0.0f;
+float32_t L_top                 = 0.0f;
+float32_t C_top                 = 0.0f;
+float32_t RL_top                = 0.0f;
+float32_t RC_top                = 0.0f;
+float32_t RS_top                = 0.0f;
+float32_t P_top                 = 0.0f;
+float32_t QL_top                = 0.0f;
+float32_t QC_top                = 0.0f;
+float32_t IL_top                = 0.0f;
+float32_t VC_top                = 0.0f;
 
 float32_t V_DC_slope            = 0.0f;
 float32_t slope_FreqRef         = 0.0f;
+
+float32_t ON_degree             = 0.0f;
+float32_t OFF_degree            = 0.0f;
+volatile uint32_t CouplingMode   = 0;               // For Source Mode -
+                                                    //  1)AC+DC
+                                                    //  2)AC
+                                                    //  3)DC
 volatile uint32_t StartPowerStage = 0;
 volatile uint32_t StartPowerStage_prev = 0;
 volatile uint32_t StartPowerStage_Harm = 0;
 volatile uint32_t StartPowerStage_Harm_prev = 0;
 
-float32_t ON_degree             = 0.0f;
-float32_t OFF_degree            = 0.0f;
-volatile uint32_t CouplingMode   = 0;
-
 volatile uint32_t LoadSource_mode = 0;
 volatile uint32_t Load_mode      = 0;
+volatile uint32_t Selected_Topology = 0;
 
 float32_t Limit_VAC             = 0.0f;
 float32_t Limit_VDC_max         = 0.0f;

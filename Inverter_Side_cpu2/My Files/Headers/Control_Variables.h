@@ -29,19 +29,36 @@ extern float32_t Pkva_set;
 extern float32_t PFset;
 extern float32_t I_PFset;
 
+extern float32_t R_top;
+extern float32_t L_top;
+extern float32_t C_top;
+extern float32_t RL_top;
+extern float32_t RC_top;
+extern float32_t RS_top;
+extern float32_t P_top;
+extern float32_t QL_top;
+extern float32_t QC_top;
+extern float32_t IL_top;
+extern float32_t VC_top;
 
 extern float32_t V_DC_slope;
 extern float32_t slope_FreqRef;
+
+extern float32_t ON_degree;
+extern float32_t OFF_degree;
+extern volatile uint32_t CouplingMode;      // For Source Mode -
+                                            //  1)AC+DC
+                                            //  2)AC
+                                            //  3)DC
+
 extern volatile uint32_t StartPowerStage;
 extern volatile uint32_t StartPowerStage_prev;
 extern volatile uint32_t StartPowerStage_Harm;
 extern volatile uint32_t StartPowerStage_Harm_prev;
-extern float32_t ON_degree;
-extern float32_t OFF_degree;
-extern volatile uint32_t CouplingMode;
 
 extern volatile uint32_t LoadSource_mode;
 extern volatile uint32_t Load_mode;
+extern volatile uint32_t Selected_Topology;
 
 extern float32_t Limit_VAC;
 extern float32_t Limit_VDC_max;

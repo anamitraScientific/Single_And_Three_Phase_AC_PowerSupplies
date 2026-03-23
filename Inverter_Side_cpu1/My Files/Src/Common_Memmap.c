@@ -35,21 +35,33 @@ static const DataMapEntry Source_Limit_dataMap[] = {
                                                     {BUFF_ADR_SET_PF, &PFset, TYPE_FLOAT32},
                                                     {BUFF_ADR_SET_I_PF, &I_PFset, TYPE_FLOAT32},
 
+                                                    {BUFF_ADR_SET_R_TOP, &R_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_L_TOP, &L_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_C_TOP, &C_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_RL_TOP, &RL_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_RC_TOP, &RC_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_RS_TOP, &RS_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_P_TOP, &P_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_QL_TOP, &QL_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_QC_TOP, &QC_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_IL_TOP, &IL_top, TYPE_FLOAT32},
+                                                    {BUFF_ADR_SET_VC_TOP, &VC_top, TYPE_FLOAT32},
+
 
                                                     {BUFF_ADR_VDC_SLEW, &V_DC_slope, TYPE_FLOAT32},
                                                     {BUFF_ADR_FREQ_SLEW, &slope_FreqRef, TYPE_FLOAT32},
 
-                                                    {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_UINT32},
-                                                    {BUFF_ADR_HARM_TAB_OUT_STATE, &StartPowerStage_Harm, TYPE_UINT32},
-
                                                     {BUFF_ADR_ON_DEGREE, &ON_degree, TYPE_FLOAT32},
                                                     {BUFF_ADR_OFF_DEGREE, &OFF_degree, TYPE_FLOAT32},
-
                                                     {BUFF_ADR_COUPLE, &CouplingMode, TYPE_UINT32},
+
+                                                    {BUFF_ADR_OUT_STATE, &StartPowerStage, TYPE_UINT32},
+                                                    {BUFF_ADR_HARM_TAB_OUT_STATE, &StartPowerStage_Harm, TYPE_UINT32},
 
 
                                                     {BUFF_ADR_LOAD_SOURCE_MODE, &LoadSource_mode, TYPE_UINT32},
                                                     {BUFF_ADR_LOAD__MODE, &Load_mode, TYPE_UINT32},
+                                                    {BUFF_ADR_SELECTED_TOPOLOGY, &Selected_Topology, TYPE_UINT32},
 
 
                                                     //Limit SubSystem

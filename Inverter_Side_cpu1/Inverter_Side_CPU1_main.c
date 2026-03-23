@@ -17,6 +17,7 @@
 #include "Control_Variables.h"
 #include "Common_Memmap.h"
 #include "Ref_Gen.h"
+#include "emavg.h"
 
 // Variable declarations for state machine
 void (*alpha_State_Ptr)(void);
@@ -62,6 +63,10 @@ volatile float32_t total_step_time;
 volatile uint32_t total_timer_count_per_step;
 volatile uint32_t timerCount;
 
+
+EMAVG vout;
+
+
 // State Machine function prototypes
 void A0(void); // Alpha states
 void A1(void); // A branch states
@@ -72,7 +77,7 @@ static inline void CheckSharedMemory(void);
 
 
 void main(void)
- {
+{
 
 //    Harmonic_Array_Init();
 
@@ -85,6 +90,8 @@ void main(void)
 //    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
 ////    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching, 0.5f, 600U);
 //    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching);
+
+    EMAVG_config(&vout, 0.05);
 
     POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
     POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Fswitching, 0.05f, 1000.0f, 25.0f);
@@ -154,7 +161,7 @@ void main(void)
 
 
         WriteMeasureDataToSharedMemory();
-//        CheckSharedMemory();
+        CheckSharedMemory();
  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //        if(seq_start == true)
 //        {
@@ -222,118 +229,16 @@ void A1(void)
 // MAIN ISR LOOP
 interrupt void ISR(void)
 {
+    if(LoadSource_mode == 1)
+    {
 
-#if mode1 == testing
-    NPC_Testing();
-#else
-#endif
+        RUN_INV_ISR_LoadMode();
+    }
+    else
+    {
+        RUN_INV_ISR_SourceMode();
+    }
 
-#if mode1 == GE_AC
-    #if AC_submode == NormalOperation
-            RUN_INV_ISR_ABC();
-
-    #elif AC_submode == ACFaults
-            RUN_INV_ISR_ABC();  // applicable in balanced and CV mode
-
-    #elif AC_submode == harmonic_injection
-            RUN_INV_ISR_GE_AC_fundamental_with_harmonics();
-
-    #elif AC_submode == arbitary_frequency
-            //RUN_INV_ISR_GE_AC_arbitary_frequency();
-            RUN_INV_ISR_GE_AC_fundamental_with_harmonics();  //select unbalanced mode; provide frequency in multiples of 50 working upto 1khz from watch window
-                                                             // but provide arb. freq. as 50hz for all phases in project defines
-
-    #elif AC_submode == SINGLE_PHASE_paralleling
-            RUN_INV_ISR_GE_AC_paralleling();                // not tested
-
-    #elif AC_submode == programmable_output_impedence
-            RUN_INV_ISR_GE_AC_programmable_output_impedence();
-
-    #elif AC_submode == Arbitrary_waveform_mode
-            //RUN_INV_ISR_GE_AC_arbitary_waveform();
-            RUN_INV_ISR_GE_AC_fundamental_with_harmonics();
-    #else
-    #endif
-#else
-#endif
-
-#if mode1 == EL_AC
-#if loop == CC_loop
-    #if AC_submode == NormalOperation
-            //RUN_INV_ISR_EL_AC_fundamental();
-            //RUN_INV_ISR_EL_LL(); for line to line
-            RUN_INV_ISR_EL_AC_fundamental_with_harmonics();  // provide only fundamental
-
-    #elif AC_submode == harmonic_injection
-            RUN_INV_ISR_EL_AC_fundamental_with_harmonics();
-
-    #elif AC_submode == arbitary_frequency
-            //RUN_INV_ISR_EL_AC_arbitary_frequency();
-            RUN_INV_ISR_EL_AC_fundamental_with_harmonics();  //select unbalanced mode; provide frequency in multiples of 50 working upto 1khz from watch window
-                                                                         // but provide arb. freq. as 50hz for all phases in project defines.h
-
-    #elif AC_submode == SINGLE_PHASE_paralleling
-            RUN_INV_ISR_EL_AC_paralleling();                // not tested
-
-    #elif AC_submode == programmable_output_impedence
-            RUN_INV_ISR_EL_AC_programmable_output_impedence();
-
-    #elif AC_submode == Arbitrary_waveform
-            RUN_INV_ISR_EL_AC_arbitary_waveform();          // not tested
-    #else
-    #endif
-#else
-#endif
-#else
-#endif
-
-#if mode1 == GE_DC
-    #if DC_submode == NormalOperation
-            RUN_INV_ISR_GE_DC();
-            //RUN_INV_ISR_GE_DC_dual();  // not tested
-
-    #elif DC_submode == Bipolar
-            RUN_INV_ISR_GE_DC_Bipolar();
-
-    #elif DC_submode == paralleling
-            RUN_INV_ISR_GE_DC_paralleling();    // not tested
-
-    #elif DC_submode == programmable_output_impedence_dc
-            RUN_INV_ISR_GE_DC_programmable_output_impedence();
-    #else
-    #endif
-#else
-#endif
-
-#if mode1 == EL_DC  // not tested
-#if loop == CC_loop
-    #if DC_submode == NormalOperation
-            RUN_INV_ISR_GE_DC();
-
-    #elif DC_submode == Bipolar
-            RUN_INV_ISR_GE_DC_Bipolar();
-
-    #elif DC_submode == paralleling
-            RUN_INV_ISR_GE_DC_paralleling();
-
-    #elif DC_submode == programmable_output_impedence_dc
-            RUN_INV_ISR_GE_DC_programmable_output_impedence();
-    #else
-    #endif
-#else
-#endif
-#else
-#endif
-
-#if mode1 == GE_AC_DC // not tested
-    RUN_INV_ISR_GE_AC_fundamental();
-#else
-#endif
-
-//    WriteMeasureDataToSharedMemory();
-
-//    Run_aux_ISR();
-//    WriteMeasureDataToSharedMemory();
 
 
 #if CONVERTER_TYPE == SINGLE_PHASE
@@ -342,52 +247,11 @@ interrupt void ISR(void)
     NPC_HAL_clear_ISR1_EPWM4_InterruptFlag();
 #else
 #endif
+
+
     NPC_HAL_Acknowledge_Interrupt();
 }
 
-
-
-//AUX ISR related Function definitions
-//interrupt void AUX_ISR(void)
-//{
-//    if(seq_start == true)
-//    {
-//        if(seq_run == false)
-//        {
-//            seqIndex = 0;
-//            seq_run = true;
-//
-//            VA_fundamental = seq_table[seqIndex][0];
-//            AC_Freq_Ref_A = seq_table[seqIndex][1];
-//            seq_time = seq_table[seqIndex][2];
-//
-//            volt_step_rise_time = (float32_t)((1/ISR_FREQUENCY) * ((VA_fundamental - VA_RefSlewRamp.out_slew) / slope_VacRef));
-//            freq_step_rise_time = (float32_t)((1/ISR_FREQUENCY) * ((AC_Freq_Ref_A - FreqRefSlewRamp_A.out_slew) / slope_FreqRef));
-//
-//            if(volt_step_rise_time >= freq_step_rise_time)
-//            {
-//                total_step_time = (volt_step_rise_time + seq_time) * 1000000; // seconds converted to micro seconds
-//            }
-//            else
-//            {
-//                total_step_time = (freq_step_rise_time + seq_time) * 1000000; // seconds converted to micro seconds
-//            }
-//
-//            total_timer_count_per_step = (uint32_t)(total_step_time / 100);
-//        }
-//        else
-//        {
-//           if(timerCount == total_timer_count_per_step)
-//           {
-//               seqIndex++;
-//               timerCount = 0;
-//               seq_run = false;
-//           }
-//        }
-//    }
-
-//    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-//}
 
 
 static inline void CheckSharedMemory(void)

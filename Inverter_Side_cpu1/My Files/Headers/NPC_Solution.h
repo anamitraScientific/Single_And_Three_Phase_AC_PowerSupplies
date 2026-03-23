@@ -1,8 +1,8 @@
 /*
  * NPC_Solution.h
  *
- *  Created on: 17-Jun-2025
- *      Author: Subhasis Mishra
+ *  Created on: 20-Mar-2026
+ *      Author: Anamitra Sarkar
  */
 
 
@@ -28,6 +28,7 @@
 #include "rampgen.h"
 #include "Ref_slew.h"
 #include "Control_Variables.h"
+#include "emavg.h"
 
 //#include "REF_GEN_FUNC.h"
 
@@ -57,6 +58,14 @@ typedef union
 
 extern volatile POWER_MEAS_SINE_ANALYZER PPA_phaseA;
 extern f32_to_u16 PLL_angle_DAC;
+
+//*********************************//
+//******Lode Mode variables********//
+//*********************************//
+
+//CC mode
+extern float32_t phase_angle;
+extern SPLL_1PH_SOGI V_line_pll;
 
 //
 // Global Variables
@@ -153,6 +162,10 @@ extern float32_t Vc_fb;
 extern float32_t Va_fb_pu;
 extern float32_t Vb_fb_pu;
 extern float32_t Vc_fb_pu;
+
+extern float32_t Vac_fb_pu;
+
+
 extern float32_t Ia_fb;
 extern float32_t Ib_fb;
 extern float32_t Ic_fb;
@@ -441,6 +454,8 @@ extern SPLL_1PH_SOGI spll_A;
 extern SPLL_1PH_SOGI spll_B;
 extern SPLL_1PH_SOGI spll_C;
 
+extern SPLL_1PH_SOGI spll_line;
+
 
 // auto start variables
 typedef union{
@@ -498,6 +513,8 @@ extern float32_t Za_Ia,Za_Ib,Za_Ic;
 extern float32_t sine_arbitary_A,sine_arbitary_B,sine_arbitary_C;
 extern volatile float32_t clip_A,clip_B,clip_C;
 
+extern EMAVG vout;
+
 //
 // ADC read function
 //
@@ -513,10 +530,14 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
 
 
     Va_sns = (float)((AdcaResultRegs.ADCRESULT0 + AdcaResultRegs.ADCRESULT1 + AdcaResultRegs.ADCRESULT2 + AdcaResultRegs.ADCRESULT3)*0.25f);
+    EMAVG_run(&vout, Va_sns);
+    Va_sns = vout.out;
+
     Va_fb =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling;
 //    PPA_phaseA.Va = Va_fb;
     PPA_phaseA.v = Va_fb;
 
+    Vac_fb_pu = ((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling_PU;
 
 //    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
 //    Meas_Vrms = PPA_phaseA.Va_rms;
@@ -1041,60 +1062,6 @@ static inline void Ref_Gen_function(void)
 
 }
 
-//
-//testing function
-//
-static inline void NPC_Testing(void)
-{
-
-    NPC_readCurrentAndVoltageSignals();
-    NPC_run_internal_PLL();
-    Ref_Gen_function();
-
-
-    if(StartPowerStage == 1)
-    {
-       // StartPowerStage     = 0;
-        NPC_HAL_ClearALLPWMTripFlags();
-      //  NPC_HAL_Enable_GateDriver();
-
-//       EPWM_forceTripZoneEvent(EPWM5_BASE, EPWM_TZ_FORCE_EVENT_OST);
-//       EPWM_forceTripZoneEvent(EPWM2_BASE, EPWM_TZ_FORCE_EVENT_OST);
-//       EPWM_forceTripZoneEvent(EPWM1_BASE, EPWM_TZ_FORCE_EVENT_OST);
-
-
-
-    Ma1 = kdc1 + (kac1*(float)(Ref_A));
-    Mb1 = kdc2 + (kac1*(float)(Ref_B));
-    Mc1 = kdc3 + (kac1*(float)(Ref_C));
-
-//    NPC_Calculate_duty(Ma1,
-//                       Mb1,
-//                       Mc1);
-
-
-//    NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
-//                                     dutyB_S1_Ref,
-//                                     dutyC_S1_Ref,
-//                                     dutyN_S1_Ref,
-//                                     dutyE_S1_Ref,
-//                                     dutyF_S1_Ref,
-//                                     DeadBand);
-
-    if(DeadBand >= DBTicks)
-    {
-        DeadBand = DeadBand - 1;
-    }
-
-    }
-
-    else if (StartPowerStage == 2)
-
-    {
-        NPC_HAL_ForceOSTEVENTtoALLEPWM();
-    }
-    NPC_filterAndCheckForBusOverVoltage();
-}
 
 //
 // select CC or CV loop ; balanced/ unbalanced from project defines.h file
@@ -1104,50 +1071,11 @@ static inline void NPC_Testing(void)
 
 ///////// ON OFF and modes are done needs to be tested at power and output off at 2
 
-//static inline void RUN_INV_ISR_ABC(void)
-//{
-//    NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
-//    NPC_run_internal_PLL();
-//    Ref_Gen_function();
-//    NPC_HAL_ClearALLPWMTripFlags();
-//
-//    Ref_A = Ref_A * Vac_fundamental/300.0f ;
-//
-//    Ref_A = Ref_A + (V_DC/300.0f);
-//
-//    if(Ref_A>1)
-//    {
-//        Ref_A = 1;
-//    }
-//    else if(Ref_A<-1)
-//    {
-//        Ref_A = -1;
-//    }
-//
-//    NPC_Calculate_duty(Ref_A);
-//
-//    if(StartPowerStage != 1)
-//    {
-//        DeadBand = 1000;
-//    }
-//
-//    NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
-//                                                dutyB_S1_Ref,
-//                                                DeadBand);
-//
-//    if(DeadBand >= DBTicks)
-//    {
-//        DeadBand = DeadBand - 1;
-//    }
-//
-//
-//}
 
 
 
 
-
-static inline void RUN_INV_ISR_ABC(void)
+static inline void RUN_INV_ISR_SourceMode(void)
 {
 
     NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
@@ -1169,7 +1097,6 @@ static inline void RUN_INV_ISR_ABC(void)
             {
                 REFslew_set(&VA_RefSlewRamp,0.0f);
                 REFslew_set(&VdcRefSlewRamp,0.0f);
-//                close_VoltageLoop = 1;
                 NPC_HAL_ClearALLPWMTripFlags();
                 StartPowerStage_prev = StartPowerStage;
             }
@@ -1191,14 +1118,6 @@ static inline void RUN_INV_ISR_ABC(void)
                 err_VA = 0;
             }
         }
-//        else if(StartPowerStage == 2)
-//        {
-//            REFslew_set(&VA_RefSlewRamp,0.0f);
-//            REFslew_set(&VdcRefSlewRamp,0.0f);
-////                close_VoltageLoop = 1;
-//            NPC_HAL_ClearALLPWMTripFlags();
-//            StartPowerStage_prev = StartPowerStage;
-//        }
     }
 
     if (StartPowerStage_Harm != StartPowerStage_Harm_prev)
@@ -1315,7 +1234,84 @@ static inline void RUN_INV_ISR_ABC(void)
         {
             DeadBand = DeadBand - 1;
         }
-   }
+}
+
+
+static inline void RUN_INV_ISR_LoadMode(void)
+{
+
+    // CC Mode
+    if(Load_mode == 0)
+    {
+        float32_t CC_I_angle;
+        float32_t IacRef_slope = 0.0002f;
+        float32_t pf_cmd, pf_abs;
+
+        NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
+
+        if (StartPowerStage != StartPowerStage_prev)
+        {
+            if(StartPowerStage == 1)
+            {
+                SPLL_1PH_SOGI_reset(&spll_line);
+                SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+
+                REFslew_set(&IacRefSlewRamp,0.0f);
+                NPC_HAL_ClearALLPWMTripFlags();
+                StartPowerStage_prev = StartPowerStage;
+            }
+            else if(StartPowerStage == 0)
+            {
+                NPC_HAL_ForceOSTEVENTtoALLEPWM();
+                StartPowerStage_prev = StartPowerStage;
+                err_VA = 0;
+            }
+        }
+
+        SPLL_1PH_SOGI_run(&V_line_pll, Vac_fb_pu);
+
+        pf_cmd = I_PFset;
+        if(pf_cmd >  1.0f) pf_cmd =  1.0f;
+        if(pf_cmd < -1.0f) pf_cmd = -1.0f;
+
+        pf_abs = fabsf(pf_cmd);
+        phase_angle = acosf(pf_abs);
+
+        if(pf_cmd < 0.0f) // for current leading
+        {
+            CC_I_angle = V_line_pll.theta[0] - phase_angle;
+        }
+        else              // for current lagging
+        {
+            CC_I_angle = V_line_pll.theta[0] + phase_angle;
+        }
+
+        while(CC_I_angle < 0.0f)
+            CC_I_angle += 2.0f * 3.1415926f;
+
+        while(CC_I_angle >= 2.0f * 3.1415926f)
+            CC_I_angle -= 2.0f * 3.1415926f;
+
+        REFslew_run(&IacRefSlewRamp, -Iset, IacRef_slope);
+        Ia_ref = (IacRefSlewRamp.out_slew) * sinf(CC_I_angle);
+
+        err_IA = (float)(Ia_ref - Ia_fb);  // ERROR SIGNAL GIVEN TO CONTROLLER.
+        uk_Ia  = runPR_custom(&Testg1, err_IA);
+        Ma1 = uk_Ia + (float32_t)(1.0f - (Va_sns/400.0f));
+        NPC_Calculate_duty(Ma1);
+        NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
+                                         dutyB_S1_Ref,
+                                         DeadBand);
+
+        DeadBand = DBTicks-1;
+        if(DeadBand >= DBTicks)
+        {
+            DeadBand = DeadBand - 1;
+        }
+
+    }
+
+}
 
 #pragma FUNC_ALWAYS_INLINE(Run_aux_ISR)
 static inline void Run_aux_ISR(void)

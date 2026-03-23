@@ -26,6 +26,15 @@ volatile POWER_MEAS_SINE_ANALYZER PPA_phaseA;
 
 f32_to_u16 PLL_angle_DAC;
 
+
+//*********************************//
+//******Lode Mode variables********//
+//*********************************//
+
+//CC mode
+float32_t phase_angle;
+SPLL_1PH_SOGI V_line_pll;
+
 //****************************************************************************************************************************\\
 //*********************************************************** Global Variables*************************************************\\
 //*****************************************************************************************************************************\\
@@ -127,6 +136,9 @@ float32_t Vc_fb;
 float32_t Va_fb_pu;
 float32_t Vb_fb_pu;
 float32_t Vc_fb_pu;
+
+float32_t Vac_fb_pu;
+
 float32_t Ia_fb;
 float32_t Ib_fb;
 float32_t Ic_fb;
@@ -366,6 +378,8 @@ float32_t wrcV_1H, wrcV_3H, wrcV_5H, wrcV_7H, wrcV_9H;
 SPLL_1PH_SOGI spll_A;
 SPLL_1PH_SOGI spll_B;
 SPLL_1PH_SOGI spll_C;
+
+SPLL_1PH_SOGI spll_line;
 //
 //Reference slew related
 //
@@ -731,6 +745,15 @@ void NPC_globalVariablesInit(void)
 
         // Initialize system state FOR AUTO-START OF THE INVERTER STAGE.
            NPC_system_state.enum_systemState = systemState_normalOperation;//systemState_InverterON;//systemState_waitForDCVoltage;
+
+        /***************************************************
+         * *************************************************
+         * SPLL 1ph SOGI Method initialization for load Mode
+         * *************************************************
+         ***************************************************/
+
+           SPLL_1PH_SOGI_reset(&spll_line);
+           SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
 
            //
            // SPLL 1ph SOGI Method initialization
