@@ -229,7 +229,7 @@ void A1(void)
 // MAIN ISR LOOP
 interrupt void ISR(void)
 {
-    if(LoadSource_mode == 1)
+    if(LoadSource_mode != 0)
     {
 
         RUN_INV_ISR_LoadMode();
