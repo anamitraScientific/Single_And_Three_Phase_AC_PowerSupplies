@@ -66,6 +66,14 @@ extern f32_to_u16 PLL_angle_DAC;
 //CC mode
 extern float32_t phase_angle;
 extern SPLL_1PH_SOGI V_line_pll;
+extern SPLL_1PH_SOGI sogi_Ia;
+extern float32_t Id_ref, Iq_ref;
+extern float32_t i_alpha, i_beta;
+extern float32_t Id_fb, Iq_fb;
+extern float32_t ud_inv, uq_inv;
+extern float32_t alpha_ref;
+
+
 
 //
 // Global Variables
@@ -79,6 +87,10 @@ extern SPLL_1PH_SOGI V_line_pll;
 //extern float32_t IB_fundamental;
 //extern float32_t IC_fundamental;
 extern float32_t V_flicker;
+
+extern float32_t uk_kp;
+extern float32_t uk_ki;
+extern float32_t Mff;
 
 extern float32_t uk_Va;
 extern float32_t uk_Vb;
@@ -157,6 +169,9 @@ extern float32_t max_val;
 extern float32_t min_val;
 
 extern float32_t Va_fb;
+
+extern float32_t V_fb[2];
+
 extern float32_t Vb_fb;
 extern float32_t Vc_fb;
 extern float32_t Va_fb_pu;
@@ -167,8 +182,15 @@ extern float32_t Vac_fb_pu;
 
 
 extern float32_t Ia_fb;
+
+extern float32_t I_fb[2];
+
+extern float32_t scale;
 extern float32_t Ib_fb;
 extern float32_t Ic_fb;
+
+extern float32_t Vc1_fb;
+
 extern float32_t Ia_ref;
 extern float32_t Ib_ref;
 extern float32_t Ic_ref;
@@ -366,9 +388,31 @@ typedef struct  {
     float32_t x2;   //!< x2
 } PR_Custom_DF22;
 
+
+/*
+ * PI controller instances
+ */
+
+typedef struct {
+    float32_t Kp;
+    float32_t Ki;
+    float32_t i10;  //  integrator
+    float32_t Umax;
+    float32_t Umin;
+    float32_t i6;   // integrator enable (1 = on, 0 = hold)
+} PI_Custom;
+
+extern PI_Custom pi_I_inv;
+extern PI_Custom pi_Id_inv;
+extern PI_Custom pi_Iq_inv;
+
+//default values to initialize the PI structure
+#define Custom_PI_DEFAULTS { 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 1.0f }
+
 //! \brief          Defines default values to initialize the DCL_DF22 structure
 //!
 #define Custom_DF22_DEFAULTS { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f}
+
 
 
 
@@ -514,7 +558,7 @@ extern float32_t sine_arbitary_A,sine_arbitary_B,sine_arbitary_C;
 extern volatile float32_t clip_A,clip_B,clip_C;
 
 extern EMAVG vout;
-
+extern EMAVG Vdc_out;
 //
 // ADC read function
 //
@@ -526,7 +570,7 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
     Ia_sns = (float)((AdcbResultRegs.ADCRESULT0 + AdcbResultRegs.ADCRESULT1 + AdcbResultRegs.ADCRESULT2 + AdcbResultRegs.ADCRESULT3)*0.25f);
     Ia_fb =((float)Ia_sns - Iconv_sense_offset)*Iconv_Sense_scaling;
 //    PPA_phaseA.Ia = Ia_fb;
-    PPA_phaseA.i = Ia_fb;
+//    PPA_phaseA.i = Ia_fb;
 
 
     Va_sns = (float)((AdcaResultRegs.ADCRESULT0 + AdcaResultRegs.ADCRESULT1 + AdcaResultRegs.ADCRESULT2 + AdcaResultRegs.ADCRESULT3)*0.25f);
@@ -534,35 +578,36 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
     Va_sns = vout.out;
 
     Va_fb =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling;
-//    PPA_phaseA.Va = Va_fb;
-    PPA_phaseA.v = Va_fb;
+//    PPA_phaseA.Va = Va_fb + 31.0f;
+//    PPA_phaseA.v = Va_fb;
+    PPA_phaseA.Vacdc = Va_fb + 31.0f;
 
     Vac_fb_pu = ((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling_PU;
 
+    Vc1_sns = (float)((AdccResultRegs.ADCRESULT0 + AdccResultRegs.ADCRESULT1 + AdccResultRegs.ADCRESULT2 + AdccResultRegs.ADCRESULT3)*0.25f);
+    EMAVG_run(&Vdc_out, Vc1_sns);
+    Vc1_sns = Vdc_out.out;
+    Vc1_fb = ((float)Vc1_sns - (float)Vdc_sense_offset)*Vdc_Sense_scaling;
+
 //    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
-//    Meas_Vrms = PPA_phaseA.Va_rms;
-//    Meas_Irms = PPA_phaseA.Ia_rms;
-//    Meas_Freq = PPA_phaseA.Frequency_A;
-//    Meas_Papparent = PPA_phaseA.Sa_apparent;
-//    Meas_Vpk_P = PPA_phaseA.POS_PK;
-//    Meas_Vpk_N = PPA_phaseA.NEG_PK;
+
 //    Meas_PF = PPA_phaseA.PF_A;
 
-    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
-    Meas_Vrms = PPA_phaseA.vRms;
-    Meas_Irms = PPA_phaseA.iRms;
-    Meas_PF = PPA_phaseA.powerFactor;
-    Meas_Papparent = Meas_Vrms * Meas_Irms;
-    Meas_Preal = Meas_Papparent * Meas_PF;
-    Meas_Preactive = Meas_Papparent * (sqrtf(1.0f - (Meas_PF * Meas_PF)));
-
-    Meas_Vpk_P = PPA_phaseA.Vpeak_Pos;
-    Meas_Vpk_N = PPA_phaseA.Vpeak_Neg;
-    Meas_Ipk_P = PPA_phaseA.Ipeak_Pos;
-    Meas_Ipk_N = PPA_phaseA.Ipeak_Neg;
-
-    Meas_V_CF = Meas_Vpk_P / Meas_Vrms;
-    Meas_I_CF = Meas_Ipk_P / Meas_Irms;
+//    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
+//    Meas_Vrms = PPA_phaseA.vRms;
+//    Meas_Irms = PPA_phaseA.iRms;
+//    Meas_PF = PPA_phaseA.powerFactor;
+//    Meas_Papparent = Meas_Vrms * Meas_Irms;
+//    Meas_Preal = Meas_Papparent * Meas_PF;
+//    Meas_Preactive = Meas_Papparent * (sqrtf(1.0f - (Meas_PF * Meas_PF)));
+//
+//    Meas_Vpk_P = PPA_phaseA.Vpeak_Pos;
+//    Meas_Vpk_N = PPA_phaseA.Vpeak_Neg;
+//    Meas_Ipk_P = PPA_phaseA.Ipeak_Pos;
+//    Meas_Ipk_N = PPA_phaseA.Ipeak_Neg;
+//
+//    Meas_V_CF = Meas_Vpk_P / Meas_Vrms;
+//    Meas_I_CF = Meas_Ipk_P / Meas_Irms;
 
 
 #if mode1 == EL_AC
@@ -674,6 +719,31 @@ static inline void runPR_custom_reset(PR_Custom_DF22 *p)
     __enable_interrupts();
 }
 */
+
+
+static inline float32_t runPI_Custom(PI_Custom *p, float32_t rk , float32_t yk )
+{
+    float32_t v1, v2, v4, v5, v9;
+     v1 = rk - yk;                         // error
+//    v1 = rk + yk;
+     v2 = p->Kp * v1;                      // proportional term
+     v4 = (v1 * p->Ki * p->i6) + p->i10; // integrator update
+     p->i10 = v4;
+     v5 = v2 + v4;                         // control effort
+     v9 = (v5 > p->Umax) ? p->Umax : v5;
+     v9 = (v9 < p->Umin) ? p->Umin : v9;
+     p->i6 = (v5 == v9) ? 1.0f : 0.0f;     // anti-windup gate
+
+     return(v9);
+}
+
+static inline void resetPI_Custom(PI_Custom *p)
+{
+    p->i10 = 0.0f;
+    p->i6 = 1.0f;
+}
+
+
 static inline void NPC_run_internal_PLL1(void)
 {
     RAMP_run(&theta_A,AC_Freq_Ref,ISR_FREQUENCY);
@@ -1071,6 +1141,21 @@ static inline void Ref_Gen_function(void)
 
 ///////// ON OFF and modes are done needs to be tested at power and output off at 2
 
+static inline float32_t toRadian(float32_t deg)
+{
+    float32_t angle;
+
+    angle = (deg * 3.1415926f) / 180.0f;
+    return angle;
+}
+
+static inline float32_t toDegree(float32_t rad)
+{
+    float32_t angle;
+
+    angle = (rad * 180.0f) / 3.1415926f;
+    return angle;
+}
 
 
 
@@ -1237,54 +1322,131 @@ static inline void RUN_INV_ISR_SourceMode(void)
 }
 
 
+//static inline void RUN_INV_ISR_LoadMode(void)
+//{
+//    SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+//
+//
+//    // CC Mode
+//    if(Load_mode == 0)
+//    {
+//        float32_t CC_I_angle;
+//        float32_t IacRef_slope = 0.0002f;
+//        float32_t pf_cmd, pf_abs;
+//
+//        NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
+//
+//        if (StartPowerStage != StartPowerStage_prev)
+//        {
+//            if(StartPowerStage == 1)
+//            {
+//                SPLL_1PH_SOGI_reset(&spll_line);
+////                SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+//
+//                REFslew_set(&IacRefSlewRamp,0.0f);
+//                NPC_HAL_ClearALLPWMTripFlags();
+//                StartPowerStage_prev = StartPowerStage;
+//            }
+//            else if(StartPowerStage == 0)
+//            {
+//                NPC_HAL_ForceOSTEVENTtoALLEPWM();
+//                StartPowerStage_prev = StartPowerStage;
+//                err_VA = 0;
+//            }
+//        }
+//
+//        SPLL_1PH_SOGI_run(&V_line_pll, Vac_fb_pu);
+//
+//        pf_cmd = I_PFset;
+//        if(pf_cmd >  1.0f) pf_cmd =  1.0f;
+//        if(pf_cmd < -1.0f) pf_cmd = -1.0f;
+//
+//        pf_abs = fabsf(pf_cmd);
+//        phase_angle = acosf(pf_abs);
+//
+//        if(pf_cmd < 0.0f) // for current leading
+//        {
+//            CC_I_angle = V_line_pll.theta[0] - phase_angle;
+//        }
+//        else              // for current lagging
+//        {
+//            CC_I_angle = V_line_pll.theta[0] + phase_angle;
+//        }
+//
+//        while(CC_I_angle < 0.0f)
+//            CC_I_angle += 2.0f * 3.1415926f;
+//
+//        while(CC_I_angle >= 2.0f * 3.1415926f)
+//            CC_I_angle -= 2.0f * 3.1415926f;
+//
+//        REFslew_run(&IacRefSlewRamp, -Iset, IacRef_slope);
+//        Ia_ref = (IacRefSlewRamp.out_slew) * sinf(CC_I_angle);
+//
+//        err_IA = (float)(Ia_ref - Ia_fb);  // ERROR SIGNAL GIVEN TO CONTROLLER.
+//        uk_Ia  = runPR_custom(&Testg1, err_IA);
+//        Ma1 = uk_Ia + (float32_t)(1.0f - (Va_sns/400.0f));
+//        NPC_Calculate_duty(Ma1);
+//        NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
+//                                         dutyB_S1_Ref,
+//                                         DeadBand);
+//
+//        DeadBand = DBTicks-1;
+//        if(DeadBand >= DBTicks)
+//        {
+//            DeadBand = DeadBand - 1;
+//        }
+//
+//    }
+//
+//}
+
+
 static inline void RUN_INV_ISR_LoadMode(void)
 {
+    float32_t CC_I_angle;
+    float32_t pf_cmd, pf_abs;
+    float32_t IacRef_slope = 0.001f;
+
+    NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
+    SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+    SPLL_1PH_SOGI_run(&V_line_pll, Vac_fb_pu);
+
+
+    if (StartPowerStage != StartPowerStage_prev)
+    {
+        if(StartPowerStage == 1)
+        {
+            REFslew_set(&IacRefSlewRamp,0.0f);
+            NPC_HAL_ClearALLPWMTripFlags();
+            StartPowerStage_prev = StartPowerStage;
+        }
+        else if(StartPowerStage == 0)
+        {
+            NPC_HAL_ForceOSTEVENTtoALLEPWM();
+            StartPowerStage_prev = StartPowerStage;
+            err_VA = 0;
+        }
+    }
+
 
     // CC Mode
     if(Load_mode == 0)
     {
-        float32_t CC_I_angle;
-        float32_t IacRef_slope = 0.0002f;
-        float32_t pf_cmd, pf_abs;
+//        pf_cmd = I_PFset;
+//        if(pf_cmd >  1.0f) pf_cmd =  1.0f;
+//        if(pf_cmd < -1.0f) pf_cmd = -1.0f;
+//
+//        pf_abs = fabsf(pf_cmd);
+//        phase_angle = acosf(pf_abs);
 
-        NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
-
-        if (StartPowerStage != StartPowerStage_prev)
-        {
-            if(StartPowerStage == 1)
-            {
-                SPLL_1PH_SOGI_reset(&spll_line);
-                SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
-
-                REFslew_set(&IacRefSlewRamp,0.0f);
-                NPC_HAL_ClearALLPWMTripFlags();
-                StartPowerStage_prev = StartPowerStage;
-            }
-            else if(StartPowerStage == 0)
-            {
-                NPC_HAL_ForceOSTEVENTtoALLEPWM();
-                StartPowerStage_prev = StartPowerStage;
-                err_VA = 0;
-            }
-        }
-
-        SPLL_1PH_SOGI_run(&V_line_pll, Vac_fb_pu);
-
-        pf_cmd = I_PFset;
-        if(pf_cmd >  1.0f) pf_cmd =  1.0f;
-        if(pf_cmd < -1.0f) pf_cmd = -1.0f;
-
-        pf_abs = fabsf(pf_cmd);
-        phase_angle = acosf(pf_abs);
-
-        if(pf_cmd < 0.0f) // for current leading
-        {
-            CC_I_angle = V_line_pll.theta[0] - phase_angle;
-        }
-        else              // for current lagging
-        {
-            CC_I_angle = V_line_pll.theta[0] + phase_angle;
-        }
+//        if(pf_cmd < 0.0f) // for current leading
+//        {
+            CC_I_angle = V_line_pll.theta[0] + toRadian(phase_angle) ;
+//        }
+//        else              // for current lagging
+//        {
+//            CC_I_angle = V_line_pll.theta[0] - phase_angle;
+//        }
 
         while(CC_I_angle < 0.0f)
             CC_I_angle += 2.0f * 3.1415926f;
@@ -1293,25 +1455,299 @@ static inline void RUN_INV_ISR_LoadMode(void)
             CC_I_angle -= 2.0f * 3.1415926f;
 
         REFslew_run(&IacRefSlewRamp, -Iset, IacRef_slope);
-        Ia_ref = (IacRefSlewRamp.out_slew) * sinf(CC_I_angle);
+        Ia_ref = (IacRefSlewRamp.out_slew) * sinf(CC_I_angle + 3.1415926f);
 
-        err_IA = (float)(Ia_ref - Ia_fb);  // ERROR SIGNAL GIVEN TO CONTROLLER.
-        uk_Ia  = runPR_custom(&Testg1, err_IA);
-        Ma1 = uk_Ia + (float32_t)(1.0f - (Va_sns/400.0f));
-        NPC_Calculate_duty(Ma1);
-        NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
-                                         dutyB_S1_Ref,
-                                         DeadBand);
+        float32_t Iref = Ia_ref / scale;
+        float32_t abc = (Iref / 50.0) * 4095.0f + 2048.0f;
+        NPC_HAL_passDAC_AVals((uint16_t)abc);
 
-        DeadBand = DBTicks-1;
+    }
+
+
+
+
+
+
+
+
+//    For DC Loading
+
+/*
+    NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
+
+
+    if (StartPowerStage != StartPowerStage_prev)
+    {
+        if(StartPowerStage == 1)
+        {
+            REFslew_set(&IacRefSlewRamp,0.0f);
+            NPC_HAL_ClearALLPWMTripFlags();
+            StartPowerStage_prev = StartPowerStage;
+        }
+        else if(StartPowerStage == 0)
+        {
+            NPC_HAL_ForceOSTEVENTtoALLEPWM();
+            StartPowerStage_prev = StartPowerStage;
+            err_VA = 0;
+        }
+    }
+
+    if(StartPowerStage == 0) resetPI_Custom(&pi_I_inv);
+    else{}
+
+//    REFslew_run(&IacRefSlewRamp, -Iset, IacRef_slope);
+//    Ia_ref = (IacRefSlewRamp.out_slew);
+    Ia_ref = -Iset;
+*/
+
+
+
+
+    pi_I_inv.Kp   = uk_kp; //GI_PI_kp_loadMode;
+    pi_I_inv.Ki   = uk_ki; //GI_PI_ki_loadMode;
+
+//   28 Mar, tested with 10A DC Load
+//   kP=.0125;
+//   Ki = 9.99e-5; No SHoot
+
+//    err_IA = (float)(Ia_ref + Ia_fb);  // ERROR SIGNAL GIVEN TO CONTROLLER. // + convention is correct in Load Mode
+    err_IA = (float)(Ia_ref - Ia_fb);
+
+
+            float32_t abc = (err_IA / (50.0f*scale)) * 4095.0f + 2048.0f;
+            NPC_HAL_passDAC_BVals((uint16_t)abc);
+
+
+
+    uk_Ia  = runPR_custom(&Testg1, err_IA);
+//    uk_Ia  = runPI_Custom(&pi_I_inv, Ia_ref, Ia_fb);
+
+//    Ma1 = (uk_Ia + Mff);
+    Ma1 = (uk_Ia);
+//    Ma1 = (float32_t)(uk_Ia + (1.0f - (30/50.0f)));
+//    Ma1 = uk_Ia;
+//    Ma1 = uk_Ia + (60.0f/120.0f);
+//    Ma1 = uk_Ia + (Va_fb/Vc1_fb);
+
+
+
+
+    NPC_Calculate_duty(Ma1);
+    NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
+                                     dutyB_S1_Ref,
+                                     DeadBand);
+
+    DeadBand = DBTicks-1;
+    if(DeadBand >= DBTicks)
+    {
+        DeadBand = DeadBand - 1;
+    }
+
+
+
+
+//    switch(LoadMode)
+//    {
+//    case AC: // SOGI + PF
+//
+//            switch(mode)
+//            {
+//
+//            case CC: Ampl + PF
+//            case CV: // Lets Check
+//            case CP: Active + Reactive
+//            case CR: Active
+//            case Harmonics:
+//            }
+//
+//            break;
+//
+//    case ACDC:
+//            // inst Ref
+//            switch(mode)
+//            {
+//            case CC:
+//            case CV:
+//            case CP:
+//            case CR:
+//            }
+//
+//    case RLC:
+//            switch(Eqn No)
+//
+//
+//            //Fix Ref
+//             break;
+//    }
+}
+
+
+static inline void RUN_INV_ISR_LoadMode_1(void)
+{
+    //*************************************
+    //************For AC Loading***********
+    //*************************************
+
+    float32_t pf_angle_rad;
+    float32_t Icmd_mag;
+    float32_t sin_t, cos_t;
+    float32_t IacRef_slope = 0.001f;
+
+    NPC_readCurrentAndVoltageSignals();   // updates Vac_fb_pu, Ia_fb, etc.
+
+    // 1) Run PLL on sensed AC voltage
+    SPLL_1PH_SOGI_run(&V_line_pll, Vac_fb_pu);
+
+    sin_t = V_line_pll.sine;
+    cos_t = V_line_pll.cosine;
+
+    // 2) Start/Stop handling
+    if (StartPowerStage != StartPowerStage_prev)
+    {
+        if(StartPowerStage == 1)
+        {
+            REFslew_set(&IacRefSlewRamp,0.0f);
+            NPC_HAL_ClearALLPWMTripFlags();
+
+            // reset PI states
+            resetPI_Custom(&pi_Id_inv);
+            resetPI_Custom(&pi_Iq_inv);
+            ud_inv = 0.0f;
+            uq_inv = 0.0f;
+            alpha_ref = 0.0f;
+            Ma1 = 0.0f;
+
+            StartPowerStage_prev = StartPowerStage;
+        }
+        else if(StartPowerStage == 0)
+        {
+            NPC_HAL_ForceOSTEVENTtoALLEPWM();
+
+            // reset PI states
+            resetPI_Custom(&pi_Id_inv);
+            resetPI_Custom(&pi_Iq_inv);
+            ud_inv = 0.0f;
+            uq_inv = 0.0f;
+            alpha_ref = 0.0f;
+            Ma1 = 0.0f;
+
+            StartPowerStage_prev = StartPowerStage;
+        }
+    }
+
+    // 3) Reference generation in dq frame
+    pf_angle_rad = toRadian(phase_angle);
+    REFslew_run(&IacRefSlewRamp, Iset, IacRef_slope);
+    Icmd_mag = 1.41421356f * IacRefSlewRamp.out_slew;
+
+    // TI single-phase SOGI-PLL transform convention:
+    // unity PF => Id_ref = -Ipeak, Iq_ref = 0
+    //
+//    Id_ref = -Icmd_mag * cosf(pf_angle_rad);
+//    Iq_ref =  Icmd_mag * sinf(pf_angle_rad);
+    Id_ref = Icmd_mag;
+    Iq_ref = 0.0f;
+
+    // 4) Run SOGI on measured inverter/load current
+    SOGI_only_1PH_run(&sogi_Ia, Ia_fb);
+    i_alpha = sogi_Ia.osg_u[0];
+    i_beta  = sogi_Ia.osg_qu[0];
+
+    // 5) alpha-beta -> dq using PLL angle
+    Id_fb = (cos_t * i_beta)  - (sin_t * i_alpha);
+    Iq_fb = (cos_t * i_alpha) + (sin_t * i_beta);
+
+    // 6) PI control on dq current
+    pi_Id_inv.Kp = uk_kp;
+    pi_Id_inv.Ki = uk_ki;
+
+//    pi_Iq_inv.Kp = uk_kp;
+//    pi_Iq_inv.Ki = uk_ki;
+
+    ud_inv = runPI_Custom(&pi_Id_inv, Id_ref, Id_fb);
+//    uq_inv = runPI_Custom(&pi_Iq_inv, Iq_ref, Iq_fb);
+    uq_inv = 0.0f;
+
+    // 7) inverse dq -> alpha
+    // From:
+    // Iq = cos*alpha + sin*beta   &   Id = cos*beta  - sin*alpha
+    // inverse:
+    // alpha = cos*Iq - sin*Id     &   beta  = sin*Iq + cos*Id
+    //
+    alpha_ref = (cos_t * uq_inv) - (sin_t * ud_inv);
+
+    // 8) modulation command
+    Ma1 = alpha_ref;
+
+    NPC_Calculate_duty(Ma1);
+    NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
+                                     dutyB_S1_Ref,
+                                     DeadBand);
+    DeadBand = DBTicks - 1;
+    if (DeadBand >= DBTicks)
+    {
+        DeadBand = DBTicks - 1;
+    }
+}
+
+
+
+/*******************************************************
+ * *****************************************************
+ * *****************************************************
+ */
+
+static inline void RUN_INV_ISR_SourceMode_CC_Loop(void)
+{
+
+    NPC_readCurrentAndVoltageSignals();  // ADC FEEDBACK
+    NPC_run_internal_PLL();
+    Ref_Gen_function();  // REFERENCE SINE GENERATION FUNC.
+    if (StartPowerStage != StartPowerStage_prev)
+    {
+        if(StartPowerStage == 1)
+        {
+            REFslew_set(&IA_RefSlewRamp,0.0f);
+            NPC_HAL_ClearALLPWMTripFlags();
+            StartPowerStage_prev = StartPowerStage;
+        }
+        else if (StartPowerStage == 0)
+        {
+            NPC_HAL_ForceOSTEVENTtoALLEPWM();
+            StartPowerStage_prev = StartPowerStage;
+            err_VA = 0;
+        }
+    }
+
+
+    REFslew_run(&IA_RefSlewRamp, Iset, 0.001);
+    IA_RefSlewed = IA_RefSlewRamp.out_slew;
+    Ia_ref = (1.4142f * IA_RefSlewed*Ref_A);  // three different amplitude of sine.
+
+
+    pi_I_inv.Kp   = uk_kp; //GI_PI_kp_loadMode;
+    pi_I_inv.Ki   = uk_ki; //GI_PI_ki_loadMode;
+
+
+//    err_IA = (float)(Ia_ref - Ia_fb);  // ERROR SIGNAL GIVEN TO CONTROLLER.
+//    uk_Ia  = runPR_custom(&Testg1, err_IA);
+
+
+    uk_Ia  = runPI_Custom(&pi_I_inv, Ia_ref, Ia_fb);
+
+    Ma1 = (float)uk_Ia;   // PR-CONTROLLER OUTPUT + FEEDFORWARD.
+    NPC_Calculate_duty(Ma1);
+    NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
+                                    dutyB_S1_Ref,
+                                    DeadBand);
+        // Soft Start//
+           DeadBand = DBTicks-1;
         if(DeadBand >= DBTicks)
         {
             DeadBand = DeadBand - 1;
         }
-
-    }
-
 }
+
 
 #pragma FUNC_ALWAYS_INLINE(Run_aux_ISR)
 static inline void Run_aux_ISR(void)

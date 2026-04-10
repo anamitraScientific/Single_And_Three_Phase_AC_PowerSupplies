@@ -65,7 +65,10 @@ volatile uint32_t timerCount;
 
 
 EMAVG vout;
+EMAVG Vdc_out;
 
+float32_t H_alpha = 0.9999f;
+float32_t updateRate = 1.0f;
 
 // State Machine function prototypes
 void A0(void); // Alpha states
@@ -84,18 +87,32 @@ void main(void)
     /* Electrical angle step */
     Angle_Step = TWO_PI / (float)LUT_SIZE;
 
-//    float32_t Tswitching;
-//    Tswitching = 1.0f/(float)Fswitching;
+    float32_t Tswitching;
+    Tswitching = 1.0f/(float)Fswitching;
 //
 //    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
 ////    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching, 0.5f, 600U);
 //    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching);
 
     EMAVG_config(&vout, 0.05);
+    EMAVG_config(&Vdc_out, 0.05);
 
-    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
-    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Fswitching, 0.05f, 1000.0f, 25.0f);
 
+//    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
+//    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Fswitching, 0.05f, 1000.0f, 25.0f);
+    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, T_switching);
+
+    SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+
+    SPLL_1PH_SOGI_config(&V_line_pll, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+
+    SPLL_1PH_SOGI_config(&sogi_Ia, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
+
+    V_fb[0] = 0.0f;
+    V_fb[0] = 0.0f;
+    I_fb[0] = 0.0f;
+    I_fb[1] = 0.0f;
+    I_PFset = 1.0f;
 
     NPC_HAL_setupDevice();
 
@@ -159,9 +176,11 @@ void main(void)
     {
 //        (*alpha_State_Ptr)();    // AUTO-START
 
+//        NPC_HAL_passDAC_BVals(2048);
+//        NPC_HAL_passDAC_AVals(4095);
 
         WriteMeasureDataToSharedMemory();
-        CheckSharedMemory();
+//        CheckSharedMemory();
  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //        if(seq_start == true)
 //        {
@@ -189,6 +208,23 @@ void main(void)
             EDIS;
             NPC_readCurrentAndVoltageSignals();
         }
+
+        if (Va_fb < 20.0f)
+            Mff = 0.0f;
+        else if (Va_fb < 140.0f)
+            Mff = 0.2f;
+        else if (Va_fb < 220.0f)
+            Mff = 0.4f;
+        else if (Va_fb < 280.0f)
+            Mff = 0.6f;
+        else if (Va_fb < 360.0f)
+            Mff = 0.8f;
+        else
+        {
+
+        }
+
+
 
     }
 
@@ -231,12 +267,12 @@ interrupt void ISR(void)
 {
     if(LoadSource_mode != 0)
     {
-
         RUN_INV_ISR_LoadMode();
     }
     else
     {
-        RUN_INV_ISR_SourceMode();
+//        RUN_INV_ISR_SourceMode();
+        RUN_INV_ISR_SourceMode_CC_Loop();
     }
 
 

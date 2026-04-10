@@ -34,10 +34,20 @@ f32_to_u16 PLL_angle_DAC;
 //CC mode
 float32_t phase_angle;
 SPLL_1PH_SOGI V_line_pll;
+SPLL_1PH_SOGI sogi_Ia;
+float32_t Id_ref = 0.0f, Iq_ref = 0.0f;
+float32_t i_alpha = 0.0f, i_beta = 0.0f;
+float32_t Id_fb  = 0.0f, Iq_fb  = 0.0f;
+float32_t ud_inv = 0.0f, uq_inv = 0.0f;
+float32_t alpha_ref = 0.0f;
 
 //****************************************************************************************************************************\\
 //*********************************************************** Global Variables*************************************************\\
 //*****************************************************************************************************************************\\
+
+float32_t uk_kp = 0.007542758915403f; //0.0125000002;
+float32_t uk_ki = 0.0009478510398571098f; //9.98999967e-05;
+float32_t Mff;
 
 float32_t v_h_A[51];
  float32_t v_h_B[51];
@@ -131,6 +141,9 @@ float32_t min_val;
 float32_t M_alpha;
 float32_t M_beta;
 float32_t Va_fb;
+
+float32_t V_fb[2];
+
 float32_t Vb_fb;
 float32_t Vc_fb;
 float32_t Va_fb_pu;
@@ -140,9 +153,18 @@ float32_t Vc_fb_pu;
 float32_t Vac_fb_pu;
 
 float32_t Ia_fb;
+
+float32_t I_fb[2];
+
 float32_t Ib_fb;
 float32_t Ic_fb;
+
+float32_t Vc1_fb;
+
+
 float32_t Ia_ref;
+
+float32_t scale = 1;
 float32_t Ib_ref;
 float32_t Ic_ref;
 float32_t Va_ref;
@@ -285,6 +307,14 @@ volatile float32_t activePowerFilt;
 volatile float32_t reactivePowerFilt;
 volatile int32_t aux_isrTicker,aux_isrTicker1,aux_isrTicker2;
 int16_t vTimer0[4];
+
+
+/*
+ * PI controller instances
+ */
+PI_Custom pi_I_inv = Custom_PI_DEFAULTS;
+PI_Custom pi_Id_inv = Custom_PI_DEFAULTS;
+PI_Custom pi_Iq_inv = Custom_PI_DEFAULTS;
 
 //
 // pr_controller instances
@@ -691,6 +721,15 @@ void NPC_globalVariablesInit(void)
            pi_Ia.Ki   =  GI_PI_ki_I;
            pi_Ia.Umax =  GI_PI_MAX_I;
            pi_Ia.Umin =  GI_PI_MIN_I;
+
+           /*
+            * PI controller for loadMode
+            */
+//           pi_I_inv.Kp   = uk_kp; //GI_PI_kp_loadMode;
+//           pi_I_inv.Ki   = uk_ki; //GI_PI_ki_loadMode;
+           pi_I_inv.Umax = GI_PI_MAX_loadMode;
+           pi_I_inv.Umin = GI_PI_MIN_loadMode;
+
 
 #if CONVERTER_TYPE == THREE_PHASE
            pi_Vb.Kp   =  GI_PI_kp_V;

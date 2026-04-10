@@ -283,6 +283,33 @@ static inline void SPLL_1PH_SOGI_run(SPLL_1PH_SOGI *spll_obj,
        spll_obj->cosine=(float32_t)cosf(spll_obj->theta[1]);
 }
 
+
+static inline void SOGI_only_1PH_run(SPLL_1PH_SOGI *sogi_obj,
+                                     float32_t acValue)
+{
+    sogi_obj->u[0] = acValue;
+
+    sogi_obj->osg_u[0] = (sogi_obj->osg_coeff.osg_b0 *
+                         (sogi_obj->u[0] - sogi_obj->u[2])) +
+                         (sogi_obj->osg_coeff.osg_a1 * sogi_obj->osg_u[1]) +
+                         (sogi_obj->osg_coeff.osg_a2 * sogi_obj->osg_u[2]);
+
+    sogi_obj->osg_u[2] = sogi_obj->osg_u[1];
+    sogi_obj->osg_u[1] = sogi_obj->osg_u[0];
+
+    sogi_obj->osg_qu[0] = (sogi_obj->osg_coeff.osg_qb0 * sogi_obj->u[0]) +
+                          (sogi_obj->osg_coeff.osg_qb1 * sogi_obj->u[1]) +
+                          (sogi_obj->osg_coeff.osg_qb2 * sogi_obj->u[2]) +
+                          (sogi_obj->osg_coeff.osg_a1  * sogi_obj->osg_qu[1]) +
+                          (sogi_obj->osg_coeff.osg_a2  * sogi_obj->osg_qu[2]);
+
+    sogi_obj->osg_qu[2] = sogi_obj->osg_qu[1];
+    sogi_obj->osg_qu[1] = sogi_obj->osg_qu[0];
+
+    sogi_obj->u[2] = sogi_obj->u[1];
+    sogi_obj->u[1] = sogi_obj->u[0];
+}
+
 //*****************************************************************************
 //
 // Close the Doxygen group.

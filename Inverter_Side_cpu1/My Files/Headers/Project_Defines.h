@@ -234,6 +234,18 @@
 
 
 
+/**********PI Controller Defines**********/
+//
+//current controller(PFC)
+//
+
+#define GI_PI_kp_loadMode      0.007542758915403f        // Kp - PFC current controller
+#define GI_PI_ki_loadMode      0.0009478510398571098f    // Ki - PFC current controller
+#define GI_PI_MAX_loadMode     1.0f                      // positive saturation limit
+#define GI_PI_MIN_loadMode    -1.0f
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define ONE_NANO_SEC  ((float32_t)0.000000001)
 #define ONE_MICRO_SEC ((float32_t)0.000001)
@@ -412,13 +424,14 @@
 #define Vgrid_Sense_scaling     0.340331903868f//(REF3.0V[working in 12-bit])0.013928785f /*16-bit*/ // //0.245202744f(REF3.3V)
 #define Vgrid_Sense_scaling_PU  0.0077525359256128f //[working in 12-bit] //0.0005837862720829731f//(REF3.0V)//0.0006421648992912699f//(REF3.3V)
 #define Iconv_Sense_scaling     0.03662109375f //[working in 12-bit] //0.039467198f /*16-bit*/ //0.036716425985f//0.038657326632f
-#define Vdc_Sense_scaling       0.2501000000f //[working in 12-bit] //0.264384851206f//0.258356532356f//0.265246039646f//0.263523662766f//
-
+//#define Vdc_Sense_scaling       0.2501000000f //[working in 12-bit] //0.264384851206f//0.258356532356f//0.265246039646f//0.263523662766f//
+#define Vdc_Sense_scaling       0.264269f  //0.282083333f //0.273535354f
 //
 //Average current OFF set used in CMPSS
 //
-#define Vgrid_sense_offset    2332 //2265 //2332
+#define Vgrid_sense_offset    2265 //2332 //2332
 #define Iconv_sense_offset    1885 //2251 //1885
+#define Vdc_sense_offset      12
 
 #elif CONVERTER_TYPE == THREE_PHASE
 
@@ -457,6 +470,7 @@
 #define PI      ((float32_t)3.141592653589)
 #define ON_ANG_TOL      ((float32_t)(PI/180.0f))        //off_angle tolerance is at 1 degree
 #define OFF_ANG_TOL     ((float32_t)(PI/180.0f))        //off_angle tolerance is at 1 degree
+
 
 
 
