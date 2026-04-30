@@ -584,8 +584,11 @@ void ReadingDataFromSharedMemory(void)
     uint16_t addr;
     float32_t val_float;
     int32_t val_int;
-
+#if CONVERTER_TYPE == SINGLE_PHASE
     uint16_t startIdx = (uint16_t)BUFF_ADR_SET_VAC;
+#else
+    uint16_t startIdx = (uint16_t)BUFF_ADR_SRC_VA;
+#endif
     uint16_t EndIdx = (uint16_t)BUFF_ADR_HARM_WAVEFORM_NUM;
 
     uint16_t length = (uint16_t)((EndIdx - startIdx)/4u);

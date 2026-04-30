@@ -467,8 +467,220 @@ extern int32_t val_prev_int;
 #define BUFF_ADR_LIM_PWR_TOT_MAX                    BUFF_ADR_LIM_PWR_C_MIN + 4
 #define BUFF_ADR_LIM_PWR_TOT_MIN                    BUFF_ADR_LIM_PWR_TOT_MAX + 4
 
+#define    BUFF_ADR_HARM_WAVEFORM_NUM               (BUFF_ADR_LIM_PWR_TOT_MIN + 4)              //63
+
+#define    BUFF_ADR_HARM1_NO                        (BUFF_ADR_HARM_WAVEFORM_NUM + 1)        //64
+#define    BUFF_ADR_HARM1_AMP                       (BUFF_ADR_HARM1_NO + 4)                 //68
+#define    BUFF_ADR_HARM1_PHASE                     (BUFF_ADR_HARM1_AMP + 4)                //72
+
+#define    BUFF_ADR_HARM_BASE                       (BUFF_ADR_HARM1_NO)
+#define    BUFF_ADR_HARM_NUM(n)                     (BUFF_ADR_HARM_BASE + ((n-1) * 12))
+#define    BUFF_ADR_HARM_AMP(n)                     (BUFF_ADR_HARM_BASE + ((n-1) * 12) + 4)
+#define    BUFF_ADR_HARM_PHASE(n)                   (BUFF_ADR_HARM_BASE + ((n-1) * 12) + 8)
+
+#define    BUFF_ADR_HARM2_NO                        (BUFF_ADR_HARM1_PHASE + 4)              //76
+#define    BUFF_ADR_HARM2_AMP                       (BUFF_ADR_HARM2_NO + 4)                 //80
+#define    BUFF_ADR_HARM2_PHASE                     (BUFF_ADR_HARM2_AMP + 4)
+
+#define    BUFF_ADR_HARM3_NO                        (BUFF_ADR_HARM2_PHASE + 4)
+#define    BUFF_ADR_HARM3_AMP                       (BUFF_ADR_HARM3_NO + 4)
+#define    BUFF_ADR_HARM3_PHASE                     (BUFF_ADR_HARM3_AMP + 4)
+
+#define    BUFF_ADR_HARM4_NO                        (BUFF_ADR_HARM3_PHASE + 4)
+#define    BUFF_ADR_HARM4_AMP                       (BUFF_ADR_HARM4_NO + 4)
+#define    BUFF_ADR_HARM4_PHASE                     (BUFF_ADR_HARM4_AMP + 4)
+
+#define    BUFF_ADR_HARM5_NO                        (BUFF_ADR_HARM4_PHASE + 4)
+#define    BUFF_ADR_HARM5_AMP                       (BUFF_ADR_HARM5_NO + 4)
+#define    BUFF_ADR_HARM5_PHASE                     (BUFF_ADR_HARM5_AMP + 4)
+
+#define    BUFF_ADR_HARM6_NO                        (BUFF_ADR_HARM5_PHASE + 4)
+#define    BUFF_ADR_HARM6_AMP                       (BUFF_ADR_HARM6_NO + 4)
+#define    BUFF_ADR_HARM6_PHASE                     (BUFF_ADR_HARM6_AMP + 4)
+
+#define    BUFF_ADR_HARM7_NO                        (BUFF_ADR_HARM6_PHASE + 4)
+#define    BUFF_ADR_HARM7_AMP                       (BUFF_ADR_HARM7_NO + 4)
+#define    BUFF_ADR_HARM7_PHASE                     (BUFF_ADR_HARM7_AMP + 4)
+
+#define    BUFF_ADR_HARM8_NO                        (BUFF_ADR_HARM7_PHASE + 4)
+#define    BUFF_ADR_HARM8_AMP                       (BUFF_ADR_HARM8_NO + 4)
+#define    BUFF_ADR_HARM8_PHASE                     (BUFF_ADR_HARM8_AMP + 4)
+
+#define    BUFF_ADR_HARM9_NO                        (BUFF_ADR_HARM8_PHASE + 4)
+#define    BUFF_ADR_HARM9_AMP                       (BUFF_ADR_HARM9_NO + 4)
+#define    BUFF_ADR_HARM9_PHASE                     (BUFF_ADR_HARM9_AMP + 4)
+
+#define    BUFF_ADR_HARM10_NO                       (BUFF_ADR_HARM9_PHASE + 4)
+#define    BUFF_ADR_HARM10_AMP                      (BUFF_ADR_HARM10_NO + 4)
+#define    BUFF_ADR_HARM10_PHASE                    (BUFF_ADR_HARM10_AMP + 4)
+
+#define    BUFF_ADR_HARM11_NO                       (BUFF_ADR_HARM10_PHASE + 4)
+#define    BUFF_ADR_HARM11_AMP                      (BUFF_ADR_HARM11_NO + 4)
+#define    BUFF_ADR_HARM11_PHASE                    (BUFF_ADR_HARM11_AMP + 4)
+
+#define    BUFF_ADR_HARM12_NO                       (BUFF_ADR_HARM11_PHASE + 4)
+#define    BUFF_ADR_HARM12_AMP                      (BUFF_ADR_HARM12_NO + 4)
+#define    BUFF_ADR_HARM12_PHASE                    (BUFF_ADR_HARM12_AMP + 4)
+
+#define    BUFF_ADR_HARM13_NO                       (BUFF_ADR_HARM12_PHASE + 4)
+#define    BUFF_ADR_HARM13_AMP                      (BUFF_ADR_HARM13_NO + 4)
+#define    BUFF_ADR_HARM13_PHASE                    (BUFF_ADR_HARM13_AMP + 4)
+
+#define    BUFF_ADR_HARM14_NO                       (BUFF_ADR_HARM13_PHASE + 4)
+#define    BUFF_ADR_HARM14_AMP                      (BUFF_ADR_HARM14_NO + 4)
+#define    BUFF_ADR_HARM14_PHASE                    (BUFF_ADR_HARM14_AMP + 4)
+
+#define    BUFF_ADR_HARM15_NO                       (BUFF_ADR_HARM14_PHASE + 4)
+#define    BUFF_ADR_HARM15_AMP                      (BUFF_ADR_HARM15_NO + 4)
+#define    BUFF_ADR_HARM15_PHASE                    (BUFF_ADR_HARM15_AMP + 4)
+
+#define    BUFF_ADR_HARM16_NO                       (BUFF_ADR_HARM15_PHASE + 4)
+#define    BUFF_ADR_HARM16_AMP                      (BUFF_ADR_HARM16_NO + 4)
+#define    BUFF_ADR_HARM16_PHASE                    (BUFF_ADR_HARM16_AMP + 4)
+
+#define    BUFF_ADR_HARM17_NO                       (BUFF_ADR_HARM16_PHASE + 4)
+#define    BUFF_ADR_HARM17_AMP                      (BUFF_ADR_HARM17_NO + 4)
+#define    BUFF_ADR_HARM17_PHASE                    (BUFF_ADR_HARM17_AMP + 4)
+
+#define    BUFF_ADR_HARM18_NO                       (BUFF_ADR_HARM17_PHASE + 4)
+#define    BUFF_ADR_HARM18_AMP                      (BUFF_ADR_HARM18_NO + 4)
+#define    BUFF_ADR_HARM18_PHASE                    (BUFF_ADR_HARM18_AMP + 4)
+
+#define    BUFF_ADR_HARM19_NO                       (BUFF_ADR_HARM18_PHASE + 4)
+#define    BUFF_ADR_HARM19_AMP                      (BUFF_ADR_HARM19_NO + 4)
+#define    BUFF_ADR_HARM19_PHASE                    (BUFF_ADR_HARM19_AMP + 4)
+
+#define    BUFF_ADR_HARM20_NO                       (BUFF_ADR_HARM19_PHASE + 4)
+#define    BUFF_ADR_HARM20_AMP                      (BUFF_ADR_HARM20_NO + 4)
+#define    BUFF_ADR_HARM20_PHASE                    (BUFF_ADR_HARM20_AMP + 4)
+
+#define    BUFF_ADR_HARM21_NO                       (BUFF_ADR_HARM20_PHASE + 4)
+#define    BUFF_ADR_HARM21_AMP                      (BUFF_ADR_HARM21_NO + 4)
+#define    BUFF_ADR_HARM21_PHASE                    (BUFF_ADR_HARM21_AMP + 4)
+
+#define    BUFF_ADR_HARM22_NO                       (BUFF_ADR_HARM21_PHASE + 4)
+#define    BUFF_ADR_HARM22_AMP                      (BUFF_ADR_HARM22_NO + 4)
+#define    BUFF_ADR_HARM22_PHASE                    (BUFF_ADR_HARM22_AMP + 4)
+
+#define    BUFF_ADR_HARM23_NO                       (BUFF_ADR_HARM22_PHASE + 4)
+#define    BUFF_ADR_HARM23_AMP                      (BUFF_ADR_HARM23_NO + 4)
+#define    BUFF_ADR_HARM23_PHASE                    (BUFF_ADR_HARM23_AMP + 4)
+
+#define    BUFF_ADR_HARM24_NO                       (BUFF_ADR_HARM23_PHASE + 4)
+#define    BUFF_ADR_HARM24_AMP                      (BUFF_ADR_HARM24_NO + 4)
+#define    BUFF_ADR_HARM24_PHASE                    (BUFF_ADR_HARM24_AMP + 4)
+
+#define    BUFF_ADR_HARM25_NO                       (BUFF_ADR_HARM24_PHASE + 4)
+#define    BUFF_ADR_HARM25_AMP                      (BUFF_ADR_HARM25_NO + 4)
+#define    BUFF_ADR_HARM25_PHASE                    (BUFF_ADR_HARM25_AMP + 4)
+
+#define    BUFF_ADR_HARM26_NO                       (BUFF_ADR_HARM25_PHASE + 4)
+#define    BUFF_ADR_HARM26_AMP                      (BUFF_ADR_HARM26_NO + 4)
+#define    BUFF_ADR_HARM26_PHASE                    (BUFF_ADR_HARM26_AMP + 4)
+
+#define    BUFF_ADR_HARM27_NO                       (BUFF_ADR_HARM26_PHASE + 4)
+#define    BUFF_ADR_HARM27_AMP                      (BUFF_ADR_HARM27_NO + 4)
+#define    BUFF_ADR_HARM27_PHASE                    (BUFF_ADR_HARM27_AMP + 4)
+
+#define    BUFF_ADR_HARM28_NO                       (BUFF_ADR_HARM27_PHASE + 4)
+#define    BUFF_ADR_HARM28_AMP                      (BUFF_ADR_HARM28_NO + 4)
+#define    BUFF_ADR_HARM28_PHASE                    (BUFF_ADR_HARM28_AMP + 4)
+
+#define    BUFF_ADR_HARM29_NO                       (BUFF_ADR_HARM28_PHASE + 4)
+#define    BUFF_ADR_HARM29_AMP                      (BUFF_ADR_HARM29_NO + 4)
+#define    BUFF_ADR_HARM29_PHASE                    (BUFF_ADR_HARM29_AMP + 4)
+
+#define    BUFF_ADR_HARM30_NO                       (BUFF_ADR_HARM29_PHASE + 4)
+#define    BUFF_ADR_HARM30_AMP                      (BUFF_ADR_HARM30_NO + 4)
+#define    BUFF_ADR_HARM30_PHASE                    (BUFF_ADR_HARM30_AMP + 4)
+
+#define    BUFF_ADR_HARM31_NO                       (BUFF_ADR_HARM30_PHASE + 4)
+#define    BUFF_ADR_HARM31_AMP                      (BUFF_ADR_HARM31_NO + 4)
+#define    BUFF_ADR_HARM31_PHASE                    (BUFF_ADR_HARM31_AMP + 4)
+
+#define    BUFF_ADR_HARM32_NO                       (BUFF_ADR_HARM31_PHASE + 4)
+#define    BUFF_ADR_HARM32_AMP                      (BUFF_ADR_HARM32_NO + 4)
+#define    BUFF_ADR_HARM32_PHASE                    (BUFF_ADR_HARM32_AMP + 4)
+
+#define    BUFF_ADR_HARM33_NO                       (BUFF_ADR_HARM32_PHASE + 4)
+#define    BUFF_ADR_HARM33_AMP                      (BUFF_ADR_HARM33_NO + 4)
+#define    BUFF_ADR_HARM33_PHASE                    (BUFF_ADR_HARM33_AMP + 4)
+
+#define    BUFF_ADR_HARM34_NO                       (BUFF_ADR_HARM33_PHASE + 4)
+#define    BUFF_ADR_HARM34_AMP                      (BUFF_ADR_HARM34_NO + 4)
+#define    BUFF_ADR_HARM34_PHASE                    (BUFF_ADR_HARM34_AMP + 4)
+
+#define    BUFF_ADR_HARM35_NO                       (BUFF_ADR_HARM34_PHASE + 4)
+#define    BUFF_ADR_HARM35_AMP                      (BUFF_ADR_HARM35_NO + 4)
+#define    BUFF_ADR_HARM35_PHASE                    (BUFF_ADR_HARM35_AMP + 4)
+
+#define    BUFF_ADR_HARM36_NO                       (BUFF_ADR_HARM35_PHASE + 4)
+#define    BUFF_ADR_HARM36_AMP                      (BUFF_ADR_HARM36_NO + 4)
+#define    BUFF_ADR_HARM36_PHASE                    (BUFF_ADR_HARM36_AMP + 4)
+
+#define    BUFF_ADR_HARM37_NO                       (BUFF_ADR_HARM36_PHASE + 4)
+#define    BUFF_ADR_HARM37_AMP                      (BUFF_ADR_HARM37_NO + 4)
+#define    BUFF_ADR_HARM37_PHASE                    (BUFF_ADR_HARM37_AMP + 4)
+
+#define    BUFF_ADR_HARM38_NO                       (BUFF_ADR_HARM37_PHASE + 4)
+#define    BUFF_ADR_HARM38_AMP                      (BUFF_ADR_HARM38_NO + 4)
+#define    BUFF_ADR_HARM38_PHASE                    (BUFF_ADR_HARM38_AMP + 4)
+
+#define    BUFF_ADR_HARM39_NO                       (BUFF_ADR_HARM38_PHASE + 4)
+#define    BUFF_ADR_HARM39_AMP                      (BUFF_ADR_HARM39_NO + 4)
+#define    BUFF_ADR_HARM39_PHASE                    (BUFF_ADR_HARM39_AMP + 4)
+
+#define    BUFF_ADR_HARM40_NO                       (BUFF_ADR_HARM39_PHASE + 4)
+#define    BUFF_ADR_HARM40_AMP                      (BUFF_ADR_HARM40_NO + 4)
+#define    BUFF_ADR_HARM40_PHASE                    (BUFF_ADR_HARM40_AMP + 4)
+
+#define    BUFF_ADR_HARM41_NO                       (BUFF_ADR_HARM40_PHASE + 4)
+#define    BUFF_ADR_HARM41_AMP                      (BUFF_ADR_HARM41_NO + 4)
+#define    BUFF_ADR_HARM41_PHASE                    (BUFF_ADR_HARM41_AMP + 4)
+
+#define    BUFF_ADR_HARM42_NO                       (BUFF_ADR_HARM41_PHASE + 4)
+#define    BUFF_ADR_HARM42_AMP                      (BUFF_ADR_HARM42_NO + 4)
+#define    BUFF_ADR_HARM42_PHASE                    (BUFF_ADR_HARM42_AMP + 4)
+
+#define    BUFF_ADR_HARM43_NO                       (BUFF_ADR_HARM42_PHASE + 4)
+#define    BUFF_ADR_HARM43_AMP                      (BUFF_ADR_HARM43_NO + 4)
+#define    BUFF_ADR_HARM43_PHASE                    (BUFF_ADR_HARM43_AMP + 4)
+
+#define    BUFF_ADR_HARM44_NO                       (BUFF_ADR_HARM43_PHASE + 4)
+#define    BUFF_ADR_HARM44_AMP                      (BUFF_ADR_HARM44_NO + 4)
+#define    BUFF_ADR_HARM44_PHASE                    (BUFF_ADR_HARM44_AMP + 4)
+
+#define    BUFF_ADR_HARM45_NO                       (BUFF_ADR_HARM44_PHASE + 4)
+#define    BUFF_ADR_HARM45_AMP                      (BUFF_ADR_HARM45_NO + 4)
+#define    BUFF_ADR_HARM45_PHASE                    (BUFF_ADR_HARM45_AMP + 4)
+
+#define    BUFF_ADR_HARM46_NO                       (BUFF_ADR_HARM45_PHASE + 4)
+#define    BUFF_ADR_HARM46_AMP                      (BUFF_ADR_HARM46_NO + 4)
+#define    BUFF_ADR_HARM46_PHASE                    (BUFF_ADR_HARM46_AMP + 4)
+
+#define    BUFF_ADR_HARM47_NO                       (BUFF_ADR_HARM46_PHASE + 4)
+#define    BUFF_ADR_HARM47_AMP                      (BUFF_ADR_HARM47_NO + 4)
+#define    BUFF_ADR_HARM47_PHASE                    (BUFF_ADR_HARM47_AMP + 4)
+
+#define    BUFF_ADR_HARM48_NO                       (BUFF_ADR_HARM47_PHASE + 4)
+#define    BUFF_ADR_HARM48_AMP                      (BUFF_ADR_HARM48_NO + 4)
+#define    BUFF_ADR_HARM48_PHASE                    (BUFF_ADR_HARM48_AMP + 4)
+
+#define    BUFF_ADR_HARM49_NO                       (BUFF_ADR_HARM48_PHASE + 4)
+#define    BUFF_ADR_HARM49_AMP                      (BUFF_ADR_HARM49_NO + 4)
+#define    BUFF_ADR_HARM49_PHASE                    (BUFF_ADR_HARM49_AMP + 4)
+
+#define    BUFF_ADR_HARM50_NO                       (BUFF_ADR_HARM49_PHASE + 4)
+#define    BUFF_ADR_HARM50_AMP                      (BUFF_ADR_HARM50_NO + 4)
+#define    BUFF_ADR_HARM50_PHASE                    (BUFF_ADR_HARM50_AMP + 4)
+
+#define    BUFF_SET_HARMNO                          (BUFF_ADR_HARM50_PHASE + 4)
+#define    BUFF_SET_HARMAMP                         (BUFF_SET_HARMNO + 4)
+#define    BUFF_SET_HARMPHASE                       (BUFF_SET_HARMAMP + 4)
+#define    BUFF_SET_HARMSRNUM                       (BUFF_SET_HARMPHASE + 4)
+
 //***************************Measure Subsystem************************************//
-#define BUFF_ADR_MEAS_VA_RMS                        BUFF_ADR_LIM_PWR_TOT_MIN + 4
+#define BUFF_ADR_MEAS_VA_RMS                        BUFF_SET_HARMSRNUM + 4
 #define BUFF_ADR_MEAS_VB_RMS                        BUFF_ADR_MEAS_VA_RMS + 4
 #define BUFF_ADR_MEAS_VC_RMS                        BUFF_ADR_MEAS_VB_RMS + 4
 #define BUFF_ADR_MEAS_VAB_RMS                       BUFF_ADR_MEAS_VC_RMS + 4

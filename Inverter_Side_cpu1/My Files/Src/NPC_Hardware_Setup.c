@@ -88,14 +88,14 @@ static inline void NPC_HAL_setupEPwm1(void)
     //
     // Set Action Qualifier Regs
     //
-    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
-    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
-    EPwm1Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
-    EPwm1Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
-//    EPwm1Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
-//    EPwm1Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
-//    EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
-//    EPwm1Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
+//    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
+//    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
+//    EPwm1Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
+//    EPwm1Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
+    EPwm1Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
+    EPwm1Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
+    EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
+    EPwm1Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
 
     //
     // Active HIC PWMs - Setup DeadBand
@@ -153,14 +153,14 @@ static inline void NPC_HAL_setupEPwm2(void)
     //
     // Set Action Qualifier Regs
     //
-    EPwm2Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
-    EPwm2Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
-    EPwm2Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
-    EPwm2Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
-//    EPwm2Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
-//    EPwm2Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
-//    EPwm2Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
-//    EPwm2Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
+//    EPwm2Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
+//    EPwm2Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
+//    EPwm2Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
+//    EPwm2Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
+    EPwm2Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
+    EPwm2Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
+    EPwm2Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
+    EPwm2Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
 
     //
     // Active HIC PWMs - Setup DeadBand
@@ -212,14 +212,14 @@ static inline void NPC_HAL_setupEPwm3(void)
     //
     // Set Action Qualifier Regs
     //
-//    EPwm3Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
-//    EPwm3Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
-//    EPwm3Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
-//    EPwm3Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
-    EPwm3Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
-    EPwm3Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
-    EPwm3Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
-    EPwm3Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
+    EPwm3Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
+    EPwm3Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
+    EPwm3Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
+    EPwm3Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
+//    EPwm3Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
+//    EPwm3Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
+//    EPwm3Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
+//    EPwm3Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
     //
     // Active HIC PWMs - Setup DeadBand
     //
@@ -317,14 +317,14 @@ static inline void NPC_HAL_setupEPwm4(void)
     //
     // Set Action Qualifier Regs
     //
-//    EPwm4Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
-//    EPwm4Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
-//    EPwm4Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
-//    EPwm4Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
-    EPwm4Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
-    EPwm4Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
-    EPwm4Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
-    EPwm4Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
+    EPwm4Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM4A on CAU event
+    EPwm4Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM4A on CAD event
+    EPwm4Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM4B on CAU event
+    EPwm4Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM4B on CAD event
+//    EPwm4Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
+//    EPwm4Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
+//    EPwm4Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
+//    EPwm4Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
 
     //
     // Active HIC PWMs - Setup DeadBand
@@ -380,14 +380,14 @@ static inline void NPC_HAL_setupEPwm5(void)
     //
     // Set Action Qualifier Regs
     //
-//    EPwm5Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM5A on CAU event
-//    EPwm5Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM5A on CAD event
-//    EPwm5Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM5B on CAU event
-//    EPwm5Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM5B on CAD event
-    EPwm5Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
-    EPwm5Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
-    EPwm5Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
-    EPwm5Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
+    EPwm5Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM5A on CAU event
+    EPwm5Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM5A on CAD event
+    EPwm5Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM5B on CAU event
+    EPwm5Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM5B on CAD event
+//    EPwm5Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM4A on CAU event
+//    EPwm5Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM4A on CAD event
+//    EPwm5Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM4B on CAU event
+//    EPwm5Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM4B on CAD event
 
     //
     // Active HIC PWMs - Setup DeadBand
@@ -439,14 +439,14 @@ static inline void NPC_HAL_setupEPwm6(void)
     //
     // Set Action Qualifier Regs
     //
-//    EPwm6Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM5A on CAU event
-//    EPwm6Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM5A on CAD event
-//    EPwm6Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM5B on CAU event
-//    EPwm6Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM5B on CAD event
-    EPwm6Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM5A on CAU event
-    EPwm6Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM5A on CAD event
-    EPwm6Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM5B on CAU event
-    EPwm6Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM5B on CAD event
+    EPwm6Regs.AQCTLA.bit.CAU = AQ_CLEAR;                        // Clear PWM5A on CAU event
+    EPwm6Regs.AQCTLA.bit.CAD = AQ_SET;                          // Set PWM5A on CAD event
+    EPwm6Regs.AQCTLB.bit.CAU = AQ_SET;                          // Set PWM5B on CAU event
+    EPwm6Regs.AQCTLB.bit.CAD = AQ_CLEAR;                        // Clear PWM5B on CAD event
+//    EPwm6Regs.AQCTLA.bit.CAU = AQ_SET;                        // Clear PWM5A on CAU event
+//    EPwm6Regs.AQCTLA.bit.CAD = AQ_CLEAR;                          // Set PWM5A on CAD event
+//    EPwm6Regs.AQCTLB.bit.CAU = AQ_CLEAR;                          // Set PWM5B on CAU event
+//    EPwm6Regs.AQCTLB.bit.CAD = AQ_SET;                        // Clear PWM5B on CAD event
 
     //
     // Active HIC PWMs - Setup DeadBand
@@ -1020,17 +1020,17 @@ static inline void NPC_HAL_setupCMPSS(uint32_t base1,
     //The LowerTrip_Limit = Voffset_counts - ((current_limit/currentmax_sense)*Voffset_counts)
     //Voffset = 1.65v --> 2048counts & currentmax_sense(A) = Voffset/gain
     //
-
-//    CMPSS_setDACValueHigh(base1, Iconv_sense_offset + (int16_t)((float32_t)current_limit *
-//                          (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
-//    CMPSS_setDACValueLow(base1, Iconv_sense_offset - (int16_t)((float32_t)current_limit *
-//                         (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
-
+#if CONVERTER_TYPE == THREE_PHASE
+    CMPSS_setDACValueHigh(base1, Iconv_sense_offset + (int16_t)((float32_t)current_limit *
+                          (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
+    CMPSS_setDACValueLow(base1, Iconv_sense_offset - (int16_t)((float32_t)current_limit *
+                         (float32_t)(4095.0f - Iconv_sense_offset) / (float32_t)current_max_sense));
+#elif CONVERTER_TYPE == SINGLE_PHASE
     CMPSS_setDACValueHigh(base1, Iconv_sense_offset + (int16_t)((float32_t)current_limit *
                           (float32_t)Iconv_sense_offset / (float32_t)current_max_sense));
     CMPSS_setDACValueLow(base1, Iconv_sense_offset - (int16_t)((float32_t)current_limit *
                          (float32_t)Iconv_sense_offset / (float32_t)current_max_sense));
-
+#endif
     //
     // Make sure the asynchronous path compare high and low event
     // does not go to the OR gate with latched digital filter output

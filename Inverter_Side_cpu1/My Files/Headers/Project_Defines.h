@@ -38,7 +38,7 @@
 #define EL_DC                 4
 #define GE_AC_DC              5
 #define testing               6
-#define mode1                 GE_AC //  testing//  GE_AC//GE_DC//  GE_AC// EL_AC//
+#define mode1                 EL_AC //  testing//  GE_AC//GE_DC//  GE_AC// EL_AC//
 
 //
 // sub mode in GE_AC
@@ -205,9 +205,9 @@
 #if mode1 == GE_AC// testing //
     #if AC_submode == NormalOperation // ACFaults //
             //voltage loop
-            #define KPV_1H            1.0f //0.5f //0.97f////0.045f //10//1.4567875851731f
-            #define KIV_1H            1000.0f //0.05f ////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
-            #define WRCV_1H           0.00628f //62.8f //628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
+            #define KPV_1H            0.5f //1.0f //0.97f////0.045f //10//1.4567875851731f
+            #define KIV_1H            300.0f //1000.0f ////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
+            #define WRCV_1H           25.0f //0.00628f //62.8f //628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
 
 #else
 #endif
@@ -232,7 +232,10 @@
 #define GI_PI_MAX_I         1.0f
 #define GI_PI_MIN_I         -1.0f
 
-
+#define GI_PI_kp      0.004567875851731f
+#define GI_PI_ki      0.001033229175718f*2.0f // (50khz)  0.001033229175718f*2.5f // (40khz)  //
+#define GI_PI_MAX     1.13f
+#define GI_PI_MIN    -1.13f
 
 /**********PI Controller Defines**********/
 //
@@ -269,15 +272,15 @@
 
 #define DBTicks         (Uint16)(150*ONE_NANO_SEC*Fsysclock)
 #elif CONVERTER_TYPE == THREE_PHASE
-#define Fswitching      40000
-
+#define Fswitching      50000
+#define T_switching     (1 / Fswitching)
 #define Faux            1000        // select auxilary ISR frequency
 #define Fsw_FAN         20000       // select fan switching frequency
 #define TimeBase        (Uint16)(Fsysclock*0.5/Fswitching)
 #define TimeBase_aux    (Uint16)(Fsysclock*0.5/Faux)
 #define TimeBase_FAN    (Uint16)((float)(Fsysclock/Fsw_FAN) - 1)
 
-#define DBTicks         (Uint16)(400*ONE_NANO_SEC*Fsysclock)
+#define DBTicks         (Uint16)(1000*ONE_NANO_SEC*Fsysclock) //(400*ONE_NANO_SEC*Fsysclock)
 #else
 #endif
 
@@ -394,8 +397,8 @@
 
 #elif CONVERTER_TYPE == THREE_PHASE
 
-#define Iconv_MAX_SENSE_AMPS  ((float32_t)88)
-#define Iconv_TRIP_LIMIT_AMPS ((float32_t)88)
+#define Iconv_MAX_SENSE_AMPS  ((float32_t)70) //((float32_t)88)
+#define Iconv_TRIP_LIMIT_AMPS ((float32_t)70) //((float32_t)88)
 
 #else
 #endif
@@ -404,11 +407,11 @@
 //
 #define VBUS_OVERVOLT_LIMIT     440
 
-#define VGRID_BASE              325
+#define VGRID_BASE              381.8376618f//325
 #define GRID_MIN_VRMS           190
 #define GRID_MAX_VRMS           300
-#define GRID_MAX_FREQ           60
-#define GRID_MIN_FREQ           45
+#define GRID_MAX_FREQ           100 //60
+#define GRID_MIN_FREQ           10  //45
 
 #define MIN_DCLINK_volt  340
 #define MAX_DCLINK_volt  400
@@ -436,14 +439,14 @@
 #elif CONVERTER_TYPE == THREE_PHASE
 
 #define Vgrid_Sense_scaling     0.222911585f//(REF3.0V[working in 12-bit])0.013928785f /*16-bit*/ // //0.245202744f(REF3.3V)
-#define Vgrid_Sense_scaling_PU  0.003152445869248f //[working in 12-bit] //0.0005837862720829731f//(REF3.0V)//0.0006421648992912699f//(REF3.3V)
+#define Vgrid_Sense_scaling_PU  0.0005837862720829731f //0.003152445869248f //[working in 12-bit] //0.0005837862720829731f//(REF3.0V)//0.0006421648992912699f//(REF3.3V)
 #define Iconv_Sense_scaling     0.039476832096f //[working in 12-bit] //0.039467198f /*16-bit*/ //0.036716425985f//0.038657326632f
 #define Vdc_Sense_scaling       0.265246039646f //[working in 12-bit] //0.264384851206f//0.258356532356f//0.265246039646f//0.263523662766f//
 #define Vdc1_Sense_scaling      0.22498995580554f //[working in 12-bit] //(calibrated in DBR mode)  //0.22549576167120f//(calibrated in PFC mode @750vdc)//
 #define Vdc2_Sense_scaling      0.22498995580554f//[working in 12-bit]//(calibrated in DBR mode)  //0.22247805869952f//(calibrated in DBR mode @750vdc)//
 #define Temp_Scaling            (float32_t)(3/4095) //(float32_t)(3/65535) //
 
-#define Vgrid_sense_offset_A  2265 //36060     //
+#define Vgrid_sense_offset_A  2251 //2265 //36060     //
 #define Vgrid_sense_offset_B  2258 //36060     //
 #define Vgrid_sense_offset_C  2251 //36060     //
 

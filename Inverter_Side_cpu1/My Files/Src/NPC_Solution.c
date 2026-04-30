@@ -45,8 +45,8 @@ float32_t alpha_ref = 0.0f;
 //*********************************************************** Global Variables*************************************************\\
 //*****************************************************************************************************************************\\
 
-float32_t uk_kp = 0.007542758915403f; //0.0125000002;
-float32_t uk_ki = 0.0009478510398571098f; //9.98999967e-05;
+float32_t uk_kp = 0.004567875851731f; //0.007542758915403f; //0.0125000002;
+float32_t uk_ki = 0.001033f; //0.0009478510398571098f; //9.98999967e-05;
 float32_t Mff;
 
 float32_t v_h_A[51];
@@ -698,9 +698,9 @@ void NPC_globalVariablesInit(void)
 #endif
 
        //  PR controller initialization forr voltage loop Testing H bridge//
-           kpI_1H = KPV_1H;
-           kiI_1H = KIV_1H;
-           wrcI_1H= WRCV_1H;
+//           kpI_1H = KPV_1H;
+//           kiI_1H = KIV_1H;
+//           wrcI_1H= WRCV_1H;
            woI_1H = 2.0*PI*AC_FREQ_HZ;
            computeDF22_PRcontrollerCoeff(&Testg1, kpI_1H,kiI_1H,woI_1H,
                                          ISR_FREQUENCY,wrcI_1H);
