@@ -40,13 +40,16 @@ float32_t i_alpha = 0.0f, i_beta = 0.0f;
 float32_t Id_fb  = 0.0f, Iq_fb  = 0.0f;
 float32_t ud_inv = 0.0f, uq_inv = 0.0f;
 float32_t alpha_ref = 0.0f;
+float32_t kpI_test = 1.0f, kiI_test = 1000.0f, woI_test, wrcI_test = 0.00628f;
+
+float32_t Iset_dc;
 
 //****************************************************************************************************************************\\
 //*********************************************************** Global Variables*************************************************\\
 //*****************************************************************************************************************************\\
 
-float32_t uk_kp = 0.004567875851731f; //0.007542758915403f; //0.0125000002;
-float32_t uk_ki = 0.001033f; //0.0009478510398571098f; //9.98999967e-05;
+float32_t uk_kp = 0.0599999987f; //0.004567875851731f; //0.007542758915403f; //0.0125000002;
+float32_t uk_ki = 0.00499999989f; //0.001033f; //0.0009478510398571098f; //9.98999967e-05;
 float32_t Mff;
 
 float32_t v_h_A[51];
@@ -195,11 +198,16 @@ float32_t Vdc_RefSlewed;
 float32_t IA_RefSlewed;
 float32_t IB_RefSlewed;
 float32_t IC_RefSlewed;
+float32_t Idc_RefSlewed;
 float32_t vc1_fb_flt;
 float32_t vc2_fb_flt;
 float32_t vdc_fb_flt;
 float32_t TEMP_A_fb;
 float32_t Va_sns;
+
+float32_t Va_sns1;
+float32_t Va_sns2;
+
 float32_t Vb_sns;
 float32_t Vc_sns;
 float32_t Ia_sns;
@@ -421,6 +429,7 @@ Ref_Slew_Ramp IacRefSlewRamp;
 Ref_Slew_Ramp IA_RefSlewRamp;
 Ref_Slew_Ramp IB_RefSlewRamp;
 Ref_Slew_Ramp IC_RefSlewRamp;
+Ref_Slew_Ramp Idc_RefSlewRamp;
 Ref_Slew_Ramp VdcRefSlewRamp;
 Ref_Slew_Ramp FreqRefSlewRamp;
 Ref_Slew_Ramp FreqRefSlewRamp_A;
@@ -698,9 +707,9 @@ void NPC_globalVariablesInit(void)
 #endif
 
        //  PR controller initialization forr voltage loop Testing H bridge//
-//           kpI_1H = KPV_1H;
-//           kiI_1H = KIV_1H;
-//           wrcI_1H= WRCV_1H;
+           kpI_1H = KPV_1H;
+           kiI_1H = KIV_1H;
+           wrcI_1H= WRCV_1H;
            woI_1H = 2.0*PI*AC_FREQ_HZ;
            computeDF22_PRcontrollerCoeff(&Testg1, kpI_1H,kiI_1H,woI_1H,
                                          ISR_FREQUENCY,wrcI_1H);

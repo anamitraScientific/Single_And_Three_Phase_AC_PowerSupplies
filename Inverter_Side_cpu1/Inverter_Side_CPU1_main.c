@@ -87,8 +87,6 @@ void main(void)
     /* Electrical angle step */
     Angle_Step = TWO_PI / (float)LUT_SIZE;
 
-    float32_t Tswitching;
-    Tswitching = 1.0f/(float)Fswitching;
 //
 //    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
 ////    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Tswitching, 0.5f, 600U);
@@ -100,7 +98,7 @@ void main(void)
 
 //    POWER_MEAS_SINE_ANALYZER_reset(&PPA_phaseA);
 //    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, Fswitching, 0.05f, 1000.0f, 25.0f);
-    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, T_switching);
+    POWER_MEAS_SINE_ANALYZER_config(&PPA_phaseA, T_switching, (float32_t)AC_FREQ_HZ);
 
     SPLL_1PH_SOGI_config(&spll_line, AC_FREQ_HZ, ISR_FREQUENCY, (float32_t)(222.2862), (float32_t)(-222.034));
 
@@ -230,15 +228,9 @@ void main(void)
 
         }
 
-
-
     }
 
 }
-
-
-
-
 
 //  STATE-MACHINE SEQUENCING AND SYNCRONIZATION FOR SLOW BACKGROUND TASKS
 void A0(void)
@@ -293,6 +285,8 @@ interrupt void ISR(void)
 
     NPC_HAL_Acknowledge_Interrupt();
 }
+
+
 
 
 

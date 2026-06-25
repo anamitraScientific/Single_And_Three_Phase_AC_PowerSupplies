@@ -15,13 +15,13 @@
 // Included Files
 //
 
+#include <power_meas_sine_analyzer.h>
 #include "NPC_Hardware_Setup.h"
 #include "Config.h"
 
 #include "IQmathLib.h"
 #include "DCLF32.h"
 #include "spll_1ph_sogi.h"
-#include "power_meas_sine_analyzer.h"
 #include "abc_dq0_pos.h"
 #include "abc_dq0_neg.h"
 #include "dq0_abc.h"
@@ -72,7 +72,8 @@ extern float32_t i_alpha, i_beta;
 extern float32_t Id_fb, Iq_fb;
 extern float32_t ud_inv, uq_inv;
 extern float32_t alpha_ref;
-
+extern float32_t kpI_test, kiI_test, woI_test, wrcI_test;
+extern float32_t Iset_dc;
 
 
 //
@@ -227,10 +228,16 @@ extern float32_t Vdc_RefSlewed;
 extern float32_t IA_RefSlewed;
 extern float32_t IB_RefSlewed;
 extern float32_t IC_RefSlewed;
+extern float32_t Idc_RefSlewed;
 extern float32_t ImaxRefSlewed;
 
 extern float32_t TEMP_A_fb;
 extern float32_t Va_sns;
+
+extern float32_t Va_sns1;
+extern float32_t Va_sns2;
+
+
 extern float32_t Vb_sns;
 extern float32_t Vc_sns;
 extern float32_t Ia_sns;
@@ -284,6 +291,7 @@ extern Ref_Slew_Ramp IA_RefSlewRamp;
 extern Ref_Slew_Ramp IB_RefSlewRamp;
 extern Ref_Slew_Ramp IC_RefSlewRamp;
 extern Ref_Slew_Ramp VdcRefSlewRamp;
+extern Ref_Slew_Ramp Idc_RefSlewRamp;
 extern Ref_Slew_Ramp FreqRefSlewRamp;
 extern Ref_Slew_Ramp FreqRefSlewRamp_A;
 extern Ref_Slew_Ramp FreqRefSlewRamp_B;
@@ -569,18 +577,21 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
 
     Ia_sns = (float)((AdcbResultRegs.ADCRESULT0 + AdcbResultRegs.ADCRESULT1 + AdcbResultRegs.ADCRESULT2 + AdcbResultRegs.ADCRESULT3)*0.25f);
     Ia_fb =((float)Ia_sns - Iconv_sense_offset)*Iconv_Sense_scaling;
-//    PPA_phaseA.Ia = Ia_fb;
-//    PPA_phaseA.i = Ia_fb;
+    PPA_phaseA.i = Ia_fb;
 
 
     Va_sns = (float)((AdcaResultRegs.ADCRESULT0 + AdcaResultRegs.ADCRESULT1 + AdcaResultRegs.ADCRESULT2 + AdcaResultRegs.ADCRESULT3)*0.25f);
-    EMAVG_run(&vout, Va_sns);
-    Va_sns = vout.out;
 
-    Va_fb =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling;
-//    PPA_phaseA.Va = Va_fb + 31.0f;
-//    PPA_phaseA.v = Va_fb;
-    PPA_phaseA.Vacdc = Va_fb + 31.0f;
+//    EMAVG_run(&vout, Va_sns);
+//    Va_sns1 = vout.out;
+//
+//    EMAVG_run(&vout, Va_sns1);
+//    Va_sns2 = vout.out;
+
+    Va_fb =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling - 2.5f;
+
+
+    PPA_phaseA.v = Va_fb;
 
     Vac_fb_pu = ((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling_PU;
 
@@ -589,11 +600,8 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
     Vc1_sns = Vdc_out.out;
     Vc1_fb = ((float)Vc1_sns - (float)Vdc_sense_offset)*Vdc_Sense_scaling;
 
-//    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
 
-//    Meas_PF = PPA_phaseA.PF_A;
-
-//    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA);
+    POWER_MEAS_SINE_ANALYZER_run(&PPA_phaseA, AC_Freq_Ref);
 //    Meas_Vrms = PPA_phaseA.vRms;
 //    Meas_Irms = PPA_phaseA.iRms;
 //    Meas_PF = PPA_phaseA.powerFactor;
@@ -610,11 +618,8 @@ static inline void NPC_readCurrentAndVoltageSignals(void)    // AC AND DC VOLTAG
 //    Meas_I_CF = Meas_Ipk_P / Meas_Irms;
 
 
-#if mode1 == EL_AC
       Va_fb_prev = Va_fb_pu;
       Va_fb_pu =((float)Va_sns - Vgrid_sense_offset)*Vgrid_Sense_scaling_PU;
-#else
-#endif
 
     //DC link voltage sensing//
 //     Vc1_sns = (float)((AdccResultRegs.ADCRESULT0 + AdccResultRegs.ADCRESULT1 + AdccResultRegs.ADCRESULT2 + AdccResultRegs.ADCRESULT3)*0.25f);
@@ -705,6 +710,17 @@ static inline float32_t runPR_custom(PR_Custom_DF22 *p, float32_t ek)
     p->x2 = (ek * p->b2) - (v7 * p->a2);
 
     return(v7);
+}
+
+static inline float32_t resetPR_custom(PR_Custom_DF22 *p)
+{
+    p->b0 = 1;
+    p->b1 = 0;
+    p->b2 = 0;
+    p->a1 = 0;
+    p->a2 = 0;
+    p->x1 = 0;
+    p->x2 = 0;
 }
 
 /*
@@ -1179,15 +1195,10 @@ static inline void RUN_INV_ISR_SourceMode(void)
     {
         if(StartPowerStage == 1)
         {
-#if CONVERTER_TYPE == SINGLE_PHASE
-            float32_t target_on_angle = (float32_t)((ON_degree * PI) / 180.0f);
-#elif CONVERTER_TYPE == THREE_PHASE
-            float32_t target_on_angle = (float32_t)((ON_degree_A * PI) / 180.0f);
-#endif
+            float32_t target_on_angle = (float32_t)((ON_degree * PI) / 180.0f) + PI;
+            if(target_on_angle > 2*PI) target_on_angle = target_on_angle - 2*PI;
             float32_t angle_diff = fabsf(pll_ang_A - target_on_angle);
-
-            if(angle_diff > PI) angle_diff = (float32_t)((2 * PI) - angle_diff);
-            if(angle_diff <= ON_ANG_TOL)
+            if (angle_diff <= ON_ANG_TOL)
             {
                 REFslew_set(&VA_RefSlewRamp,0.0f);
                 REFslew_set(&VdcRefSlewRamp,0.0f);
@@ -1197,19 +1208,15 @@ static inline void RUN_INV_ISR_SourceMode(void)
         }
         else if (StartPowerStage == 0)
         {
-#if CONVERTER_TYPE == SINGLE_PHASE
-            float32_t target_off_angle = (float32_t)((OFF_degree * PI) / 180.0f);
-#elif CONVERTER_TYPE == THREE_PHASE
-            float32_t target_off_angle = (float32_t)((OFF_degree_A * PI) / 180.0f);
-#endif
+            float32_t target_off_angle = (float32_t)((OFF_degree * PI) / 180.0f) + PI;
+            if(target_off_angle > 2*PI) target_off_angle = target_off_angle - 2*PI;
             float32_t angle_diff = fabsf(pll_ang_A - target_off_angle);
-
-            if(angle_diff > PI) angle_diff = (float32_t)((2 * PI) - angle_diff);
-            if(angle_diff <= OFF_ANG_TOL)
+            if (angle_diff <= OFF_ANG_TOL)
             {
                 NPC_HAL_ForceOSTEVENTtoALLEPWM();
                 StartPowerStage_prev = StartPowerStage;
                 err_VA = 0;
+                resetPR_custom(&Testg1);
             }
         }
     }
@@ -1246,6 +1253,13 @@ static inline void RUN_INV_ISR_SourceMode(void)
         }
     }
 
+    kpI_1H = kpI_test;
+    kiI_1H = kiI_test;
+    wrcI_1H = wrcI_test;
+    woI_1H = 2.0*PI*AC_FREQ_HZ;
+
+    computeDF22_PRcontrollerCoeff(&Testg1, kpI_1H,kiI_1H,woI_1H,
+                                             ISR_FREQUENCY,wrcI_1H);
 
 #if mode2 == balanced
 
@@ -1255,7 +1269,8 @@ static inline void RUN_INV_ISR_SourceMode(void)
     REFslew_run(&VdcRefSlewRamp, V_DC, slope_VacRef);
     VA_RefSlewed = VA_RefSlewRamp.out_slew;
     Vdc_RefSlewed = VdcRefSlewRamp.out_slew;
-    Va_ref = (1.4142f * VA_RefSlewed*Ref_A) + Vdc_RefSlewed;  // three different amplitude of sine.
+//    Va_ref = (1.4142f * VA_RefSlewed*Ref_A) + Vdc_RefSlewed;  // three different amplitude of sine.
+    Va_ref = (1.4142f * VA_RefSlewed*Ref_A) - Vdc_RefSlewed;  // three different amplitude of sine.
 
 //    Va_ref = (Vac_fundamental * Ref_A) + V_DC;
 //    if(Va_ref > 300.0f) Va_ref = 300.0f;
@@ -1289,7 +1304,7 @@ static inline void RUN_INV_ISR_SourceMode(void)
 #if CONVERTER_TYPE == SINGLE_PHASE
            err_VA = (float)(Va_ref - Va_fb);  // ERROR SIGNAL GIVEN TO CONTROLLER.
            uk_Va  = runPR_custom(&Testg1, err_VA);
-           Ma1 = (float)(uk_Va + Va_fb)/(400);   // PR-CONTROLLER OUTPUT + FEEDFORWARD.
+           Ma1 = (float)(uk_Va + Va_fb)/(100);   // PR-CONTROLLER OUTPUT + FEEDFORWARD.
            NPC_Calculate_duty(Ma1);
            NPC_HAL_updatePWMDutyAndDeadBand(dutyA_S1_Ref,
                                             dutyB_S1_Ref,
@@ -1359,8 +1374,10 @@ static inline void RUN_INV_ISR_LoadMode(void)
     float32_t I_ref_slew = ((float32_t)(0.01/(0.001*ISR_FREQUENCY)));
 
     REFslew_run(&IacRefSlewRamp, -Iset, I_ref_slew);
+    REFslew_run(&Idc_RefSlewRamp, -Iset_dc, I_ref_slew);
     IA_RefSlewed = IacRefSlewRamp.out_slew;
-    Ia_ref = (1.414f) * IA_RefSlewed * sinf(V_line_pll.theta[1]-((3.141592653f * phase_angle)/180.0f) + 3.141592653f);
+    Idc_RefSlewed = Idc_RefSlewRamp.out_slew;
+    Ia_ref = (1.414f) * IA_RefSlewed * sinf(V_line_pll.theta[1]-((3.141592653f * phase_angle)/180.0f) + 3.141592653f) - Idc_RefSlewed;
 
     /*
      * For Single Phase

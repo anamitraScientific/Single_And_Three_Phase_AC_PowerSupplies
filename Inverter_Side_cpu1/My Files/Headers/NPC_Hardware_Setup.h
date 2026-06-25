@@ -294,6 +294,7 @@ static inline void NPC_HAL_setupInterrupt(void)
 #if CONVERTER_TYPE == SINGLE_PHASE
 
     PieVectTable.EPWM1_INT = &ISR;      //Registers a function to be called when an interrupt occurs.
+
     EDIS;
     IER |= M_INT3;                      // Set EPWM4 interrupt path to CPU(group 3 is epwm4 path)
     PieCtrlRegs.PIEIER3.bit.INTx1 = 1;  // Set EPMW4 interrupt path in PIE registers (3rd row 4th column)

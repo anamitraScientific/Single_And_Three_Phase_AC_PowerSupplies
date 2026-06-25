@@ -506,6 +506,7 @@ void NPC_HAL_setupEPWM(void)
     NPC_HAL_setupEPwm3();
     NPC_HAL_setupEPwm4();
     NPC_HAL_setup_FAN_EPwm();
+
 #elif CONVERTER_TYPE == THREE_PHASE
     NPC_HAL_setupEPwm1();
     NPC_HAL_setupEPwm2();

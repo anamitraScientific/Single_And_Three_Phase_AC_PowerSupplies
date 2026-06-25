@@ -38,7 +38,7 @@
 #define EL_DC                 4
 #define GE_AC_DC              5
 #define testing               6
-#define mode1                 EL_AC //  testing//  GE_AC//GE_DC//  GE_AC// EL_AC//
+#define mode1                 GE_AC //  testing//  GE_AC//GE_DC//  GE_AC// EL_AC//
 
 //
 // sub mode in GE_AC
@@ -205,9 +205,9 @@
 #if mode1 == GE_AC// testing //
     #if AC_submode == NormalOperation // ACFaults //
             //voltage loop
-            #define KPV_1H            0.5f //1.0f //0.97f////0.045f //10//1.4567875851731f
-            #define KIV_1H            300.0f //1000.0f ////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
-            #define WRCV_1H           25.0f //0.00628f //62.8f //628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
+            #define KPV_1H            1.5f //1.0f //0.5f //0.97f////0.045f //10//1.4567875851731f
+            #define KIV_1H            1000.0f //1000.0f //300.0f ////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
+            #define WRCV_1H           0.00628f //0.00628f //25.0f //62.8f //628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
 
 #else
 #endif
@@ -217,6 +217,12 @@
 
 #else
 #endif
+
+
+            #define KPV_1H            1.5f //1.0f //0.5f //0.97f////0.045f //10//1.4567875851731f
+            #define KIV_1H            1000.0f //1000.0f //300.0f ////100.0f // 50.0f//10//1000  // changed KIV_1H from 100 to 1000 for freq. variation//0.051
+            #define WRCV_1H           0.00628f //0.00628f //25.0f //62.8f //628.0f //1.0f//20.0f//100.0f // 50.0f //0.6f//0.00628f// 0.628f*1//0.314159265f*0.5//1.0f
+
 
 //
 //PI controller for DC mode
@@ -471,8 +477,8 @@
 #define AC_FREQ_HZ     50 // 400 //
 
 #define PI      ((float32_t)3.141592653589)
-#define ON_ANG_TOL      ((float32_t)(PI/180.0f))        //off_angle tolerance is at 1 degree
-#define OFF_ANG_TOL     ((float32_t)(PI/180.0f))        //off_angle tolerance is at 1 degree
+#define ON_ANG_TOL      ((float32_t)(PI/180.0f)*5.0f)        //off_angle tolerance is at 1 degree
+#define OFF_ANG_TOL     ((float32_t)(PI/180.0f)*5.0f)        //off_angle tolerance is at 1 degree
 
 
 
